@@ -1,0 +1,12 @@
+opencocon v3 : Old computer, New generation.
+distributed by SHIMADA Hirofumi, 2012
+
+For disk-space saving, This image not contains source
+code of each components.
+If you want source code and patches, please access to
+ftp://get.opencocon.org/ and get all source, buildtree.
+
+Some License information document is located in
+/usr/doc/cocon of your opencocon tree.
+
+http://opencocon.org/ for more information.

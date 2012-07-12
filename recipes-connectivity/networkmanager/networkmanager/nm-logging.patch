@@ -1,0 +1,28 @@
+From cbf72aeb34a6f1fd1bcd7f78ae88985154dc85af Mon Sep 17 00:00:00 2001
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 02 Jan 2012 13:49:40 +0000
+Subject: core: only include execinfo.h if crashtrace support is enabled
+
+On systems without backtrace suport (E.G. uClibc depending on config),
+execinfo.h might not be available, breaking the build.
+
+Fix it by only including it if enabled.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+(limited to 'src/logging/nm-logging.c')
+
+diff --git a/src/logging/nm-logging.c b/src/logging/nm-logging.c
+index ca6a709..26c8670 100644
+--- a/src/logging/nm-logging.c
++++ b/src/logging/nm-logging.c
+@@ -23,7 +23,6 @@
+ 
+ #include <dlfcn.h>
+ #include <syslog.h>
+-#include <execinfo.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+--
+cgit v0.9.0.2-2-gbebe
