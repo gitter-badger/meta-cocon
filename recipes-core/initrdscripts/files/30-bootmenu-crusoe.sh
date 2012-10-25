@@ -5,22 +5,20 @@
 # Cocon-crusoe for opencocon
 
 E="\033["
-MOUNTLOC="stage1"
+MOUNTLOC="/media/realroot"
+UNIONLOC="/media/union"
+RAMLOC="/media/ram"
+OLDLOC="/media/cf"
 
 #if ! (echo " " | read -n1 foo) >/dev/null 2>&1; then
 #    echo "'read' command lacks -n switch support, aborting" 
 #    exit 1
 #fi
 
-# first, read some modules
-modprobe loop
-modprobe aufs
-modprobe squashfs
 
 # And, do udev
 /initrd.d/udev-cocon
 
-mkdir -p $MOUNTLOC
 
 get_partition_type()
 {
@@ -31,46 +29,48 @@ get_partition_type()
 boot_iso9660()
 {
     ROOT_DEVICE="/dev/$1"
-   
+    export ROOT_DEVICE
+
     echo "--- coconcrusoe boot seq. ---"
     echo "Boot from: $ROOT_DEVICE"
    
-    mount $ROOT_DEVICE /$MOUNTLOC 
+    mount -o ro $ROOT_DEVICE $MOUNTLOC 
 
-#    if ! test -d /$MOUNTLOC/crusoe.sqs; then
-#      echo "... is not contain crusoe.sqs, try next. "
-#      umount /$MOUNTLOC
-#      return 1
-#    fi
+    if ! [ -e $MOUNTLOC/crusoe.sqs ]; then
+      echo "... is not contain crusoe.sqs, try next. "
+      umount $MOUNTLOC
+      return 1
+    fi
 
-
-   
     echo "mount squashfs"
-    mkdir /stage2
 
-    losetup /dev/loop0 /$MOUNTLOC/crusoe.sqs
-    mount -t squashfs /dev/loop0 /stage2
+    # TODO : optional root sqs file
+    losetup /dev/loop0 $MOUNTLOC/crusoe.sqs
+    mount -t squashfs /dev/loop0 $UNIONLOC
 
-
-    mount -t tmpfs none /stage2/tmp
-    mkdir -p /stage2/tmp/root-rw
-    
     echo "union with aufs"
-    mount -t aufs -o br:/stage2/tmp/root-rw:/stage2 none /stage2
+    mount -t tmpfs none $RAMLOC
+#    mkdir -p /stage2/tmp/root-rw
+    
+    mount -t aufs -o br:$RAMLOC:$UNIONLOC none $UNIONLOC
 #    mount -t aufs -o br:/stage2/tmp/etc-rw:/stage2/etc none /stage2/etc
 #    mount -t aufs -o br:/stage2/tmp/var-rw:/stage2/var none /stage2/var
 #    mount -t aufs -o br:/stage2/tmp/home-rw:/stage2/home none /stage2/home
 #    mount -t aufs -o br:/stage2/tmp/usr-rw:/stage2/usr none /stage2/usr
 #    mount -t aufs -o br:/stage2/tmp/lib-rw:/stage2/lib none /stage2/lib
 
-
     echo "--- switch root ---"
-    pkill udevd
-    umount /proc
+#    pkill udevd
+#    umount /proc
     umount /sys
 
-    cd /stage2
-    exec switch_root -c /dev/console . /sbin/init
+#    cd /stage2
+#    exec switch_root -c /dev/console . /sbin/init
+
+    # Pivot to real opencocon
+    # cd $UNIONLOC
+    pivot_root $UNIONLOC $UNIONLOC/$OLDLOC
+    exec chroot . /sbin/init <dev/console >dev/console 2>&1
 
 }
 
@@ -85,9 +85,25 @@ scan_device()
     get_partition_type
     if [ "$fstype" = "iso9660" ]; then
         # Comment following line to show all available block devices regardless of FS (for debug purposes)
+        BOOT_FS="$fstype"
+        export BOOT_FS
         boot_iso9660 $dev
         true
     fi
+    if [ "$fstype" = "vfat" ]; then
+        BOOT_FS="$fstype"
+        export BOOT_FS
+        boot_iso9660 $dev
+        true
+    fi
+    if [ "$fstype" = "ext3" ]; then
+      # ext3 : need some customize...
+      BOOT_FS="$fstype"
+      export BOOT_FS
+      boot_iso9660 $dev
+      true
+    fi
+
 
   done < /proc/diskstats
 }

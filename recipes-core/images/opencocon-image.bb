@@ -47,10 +47,16 @@ usbutils \
 wireless-tools \
 wpa-supplicant \
 update-rc.d \
-networkmanager \
+connman \
+connman-plugin-ethernet \
+connman-plugin-wifi \
 polkit \
 util-linux \
-e2fsprogs \
+e2fsprogs-fsck \
+e2fsprogs-badblocks \
+e2fsprogs-mke2fs \
+e2fsprogs-fsck \
+e2fsprogs-e2fsck \
 udev \
 kbd \
 kbd-keymaps \
@@ -103,7 +109,6 @@ xf86-video-trident \
 xf86-video-tseng \
 xf86-video-vesa \
 xf86-video-voodoo \
-xf86-video-xgi \
 xf86-video-xgixp \
 xauth \
 encodings \
@@ -116,13 +121,14 @@ dbus-x11 \
 liberation-fonts \
 ttf-bitstream-vera \
 ttf-vlgothic \
-ttf-sazanami-gothic \
-ttf-sazanami-mincho \
 xrandr \
 xkeyboard-config \
 freetype \
 setxkbmap \
 xmodmap \
+openssh-ssh \
+gnome-icon-theme \
+hicolor-icon-theme \
 "
 
 COCON_XEXT_PACKAGES = " \
@@ -162,14 +168,26 @@ libjpeg-turbo \
 matchbox-wm \
 lxterminal \
 pulseaudio \
-web-webkit \
+pulseaudio-module-alsa-card \
+pulseaudio-module-alsa-sink \
+pulseaudio-module-alsa-source \
+pulseaudio-module-esound-protocol-tcp \
+pulseaudio-module-native-protocol-tcp \
+pulseaudio-module-native-protocol-unix \
+pulseaudio-module-x11-bell \
+pulseaudio-module-mmkbd-evdev \
+pulseaudio-module-udev-detect \
+pulseaudio-module-x11-publish \
+pulseaudio-server \
+midori \
 cyrus-sasl \
 gtk-vnc \
 pong-clock \
 lxpanel \
 libwnck \
 libnotify \
-network-manager-applet \
+connman-gnome \
+viewnior \
 "
 
 COCON_HDDIMAGE_PACKAGES = " \
@@ -177,11 +195,21 @@ opencocon-init \
 grub \
 "
 
+COCON_NONFREE_FIRMWARE = " \
+linux-firmware-agere \
+linux-firmware-iwlwifi \
+linux-firmware-marvell \
+linux-firmware-ralink \
+linux-firmware-realtek \
+linux-firmware-vt6656 \
+"
+
 RDEPENDS = "${COCON_BASE_PACKAGES} \
 ${COCON_XBASE_PACKAGES} \
 ${COCON_XEXT_PACKAGES} \
 ${COCON_APP_PACKAGES} \
 ${COCON_HDDIMAGE_PACKAGES} \
+${COCON_NONFREE_FIRMWARE} \
 "
 
 IMAGE_INSTALL = "${COCON_BASE_PACKAGES} \
@@ -189,12 +217,13 @@ ${COCON_XBASE_PACKAGES} \
 ${COCON_XEXT_PACKAGES} \
 ${COCON_APP_PACKAGES} \
 ${COCON_HDDIMAGE_PACKAGES} \
+${COCON_NONFREE_FIRMWARE} \
 "
 
 
 
 IMAGE_BASENAME = "opencocon"
-IMAGE_FSTYPES = " tar.gz "
+IMAGE_FSTYPES = " tar.gz squashfs "
 
 inherit image
 

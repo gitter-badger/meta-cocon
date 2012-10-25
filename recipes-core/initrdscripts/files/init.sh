@@ -5,25 +5,14 @@ BOOT_ROOT=
 ROOT_DEVICE=
 
 early_setup() {
-    mkdir -p /proc /sys /mnt /tmp
-
     mount -t proc proc /proc
     mount -t sysfs sysfs /sys
-
-#    modprobe -q mtdblock
 }
 
 dev_setup()
 {
+  # TODO : move here (call cocon-udev)
     echo -n "initramfs: Creating device nodes: "
-    grep '^ *[0-9]' /proc/diskstats | while read major minor dev ex1 ex2 ex3 ex4 ex5 ex6 ex7 ex8 ex9 ex10 ex11
-    do
-        if [ ! -e /dev/$dev ]; then
-            echo -n "$dev "
-            [ -e /dev/$dev ] || mknod /dev/$dev b $major $minor
-       fi
-    done
-    echo
 }
 
 read_args() {
@@ -43,9 +32,12 @@ read_args() {
     done
 }
 
-do_depmod() {
-	[ -e "/lib/modules/$(uname -r)/modules.dep" ] || depmod
-}
+#do_depmod() {
+  # maybe depmod not need in thisplace
+#  mount -t tmpfs none /media/card
+#  mount -t aufs -o br:/media/card:/lib/modules none /lib/modules
+#	[ -e "/lib/modules/$(uname -r)/modules.dep" ] || depmod -a
+#}
 
 load_module() {
     # Cannot redir to $CONSOLE here easily - may not be set yet
@@ -59,10 +51,10 @@ load_modules() {
     done
 }
 
-boot_root() {
-    cd $BOOT_ROOT
-    exec switch_root -c /dev/console $BOOT_ROOT /sbin/init
-}
+#boot_root() {
+#    cd $BOOT_ROOT
+#    exec switch_root -c /dev/console $BOOT_ROOT /sbin/init
+#}
 
 fatal() {
     echo $1 >$CONSOLE
@@ -71,18 +63,16 @@ fatal() {
 }
 
 
-echo "Starting initramfs boot..."
+echo "Starting opencocon initrd boot..."
 early_setup
 load_modules '0*'
-do_depmod
+# do_depmod
 
 [ -z "$CONSOLE" ] && CONSOLE="/dev/console"
 
 read_args
 
 if [ -z "$rootdelay" ]; then
-    echo "rootdelay parameter was not passed on kernel command line - assuming 2s delay"
-    echo "If you would like to avoid this delay, pass explicit rootdelay=0"
     rootdelay="2"
 fi
 if [ -n "$rootdelay" ]; then
@@ -90,10 +80,10 @@ if [ -n "$rootdelay" ]; then
     sleep $rootdelay
 fi
 
-#dev_setup
+dev_setup
 
 load_modules '[1-9]*'
 
-[ -n "$BOOT_ROOT" ] && boot_root
+# [ -n "$BOOT_ROOT" ] && boot_root
 
 fatal "No valid root device was specified.  Please add root=/dev/something to the kernel command-line and try again."

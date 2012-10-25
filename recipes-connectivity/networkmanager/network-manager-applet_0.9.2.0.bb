@@ -2,11 +2,11 @@ DESCRIPTION = "GTK+ applet for NetworkManager"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=59530bdf33659b29e73d4adb9f9f6552"
 
-DEPENDS = " polkit networkmanager dbus-glib libglade gconf gnome-keyring iso-codes libnotify"
+DEPENDS = "polkit-gnome libnotify networkmanager dbus-glib libglade gconf gnome-keyring libgnome-keyring iso-codes libnotify"
 
 SRC_URI = " http://ftp.gnome.org/pub/GNOME/sources/network-manager-applet/0.9/network-manager-applet-${PV}.tar.bz2"
 
-inherit autotools 
+inherit gnome
 
 SRC_URI[md5sum] = "feaf2c8427d23924dde7de52ff4c5078"
 SRC_URI[sha256sum] = "287301692224cc1bb20abe8bc52140461f565e58898a99daef11a188bb29b362"
@@ -31,6 +31,7 @@ FILES_${PN} += "${datadir}/nm-applet/ \
         ${datadir}/libnm-gtk/wifi.ui \
         ${datadir}/gnome-vpn-properties/ \
         ${datadir}/gnome/autostart/ \
+	${datadir}/icons/hicolor/ \
         "
 
 FILES_${PN} += "${libdir}/gnome-bluetooth/plugins/*.so"

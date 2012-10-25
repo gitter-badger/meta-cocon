@@ -3,18 +3,19 @@
 
 include freerdp.inc
 
-inherit gitpkgv cmake
+# inherit gitpkgv cmake
 
 PV = "gitr${SRCPV}"
 PKGV = "${GITPKGVTAG}"
 PR = "${INC_PR}.3"
 
-#SRCREV = "58c36d60cb82e9f4c012c6358ea98c29d195e53c"
-SRCREV = "cc9e584301f33c41409ed2aa31c4818e6cef5b9d"
-SRC_URI = "git://github.com/FreeRDP/FreeRDP.git;protocol=git"
+#SRCREV = "7fe240df119dcf585f97e3b696c863b49be44b9a"
+SRCREV = "fd0e93c35fa9cf2d6a9ac862ea87004ef7ef0aa1"
+SRC_URI = "git://github.com/FreeRDP/FreeRDP.git;protocol=git \
+"
+
 
 # ;branch=1.0-stable"
 
 S = "${WORKDIR}/git"
-
 

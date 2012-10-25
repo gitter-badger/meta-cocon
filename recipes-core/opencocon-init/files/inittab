@@ -3,13 +3,12 @@
 
 
 ::sysinit:/etc/init.d/rcS
-::respawn:/bin/menu.sh
+::respawn:/bin/cocon-init
 ::ctrlaltdel:/sbin/reboot
 ::shutdown:/sbin/swapoff -a
 ::shutdown:/bin/umount -a -r
 ::restart:/sbin/init
 tty2::askfirst:/bin/sh
-tty3::askfirst:/bin/sh
 # /sbin/getty invocations for the runlevels.
 #
 # The "id" field MUST be the same as the last

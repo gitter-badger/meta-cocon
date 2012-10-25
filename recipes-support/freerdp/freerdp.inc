@@ -3,22 +3,22 @@
 
 DESCRIPTION = "FreeRDP RDP client"
 HOMEPAGE = "http://www.freerdp.com"
-DEPENDS = "virtual/libx11 openssl libxcursor libxv alsa-lib pulseaudio libav "
+DEPENDS = "virtual/libx11 openssl libxcursor libxv alsa-lib pulseaudio libav libxkbfile"
 SECTION = "x11/network"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-INC_PR = "r2"
+INC_PR = "r3"
 
 inherit pkgconfig cmake
 
 EXTRA_OECMAKE += " -DWITH_XINERAMA=OFF -DWITH_CUPS=OFF -DWITH_PULSEAUDIO=ON \
-		-DWITH_MANPAGES=OFF "
+		-DWITH_MANPAGES=OFF -DWITH_XKBFILE=ON -DWITH_DEBUG_KBD=ON "
 
 # opencocon : don't rm these file
-#do_install_append() {
-#	rm ${D}${libdir}/freerdp/*.a ${D}${libdir}/freerdp/*.la
-#}
+do_install_append() {
+#	cp ${S}/../xfree86 ${D}${datadir}/freerdp/keymaps/xfree86
+}
 
 PACKAGES =+ "libfreerdp"
 
