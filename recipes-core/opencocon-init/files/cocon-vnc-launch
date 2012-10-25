@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# opencocon VNC Launcher
+
+if [ $1 ];
+then
+
+  if [ $DISPLAY ];  
+  then
+    
+    if [ "$2" = "libvncserver" ];
+    then
+      exec gtkvncviewer $1
+    fi
+    
+    if [ "$2" = "gtk-vnc" ];
+    then
+      exec gvncviewer $1
+    fi
+
+  else
+ 
+    # Classic mode : running X, and call this script again
+    export COCON_VNC_HOST="$1"
+    export COCON_VNC_IMPL="$2"
+ 
+    cd $HOME
+    startx
+    
+    unset COCON_VNC_HOST
+    unset COCON_VNC_IMPL
+  fi
+else
+  echo "usage: cocon-freerdp-launch [hostname] [gtk-vnc | libvncserver]"
+fi
+

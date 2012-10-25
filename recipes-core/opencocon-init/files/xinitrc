@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# opencocon-local startup
+
+
+PWROFF="/tmp/.cocon.poweroff"
+
+if [ -e $PWROFF ];
+then
+  rm $PWROFF
+fi
+
+
+
+#ccl=$COCON_CLOCK
+#if [ $ccl ];
+#then
+#  exec pong-clock
+#  exit 0
+#fi
+
+
+# Default running on matchbox window manager
+matchbox-window-manager &
+lxpanel &
+connman-applet &
+
+
+# Classic mode call function : 
+
+cvnc=$COCON_VNC_HOST
+cvnc_impl=$COCON_VNC_IMPL
+if [ $cvnc ];
+then
+  cocon-vnc-launch $cvnc $cvnc_impl
+  exit 0
+fi
+
+
+crdp=$COCON_RDP_HOST
+crdp_domain=$COCON_RDP_DOMAIN
+crdp_user=$COCON_RDP_USER
+if [ $crdp ];
+then
+  cocon-freerdp-launch $crdp $crdp_user $crdp_domain
+  exit 0
+fi
+
+cnet=$COCON_NETSET
+if [ $cnet ];
+then
+  cocon-netset-launch
+  exit 0
+fi
+
+# New mode menu
+lxterminal -e /usr/bin/cocon-menu-launch
+
+# Power off runs on .profile!

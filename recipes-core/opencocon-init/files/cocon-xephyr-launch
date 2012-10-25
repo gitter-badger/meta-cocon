@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# opencocon Xephyr launcher
+
+
+if [ $1 ];
+then
+  if [ $DISPLAY ];
+  then
+    # XDMCP via Xephyr
+    exec Xephyr -query $1 -fullscreen -once :1
+  else
+    # Classic XDMCP
+    X -query $1 -once
+  fi
+else
+  echo "usage: cocon-xephyr-launch [hostname]"
+fi
+

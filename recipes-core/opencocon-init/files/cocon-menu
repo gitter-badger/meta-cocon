@@ -1,0 +1,110 @@
+#!/bin/bash
+
+
+SELECT=/tmp/.cocon.menu.select
+HOSTN=/tmp/.cocon.menu.host
+USERN=/tmp/.cocon.menu.usern
+DOMAIN=/tmp/.cocon.menu.domain
+PWROFF=/tmp/.cocon.poweroff
+ABOUT=/usr/share/doc/cocon/about.txt
+
+dialog --menu "opencocon v4 (hyper experimental)" 20 40 25 \
+XEPHYR "Connect XDMCP" \
+RDP "Connect RDP" \
+VNC "Connect VNC" \
+VNC2 "Connect VNC (Alt.)" \
+WWW "Web Browser" \
+NET "Network Setting" \
+ABOUT "About opencocon" \
+OFF "Power Off" 2>$SELECT
+
+select=$(<"$SELECT")
+
+case $select in 
+XEPHYR)
+
+  # XDMCP via XEPHYR (Classic mode is X -query)
+
+  dialog --inputbox "Enter hostname to connect" 8 40 2>$HOSTN
+  
+  hostn=$(<$HOSTN)
+  rm $HOSTN
+  if [ $hostn ];
+  then
+    cocon-xephyr-launch $hostn
+  fi
+  ;;
+
+
+VNC)
+
+  # Connect VNC via gtk-vnc
+
+  dialog --inputbox "Enter hostname:display to connect" 8 40 2>$HOSTN
+  hostn=$(<$HOSTN)
+
+  cocon-vnc-launch $hostn gtk-vnc 
+  ;;
+
+VNC2)
+   
+  # Connect VNC via libvncclient (Alt.)
+
+  dialog --inputbox "Enter hostname:display to connect" 8 40 2>$HOSTN
+  hostn=$(<$HOSTN)
+
+  cocon-vnc-launch $hostn libvncserver
+  ;;
+
+
+RDP)
+
+  # Connect RDP with xfreerdp
+
+  dialog --inputbox "Enter hostname(:port) to connect" 8 40 2>$HOSTN
+  dialog --inputbox "Enter login username" 8 40 2>$USERN
+
+  hostn=$(<$HOSTN)
+  usern=$(<$USERN)
+ 
+  if [ $usern ];
+  then
+    dialog --inputbox "Enter Domain name (if not use domain name, just enter)" 8 40 2>$DOMAIN
+    rdpdomain=$(<$DOMAIN)
+  fi
+
+  if [ $hostn ];
+  then
+    cocon-freerdp-launch $hostn $usern $rdpdomain
+  fi
+  
+  ;;
+
+WWW)
+  # Web Browser
+  cocon-caravan-launch
+  ;;
+
+NET)
+  cocon-netset-launch
+  ;;
+
+XSH)
+  echo "Type exit [return] to back menu."
+  /bin/sh
+  ;;
+
+ABOUT)
+  about=$(<$ABOUT)
+  dialog --msgbox "$about" 20 60
+  ;;
+
+OFF)
+  # Power-off flag (to cocon-menu)
+  touch $PWROFF
+  exit 1
+
+  ;;
+
+esac
+

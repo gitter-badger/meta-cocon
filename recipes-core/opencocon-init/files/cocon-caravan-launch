@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Cocon-caravan (midori) launcher
+
+if [ $DISPLAY ];
+then
+  # Just run midori
+  exec midori
+else
+  # Classic : is usualy memory-less, do not running.
+  echo "Running classic mode: Abort running browser."
+fi
+

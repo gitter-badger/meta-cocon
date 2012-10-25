@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# opencocon FreeRDP Launcher
+
+if [ $1 ];
+then
+
+  if [ $DISPLAY ];  
+  then
+    # Login name
+    if [ $2 ];
+    then
+      OPTION="$OPTION -u $2 "
+    fi
+
+    # Domain Name
+    if [ $3 ];
+    then
+      OPTION="$OPTION -d $3 "
+    fi
+
+    # Running on xterm
+    if [ $COCON_RDP_CLASSIC ];
+    then
+      # Classic mode : run on lxterminal
+      exec lxterminal -e xfreerdp $OPTION -f -x modem -k 0x00000411 $1
+    else
+      xfreerdp $OPTION -f -x modem -k 0x00000411 $1
+    fi
+
+  else
+ 
+    # Classic mode : running X, and call this script again
+    export COCON_RDP_HOST="$1"
+    if [ $2 ];
+    then
+      export COCON_RDP_USER="$2" 
+    fi
+    if [ $3 ];
+    then
+      export COCON_RDP_DOMAIN="$3"
+    fi
+    
+    export COCON_RDP_CLASSIC=1
+    
+    cd $HOME
+    startx
+    
+    unset COCON_RDP_HOST
+    unset COCON_RDP_USER
+    unset COCON_RDP_DOMAIN
+    unset COCON_RDP_CLASSIC
+    
+  fi
+else
+  echo "usage: cocon-freerdp-launch [hostname] <username> <domain>"
+fi
+

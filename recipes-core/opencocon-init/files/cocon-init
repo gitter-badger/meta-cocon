@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# opencocon userland init
+
+# Run Menu
+
+menu_flag=`cat /proc/cmdline | grep noxmenu`
+
+if [ "$menu_flag" ];
+then
+  # noxmenu mode : Classic menu
+  su -c 'cocon-menu-launch' xuser
+else
+  # Modern X
+  su -c 'startx' xuser
+fi
+
+# Power off runs on .profile!
+cocon-poweroff
+

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# opencocon menu lancher
+# running on lxterminal (New mode) or .profile (Classic mode)
+
+PWROFF="/tmp/.cocon.poweroff"
+
+if [ -e $PWROFF ];
+then
+  rm $PWROFF
+fi
+
+
+# Menu Loop
+while :
+do
+  if [ -e $PWROFF ];
+  then
+    break
+  fi
+  /usr/bin/cocon-menu
+done
+
+# Power off runs on .profile!

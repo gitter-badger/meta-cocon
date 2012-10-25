@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# opencocon network-setting launcher
+
+if [ $DISPLAY ];
+then
+  # Just run midori
+  exec connman-properties
+else
+  export COCON_NETSET=1
+  startx
+  unset COCON_NETSET
+fi
+
