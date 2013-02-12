@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# opencocon option menu
+
+SELECT=/tmp/.cocon.menu.select
+
+while :
+do
+
+  dialog --menu "Option, Ambient tools" 20 60 25 \
+  MIX   "Sound mixer" \
+  SNDT  "Sound test (Caution: play noise sound!)" \
+  CLOCK "Pong-Clock" \
+  IMAGE "Image viewer (Incomplete)" \
+  RET   "Return to main menu" 2>$SELECT
+
+  select=$(<"$SELECT")
+
+  case $select in
+  MIX)
+    alsamixer
+    ;;
+
+  SNDT)
+    aplay /usr/share/sounds/alsa/Noise.wav
+    ;;
+
+  CLOCK)
+    pong-clock
+    ;;
+
+  IMAGE)
+    ssdir="/media/cf/media/realroot/coconpic/"
+    if [ -d "$ssdir" ];
+    then
+      echo "Using slideshow directory on realroot"
+    else
+      echo "Using pre-installed slideshow"
+      ssdir="/usr/share/cocon/pic/"
+    fi
+     
+    viewnior --slideshow --fullscreen $ssdir
+    ;;
+
+  RET)
+    exit 1
+    ;;
+
+  esac
+
+done
+

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# opencocon userland startx
+startx
+retr=$?
+
+echo "X.org return: $retr"
+
+if [ $retr -ne 0 ];
+then
+  # Error on wakeup X
+  dialog --msgbox "Xorg initalize was failed. please try 'forcefb1', 'forcefb2' and 'forcefb3' option on boot loader." 20 60
+  echo "To reboot, input 'exit'."
+  /bin/sh
+  exit 1
+fi
+
+exit 0
