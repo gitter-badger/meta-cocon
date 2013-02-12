@@ -7,7 +7,8 @@ SECTION = "kernel"
 
 LICENSE = "Proprietary"
 
-LIC_FILES_CHKSUM = "file://LICENCE.agere;md5=af0133de6b4a9b2522defd5f188afd31 \
+LIC_FILES_CHKSUM = "file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e1951dfbc \
+                    file://LICENCE.agere;md5=af0133de6b4a9b2522defd5f188afd31 \
                     file://LICENCE.iwlwifi_firmware;md5=311cc823df5b1be4f00fbf0f17d96a6b \
 		    file://LICENCE.Marvell;md5=9ddea1734a4baf3c78d845151f42a37a \
                     file://LICENCE.ralink-firmware.txt;md5=ab2c269277c45476fb449673911a2dfd \
@@ -17,7 +18,7 @@ LIC_FILES_CHKSUM = "file://LICENCE.agere;md5=af0133de6b4a9b2522defd5f188afd31 \
 
 SRCREV = "ac879fea73d2b81442029928693329673a854cba"
 PV = "0.0+git${SRCPV}"
-PR = "r2"
+PR = "r6"
 
 SRC_URI = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git;protocol=git"
 
@@ -34,8 +35,8 @@ do_install() {
 	cp -r * ${D}/lib/firmware/
 
 	# Libertas sd8686
-#	ln -sf libertas/sd8686_v9.bin ${D}/lib/firmware/sd8686.bin
-#	ln -sf libertas/sd8686_v9_helper.bin ${D}/lib/firmware/sd8686_helper.bin
+	ln -sf libertas/sd8686_v9.bin ${D}/lib/firmware/sd8686.bin
+	ln -sf libertas/sd8686_v9_helper.bin ${D}/lib/firmware/sd8686_helper.bin
 
 	# Realtek rtl8192* 
 #	install -m 0644 LICENCE.rtlwifi_firmware.txt ${D}/lib/firmware/rtlwifi/LICENCE.rtlwifi_firmware.txt
@@ -44,17 +45,14 @@ do_install() {
 #	( cd ${D}/lib/firmware ; ln -sf ti-connectivity/* . )
 }
 
-PACKAGES =+ "${PN}-agere ${PN}-iwlwifi ${PN}-marvell ${PN}-ralink ${PN}-realtek ${PN}-vt6656"
+PACKAGES =+ "${PN}-broadcom ${PN}-agere ${PN}-iwlwifi ${PN}-marvell ${PN}-ralink ${PN}-realtek ${PN}-vt6656"
 
-
-# Libertas
-# TODO : not used in cocon yet
-#LICENSE_${PN}-sd8686 = "Firmware:LICENSE.libertas"
-#FILES_${PN}-sd8686 = " \
-#  /lib/firmware/libertas/sd8686_v9* \
-#  /lib/firmware/sd8686* \
-#  /lib/firmware/LICENCE.libertas \
-#"
+# Broadcom
+LICENSE_${PN}-broadcom = "Firmware:LICENCE.broadcom_bcm43xx"
+FILES_${PN}-broadcom = " \
+  /lib/firmware/brcm/* \
+  /lib/firmware/LICENCE.broadcom_bcm43xx \
+"
 
 # agere
 LICENSE_${PN}-agere = "Firmware:LICENCE.agere"
@@ -76,6 +74,9 @@ FILES_${PN}-marvell = " \
   /lib/firmware/mwl8k/*.fw \
   /lib/firmware/mwl8335_duplex.fw \
   /lib/firmware/LICENCE.Marvell \
+  /lib/firmware/libertas/sd8686_v9* \
+  /lib/firmware/sd8686* \
+  /lib/firmware/LICENCE.libertas \
 "
 
 # Ralink

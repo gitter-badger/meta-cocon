@@ -23,10 +23,16 @@ then
     if [ $COCON_RDP_CLASSIC ];
     then
       # Classic mode : run on lxterminal
-      exec lxterminal -e xfreerdp $OPTION -f -x modem -k 0x00000411 $1
+      lxterminal -e xfreerdp $OPTION -f -x modem -k 0x00000411 --plugin drdynvc --data tsmf:audio:alsa -- --plugin rdpsnd $1
+      retr=$?
     else
-      xfreerdp $OPTION -f -x modem -k 0x00000411 $1
+      xfreerdp $OPTION -f -x modem -k 0x00000411 --plugin drdynvc --data tsmf:audio:alsa -- --plugin rdpsnd $1
+      retr=$?
     fi
+      
+    echo "Current return : $retr"
+    
+    sleep 5
 
   else
  

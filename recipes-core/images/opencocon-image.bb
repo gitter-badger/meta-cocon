@@ -110,6 +110,8 @@ xf86-video-tseng \
 xf86-video-vesa \
 xf86-video-voodoo \
 xf86-video-xgixp \
+xserver-xorg-video-psb \
+libdrm-poulsbo \
 xauth \
 encodings \
 font-util \
@@ -157,6 +159,12 @@ libdrm-drivers \
 
 COCON_APP_PACKAGES = " \
 freerdp \
+libfreerdp-plugin-drdynvc \
+libfreerdp-plugin-rdpsnd-alsa \
+libfreerdp-plugin-rdpsnd \
+libfreerdp-plugin-tsmf-alsa \
+libfreerdp-plugin-tsmf \
+libfreerdp-plugin-tsmf-ffmpeg \
 webkit-gtk \
 libvncserver \
 openssl \
@@ -167,6 +175,11 @@ libgpg-error \
 libjpeg-turbo \ 
 matchbox-wm \
 lxterminal \
+alsa-utils-alsamixer \
+alsa-utils-aplay \
+alsa-utils-amixer \
+alsa-utils-speakertest \
+alsa-utils-alsactl \
 pulseaudio \
 pulseaudio-module-alsa-card \
 pulseaudio-module-alsa-sink \
@@ -196,12 +209,14 @@ grub \
 "
 
 COCON_NONFREE_FIRMWARE = " \
+linux-firmware-broadcom \
 linux-firmware-agere \
 linux-firmware-iwlwifi \
 linux-firmware-marvell \
 linux-firmware-ralink \
 linux-firmware-realtek \
 linux-firmware-vt6656 \
+zd1211-firmware \
 "
 
 RDEPENDS = "${COCON_BASE_PACKAGES} \

@@ -20,6 +20,24 @@ then
   swapon /dev/zram0
 fi
 
+# Force Framebuffer driver if boot option contains "forcefb*"
+if [ "`cat /proc/cmdline | grep forcefb`" ];
+then
+  ln -s /usr/share/cocon/card-fbdev.conf /etc/X11/xorg.conf.d/card-fbdev.conf
+else
+  rm /etc/X11/xorg.conf.d/card-fbdev.conf
+fi
+
+
+# Force 800x600 16bit color if contains "forcesvga"
+if [ "`cat /proc/cmdline | grep forcesvga`" ];
+then
+  ln -s /usr/share/cocon/defaultdepth.conf /etc/X11/xorg.conf.d/defaultdepth.conf
+else
+  rm /etc/X11/xorg.conf.d/defaultdepth.conf
+fi
+
+
 # Enable Framebuffer console : needed for i810
 if [ -c /dev/fb0 ];
 then
@@ -32,4 +50,10 @@ fi
 
 # Keymap (TODO)
 /usr/bin/loadkeys jp106
+
+# Stop before running X
+if [ "`cat /proc/cmdline | grep stopbeforex`" ];
+then
+  exec /bin/sh
+fi
 

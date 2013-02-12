@@ -10,9 +10,11 @@ if [ "$menu_flag" ];
 then
   # noxmenu mode : Classic menu
   su -c 'cocon-menu-launch' xuser
+  retr=$?
 else
   # Modern X
-  su -c 'startx' xuser
+  su -c 'cocon-startx' xuser
+  retr=$?
 fi
 
 # Power off runs on .profile!

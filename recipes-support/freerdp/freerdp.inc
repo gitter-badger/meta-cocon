@@ -8,12 +8,13 @@ SECTION = "x11/network"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-INC_PR = "r3"
+INC_PR = "r5"
 
 inherit pkgconfig cmake
 
 EXTRA_OECMAKE += " -DWITH_XINERAMA=OFF -DWITH_CUPS=OFF -DWITH_PULSEAUDIO=ON \
-		-DWITH_MANPAGES=OFF -DWITH_XKBFILE=ON -DWITH_DEBUG_KBD=ON "
+		-DWITH_MANPAGES=OFF -DWITH_XKBFILE=ON  -DWITH_ALSA=ON "
+
 
 # opencocon : don't rm these file
 do_install_append() {

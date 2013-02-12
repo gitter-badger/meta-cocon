@@ -1,4 +1,4 @@
-opencocon v4 : Old computer, New generation.
+opencocon : Old computer, New generation.
 distributed by SHIMADA Hirofumi, 2012
 
 For disk-space saving, This image not contains source

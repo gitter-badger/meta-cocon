@@ -31,13 +31,18 @@ boot_iso9660()
     ROOT_DEVICE="/dev/$1"
     export ROOT_DEVICE
 
+    if [ -z "$SQSFILE" ];
+    then
+      SQSFILE="crusoe.sqs"
+    fi
+
     echo "--- coconcrusoe boot seq. ---"
-    echo "Boot from: $ROOT_DEVICE"
+    echo "Boot from: $ROOT_DEVICE, $SQSFILE"
    
     mount -o ro $ROOT_DEVICE $MOUNTLOC 
 
-    if ! [ -e $MOUNTLOC/crusoe.sqs ]; then
-      echo "... is not contain crusoe.sqs, try next. "
+    if ! [ -e $MOUNTLOC/$SQSFILE ]; then
+      echo "... is not contain $SQSFILE, try next. "
       umount $MOUNTLOC
       return 1
     fi
@@ -45,7 +50,7 @@ boot_iso9660()
     echo "mount squashfs"
 
     # TODO : optional root sqs file
-    losetup /dev/loop0 $MOUNTLOC/crusoe.sqs
+    losetup /dev/loop0 $MOUNTLOC/$SQSFILE
     mount -t squashfs /dev/loop0 $UNIONLOC
 
     echo "union with aufs"

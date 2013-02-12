@@ -3,10 +3,11 @@ SECTION = "base"
 LICENSE = "MIT"
 DEPENDS = "base-files"
 RDEPENDS_${PN} = "busybox"
-PR = "r18"
+PR = "r20"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "file://COPYING.MIT \
+	   file://COPYING.PICS \
 	   file://need \
            file://provide \
            file://inittab \
@@ -35,6 +36,15 @@ SRC_URI = "file://COPYING.MIT \
 	   file://lxterminal.conf \
 	   file://midori-config \
 	   file://xinitrc \ 
+	   file://cocon-startx \
+	   file://cocon-option-menu \
+	   file://sample1.jpg \
+	   file://sample2.jpg \
+           file://sample3.jpg \
+           file://sample4.jpg \
+           file://sample5.jpg \
+	   file://card-fbdev.conf \
+	   file://defaultdepth.conf \
 "
 
 
@@ -68,6 +78,8 @@ do_install() {
 	install -m 0755    ${WORKDIR}/cocon-poweroff     ${D}${bindir}/cocon-poweroff
 	install -m 0755    ${WORKDIR}/cocon-vnc-launch     ${D}${bindir}/cocon-vnc-launch
 	install -m 0755    ${WORKDIR}/cocon-xephyr-launch     ${D}${bindir}/cocon-xephyr-launch
+	install -m 0755    ${WORKDIR}/cocon-startx     ${D}${bindir}/cocon-startx
+	install -m 0755    ${WORKDIR}/cocon-option-menu     ${D}${bindir}/cocon-option-menu
 
 	# TODO : need to sepalate package (udev init)
         install -d ${D}${sysconfdir}/init.d
@@ -93,6 +105,17 @@ do_install() {
         install -m 0644 ${WORKDIR}/lgpl-2.1.txt ${D}${datadir}/doc/cocon/lgpl-2.1.txt
         install -m 0644 ${WORKDIR}/lgplv3.txt ${D}${datadir}/doc/cocon/lgplv3.txt
 	install -m 0644 ${WORKDIR}/COPYING.MIT ${D}${datadir}/doc/cocon/COPYING.MIT
+	install -d ${D}${datadir}/cocon/
+        install -m 0644 ${WORKDIR}/card-fbdev.conf ${D}${datadir}/cocon/card-fbdev.conf
+	install -m 0644 ${WORKDIR}/defaultdepth.conf ${D}${datadir}/cocon/defaultdepth.conf
+
+	install -d ${D}${datadir}/cocon/pic/
+        install -m 0644 ${WORKDIR}/COPYING.PICS ${D}${datadir}/cocon/pic/COPYING.PICS
+	install -m 0644 ${WORKDIR}/sample1.jpg ${D}${datadir}/cocon/pic/sample1.jpg
+        install -m 0644 ${WORKDIR}/sample2.jpg ${D}${datadir}/cocon/pic/sample2.jpg
+        install -m 0644 ${WORKDIR}/sample3.jpg ${D}${datadir}/cocon/pic/sample3.jpg
+        install -m 0644 ${WORKDIR}/sample4.jpg ${D}${datadir}/cocon/pic/sample4.jpg
+        install -m 0644 ${WORKDIR}/sample5.jpg ${D}${datadir}/cocon/pic/sample5.jpg
 }
 
 
