@@ -2,12 +2,30 @@
 
 /sbin/modprobe zram
 
-# Run udev daemon
-/etc/init.d/udev-cocon
+
+# Alloc /dev
+mount -t devtmpfs devtmpfs /dev
 
 # mount missing /dev/pts
-mkdir /dev/pts
-mount -t devpts none /dev/pts
+if [ ! -d /dev/pts ];
+then
+  mkdir /dev/pts
+fi
+mount -t devpts -o mode=0620,gid=5 none /dev/pts
+
+# mdev before udev
+#mdev -s
+
+# mount missing volatile
+mount -t tmpfs none /var/volatile
+mkdir /var/volatile/tmp
+mkdir /var/volatile/log
+mkdir /var/volatile/run
+mkdir /var/volatile/run/dbus
+mkdir /var/volatile/lock
+
+# Run udev daemon
+/etc/init.d/udev restart
 
 # zram
 COCON_MEM_MB=`free -m | grep "Mem:" | sed -r "s/Mem://" | sed -r "s/^[[:space:]]*([0-9]+).*/\\1/"`
@@ -16,7 +34,8 @@ echo "Memory: $COCON_MEM_MB MB"
 if [ "$COCON_MEM_MB" -lt 240 ];
 then
   echo $(($COCON_MEM_MB*1048576)) > /sys/block/zram0/disksize
-  mkswap -v1 /dev/zram0
+  sleep 2
+  mkswap /dev/zram0
   swapon /dev/zram0
 fi
 

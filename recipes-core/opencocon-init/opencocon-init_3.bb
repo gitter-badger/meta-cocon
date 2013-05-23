@@ -3,7 +3,7 @@ SECTION = "base"
 LICENSE = "MIT"
 DEPENDS = "base-files"
 RDEPENDS_${PN} = "busybox"
-PR = "r20"
+PR = "r38"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "file://COPYING.MIT \
@@ -21,7 +21,6 @@ SRC_URI = "file://COPYING.MIT \
            file://lgpl-2.1.txt \
            file://lgplv3.txt \
            file://about.txt \
-	   file://udev-cocon \
 	   file://panel \
 	   file://gtkrc \
 	   file://cocon-caravan-launch \
@@ -33,6 +32,7 @@ SRC_URI = "file://COPYING.MIT \
 	   file://cocon-poweroff \
 	   file://cocon-vnc-launch \
 	   file://cocon-xephyr-launch \
+	   file://cocon-spice-launch \
 	   file://lxterminal.conf \
 	   file://midori-config \
 	   file://xinitrc \ 
@@ -45,6 +45,7 @@ SRC_URI = "file://COPYING.MIT \
            file://sample5.jpg \
 	   file://card-fbdev.conf \
 	   file://defaultdepth.conf \
+	   file://spicy-settings \
 "
 
 
@@ -80,10 +81,7 @@ do_install() {
 	install -m 0755    ${WORKDIR}/cocon-xephyr-launch     ${D}${bindir}/cocon-xephyr-launch
 	install -m 0755    ${WORKDIR}/cocon-startx     ${D}${bindir}/cocon-startx
 	install -m 0755    ${WORKDIR}/cocon-option-menu     ${D}${bindir}/cocon-option-menu
-
-	# TODO : need to sepalate package (udev init)
-        install -d ${D}${sysconfdir}/init.d
-        install -m 0755 ${WORKDIR}/udev-cocon ${D}${sysconfdir}/init.d/udev-cocon
+        install -m 0755    ${WORKDIR}/cocon-spice-launch    ${D}${bindir}/cocon-spice-launch
 
 	install -d ${D}${sysconfdir}/gtk-2.0
 	install -m 0644 ${WORKDIR}/gtkrc ${D}${sysconfdir}/gtk-2.0/gtkrc
@@ -93,11 +91,13 @@ do_install() {
 	install -d ${D}${sysconfdir}/skel/.config/lxpanel/default/panels	
 	install -d ${D}${sysconfdir}/skel/.config/lxterminal
 	install -d ${D}${sysconfdir}/skel/.config/midori
+	install -d ${D}${sysconfdir}/skel/.config/spicy
 	install -m 0755 ${WORKDIR}/xinitrc ${D}${sysconfdir}/skel/.xinitrc
 	install -m 0644 ${WORKDIR}/panel ${D}${sysconfdir}/skel/.config/lxpanel/default/panels/panel
 	install -m 0644 ${WORKDIR}/lxterminal.conf ${D}${sysconfdir}/skel/.config/lxterminal/lxterminal.conf
 	install -m 0644 ${WORKDIR}/midori-config ${D}${sysconfdir}/skel/.config/midori/config
-
+	install -m 0644 ${WORKDIR}/spicy-settings ${D}${sysconfdir}/skel/.config/spicy/settings
+ 
         install -d ${D}${datadir}/doc/cocon/
         install -m 0644 ${WORKDIR}/about.txt ${D}${datadir}/doc/cocon/about.txt
         install -m 0644 ${WORKDIR}/gplv2.txt ${D}${datadir}/doc/cocon/gplv2.txt

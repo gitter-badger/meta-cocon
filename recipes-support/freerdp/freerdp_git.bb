@@ -3,19 +3,24 @@
 
 include freerdp.inc
 
-# inherit gitpkgv cmake
+#inherit gitpkgv
 
 PV = "gitr${SRCPV}"
 PKGV = "${GITPKGVTAG}"
-PR = "${INC_PR}.5"
+PR = "${INC_PR}.2"
 
-#SRCREV = "7fe240df119dcf585f97e3b696c863b49be44b9a"
-SRCREV = "fd0e93c35fa9cf2d6a9ac862ea87004ef7ef0aa1"
-SRC_URI = "git://github.com/FreeRDP/FreeRDP.git;protocol=git \
-"
+# Experimental:
+SRCREV = "15a22eb9c9656fab41cefbe9e39e4b70162bece2"
+# SRCREV = "b4b0fb06429b1ae2bae1429cc1a930509babf57e"  # Tested
+
+# Stable tree:
+##SRCREV = "15069020d398c203df921da93eb1b72f55b6010a"
+
+SRC_URI = "git://github.com/FreeRDP/FreeRDP.git \
+           file://futimens_cocon_v2.patch"
 GITPKGVTAG = "${SRCREV}"
 
-# ;branch=1.0-stable"
-
 S = "${WORKDIR}/git"
+
+#CMAKE_MODULE_PATH += " ${S}/cmake/ "
 

@@ -8,7 +8,7 @@ SRC_URI = "git://anongit.freedesktop.org/xorg/driver/xf86-video-nv;protocol=git;
           "
 
 S = "${WORKDIR}/git"
-SRCREV = "b3d61828837661c9b383378a7d6006752659108b"
+SRCREV = "fc78fe98222b0204b8a2872a529763d6fe5048da"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=5f26d42045c078fef2e284111eabdd31"
 

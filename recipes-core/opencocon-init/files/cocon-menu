@@ -7,6 +7,8 @@ HOSTN=/tmp/.cocon.menu.host
 USERN=/tmp/.cocon.menu.usern
 DOMAIN=/tmp/.cocon.menu.domain
 PWROFF=/tmp/.cocon.poweroff
+PORTN=/tmp/.cocon.port
+PORTN2=/tmp/.cocon.port2
 SSH_HOSTN=/tmp/.cocon.sshhost
 SSH_PORT=/tmp/.cocon.sshport
 SSH_USERN=/tmp/.cocon.sshuser
@@ -14,11 +16,12 @@ SSH_FWHOSTN=/tmp/.cocon.fwhost
 SSH_FWPORT=/tmp/.cocon.fwport
 ABOUT=/usr/share/doc/cocon/about.txt
 
-dialog --menu "opencocon v5 (hyper experimental)" 20 40 25 \
+dialog --menu "opencocon v6 (experimental)" 20 40 25 \
 XEPHYR "Connect XDMCP" \
 RDP "Connect RDP" \
 VNC "Connect VNC" \
 VNC2 "Connect VNC (Alt.)" \
+SPICE "Connect SPICE" \
 WWW "Web Browser" \
 NET "Network Setting" \
 SSHPF "Setup SSH port forwarding" \
@@ -26,7 +29,7 @@ ETC "Option, Ambient tools" \
 ABOUT "About opencocon" \
 OFF "Power Off" 2>$SELECT
 
-select=$(<"$SELECT")
+select=`cat $SELECT`
 
 case $select in 
 XEPHYR)
@@ -35,7 +38,7 @@ XEPHYR)
 
   dialog --inputbox "Enter hostname to connect" 8 40 2>$HOSTN
   
-  hostn=$(<$HOSTN)
+  hostn=`cat $HOSTN`
   rm $HOSTN
   if [ $hostn ];
   then
@@ -49,7 +52,7 @@ VNC)
   # Connect VNC via gtk-vnc
 
   dialog --inputbox "Enter hostname:display to connect" 8 40 2>$HOSTN
-  hostn=$(<$HOSTN)
+  hostn=`$HOSTN`
 
   cocon-vnc-launch $hostn gtk-vnc 
   ;;
@@ -59,7 +62,7 @@ VNC2)
   # Connect VNC via libvncclient (Alt.)
 
   dialog --inputbox "Enter hostname:display to connect" 8 40 2>$HOSTN
-  hostn=$(<$HOSTN)
+  hostn=`cat $HOSTN`
 
   cocon-vnc-launch $hostn libvncserver
   ;;
@@ -72,13 +75,13 @@ RDP)
   dialog --inputbox "Enter hostname(:port) to connect" 8 40 2>$HOSTN
   dialog --inputbox "Enter login username" 8 40 2>$USERN
 
-  hostn=$(<$HOSTN)
-  usern=$(<$USERN)
+  hostn=`cat $HOSTN`
+  usern=`cat $USERN`
  
   if [ $usern ];
   then
     dialog --inputbox "Enter Domain name (if not use domain name, just enter)" 8 40 2>$DOMAIN
-    rdpdomain=$(<$DOMAIN)
+    rdpdomain=`cat $DOMAIN`
   fi
 
   if [ $hostn ];
@@ -88,6 +91,33 @@ RDP)
   
   ;;
 
+SPICE)
+
+  # SPICE
+
+  dialog --inputbox "Enter hostname to connect" 8 40 2>$HOSTN
+  hostn=`cat $HOSTN`
+  
+  if [ $hostn ];
+  then
+  
+    dialog --inputbox "Enter port number (non-TLS, default is 5900)" 8 40 2>$PORTN
+    dialog --inputbox "Enter port number (TLS, default is 5901)" 8 40 2>$PORTN2
+ 
+    export SPICE_PORT=`cat $PORTN`
+    export SPICE_TLSPORT=`cat $PORTN2`
+
+    cocon-spice-launch $hostn 
+
+    unset SPICE_PORT
+    unset SPICE_TLSPORT
+
+    # Workaround: force restart lxterminal.
+    pkill lxterminal
+  fi
+
+  ;;
+
 SSHPF)
   dialog --inputbox "Enter SSH hostname to connect" 8 40 2>$SSH_HOSTN
   dialog --inputbox "Enter SSH port to connect (if default port(22), just enter)" 8 40 2>$SSH_PORT
@@ -95,11 +125,11 @@ SSHPF)
   dialog --inputbox "Enter forward hostname" 8 40 2>$SSH_FWHOSTN
   dialog --inputbox "Enter forward port (RDP:3389, VNC:5900+Display number)" 8 40 2>$SSH_FWPORT
   
-  ssh_hostn=$(<$SSH_HOSTN)
-  ssh_port=$(<$SSH_PORT)
-  ssh_user=$(<$SSH_USERN)
-  ssh_fwhostn=$(<$SSH_FWHOSTN)
-  ssh_fwport=$(<$SSH_FWPORT)
+  ssh_hostn=`cat $SSH_HOSTN`
+  ssh_port=`cat $SSH_PORT`
+  ssh_user=`cat $SSH_USERN`
+  ssh_fwhostn=`cat $SSH_FWHOSTN`
+  ssh_fwport=`cat $SSH_FWPORT`
   
   if [ -n "$ssh_hostn" -a -n "$ssh_user" -a -n "$ssh_fwhostn" -a -n "$ssh_fwport" ];
   then
@@ -129,11 +159,6 @@ NET)
   cocon-netset-launch
   ;;
 
-XSH)
-  echo "Type exit [return] to back menu."
-  /bin/sh
-  ;;
-
 ETC)
   # Sub menu
   cocon-option-menu
@@ -141,7 +166,7 @@ ETC)
 
 
 ABOUT)
-  about=$(<$ABOUT)
+  about=`cat $ABOUT`
   dialog --msgbox "$about" 20 60
   ;;
 

@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+<title>buildroot - Buildroot: Making Embedded Linux easy</title>
+<meta name='generator' content='cgit v0.9.1'/>
+<meta name='robots' content='index, nofollow'/>
+<link rel='stylesheet' type='text/css' href='/cgit.css'/>
+<link rel='alternate' title='Atom feed' href='http://git.buildroot.net/buildroot/atom/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage-2.2.1-cross-compile.patch?h=c0726391523da6a17ffa8e62681ffa0cc895da8e' type='application/atom+xml'/>
+</head>
+<body>
+<div id='cgit'><table id='header'>
+<tr>
+<td class='logo' rowspan='2'><a href='/'><img src='/busybox1.png' alt='cgit logo'/></a></td>
+<td class='main'><a href='/'>index</a> : <a title='buildroot' href='/buildroot/'>buildroot</a></td><td class='form'><form method='get' action=''>
+<select name='h' onchange='this.form.submit();'>
+<option value='2012.11.x'>2012.11.x</option>
+<option value='master'>master</option>
+<option value='next'>next</option>
+</select> <input type='submit' name='' value='switch'/></form></td></tr>
+<tr><td class='sub'>Buildroot: Making Embedded Linux easy</td><td class='sub right'>jacmet</td></tr></table>
+<table class='tabs'><tr><td>
+<a href='/buildroot/?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>summary</a><a href='/buildroot/refs/?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>refs</a><a href='/buildroot/log/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage-2.2.1-cross-compile.patch?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>log</a><a class='active' href='/buildroot/tree/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage-2.2.1-cross-compile.patch?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>tree</a><a href='/buildroot/commit/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage-2.2.1-cross-compile.patch?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>commit</a><a href='/buildroot/diff/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage-2.2.1-cross-compile.patch?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>diff</a></td><td class='form'><form class='right' method='get' action='/buildroot/log/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage-2.2.1-cross-compile.patch'>
+<input type='hidden' name='h' value='c0726391523da6a17ffa8e62681ffa0cc895da8e'/><select name='qt'>
+<option value='grep'>log msg</option>
+<option value='author'>author</option>
+<option value='committer'>committer</option>
+<option value='range'>range</option>
+</select>
+<input class='txt' type='text' size='10' name='q' value=''/>
+<input type='submit' value='search'/>
+</form>
+</td></tr></table>
+<div class='path'>path: <a href='/buildroot/tree/?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>root</a>/<a href='/buildroot/tree/package?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>package</a>/<a href='/buildroot/tree/package/x11r7?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>x11r7</a>/<a href='/buildroot/tree/package/x11r7/xdriver_xf86-video-savage?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>xdriver_xf86-video-savage</a>/<a href='/buildroot/tree/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage-2.2.1-cross-compile.patch?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>xdriver_xf86-video-savage-2.2.1-cross-compile.patch</a></div><div class='content'>blob: b9c296b6b5d7764b4aace844144fba0283fbfa8f (<a href='/buildroot/plain/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage-2.2.1-cross-compile.patch?h=c0726391523da6a17ffa8e62681ffa0cc895da8e'>plain</a>)
+<table summary='blob content' class='blob'>
+<tr><td class='linenumbers'><pre><a class='no' id='n1' name='n1' href='#n1'>1</a>
+<a class='no' id='n2' name='n2' href='#n2'>2</a>
+<a class='no' id='n3' name='n3' href='#n3'>3</a>
+<a class='no' id='n4' name='n4' href='#n4'>4</a>
+<a class='no' id='n5' name='n5' href='#n5'>5</a>
+<a class='no' id='n6' name='n6' href='#n6'>6</a>
+<a class='no' id='n7' name='n7' href='#n7'>7</a>
+<a class='no' id='n8' name='n8' href='#n8'>8</a>
+<a class='no' id='n9' name='n9' href='#n9'>9</a>
+<a class='no' id='n10' name='n10' href='#n10'>10</a>
+<a class='no' id='n11' name='n11' href='#n11'>11</a>
+<a class='no' id='n12' name='n12' href='#n12'>12</a>
+<a class='no' id='n13' name='n13' href='#n13'>13</a>
+<a class='no' id='n14' name='n14' href='#n14'>14</a>
+<a class='no' id='n15' name='n15' href='#n15'>15</a>
+<a class='no' id='n16' name='n16' href='#n16'>16</a>
+<a class='no' id='n17' name='n17' href='#n17'>17</a>
+<a class='no' id='n18' name='n18' href='#n18'>18</a>
+<a class='no' id='n19' name='n19' href='#n19'>19</a>
+<a class='no' id='n20' name='n20' href='#n20'>20</a>
+<a class='no' id='n21' name='n21' href='#n21'>21</a>
+<a class='no' id='n22' name='n22' href='#n22'>22</a>
+<a class='no' id='n23' name='n23' href='#n23'>23</a>
+<a class='no' id='n24' name='n24' href='#n24'>24</a>
+<a class='no' id='n25' name='n25' href='#n25'>25</a>
+<a class='no' id='n26' name='n26' href='#n26'>26</a>
+<a class='no' id='n27' name='n27' href='#n27'>27</a>
+</pre></td>
+<td class='lines'><pre><code>--- a/configure.ac	2008-05-21 16:04:23.000000000 -0400
++++ b/configure.ac	2008-06-23 11:41:50.000000000 -0400
+@@ -68,12 +68,18 @@ sdkdir=$(pkg-config --variable=sdkdir xo
+ AC_HEADER_STDC
+ 
+ if test "$DRI" != no; then
+-        AC_CHECK_FILE([${sdkdir}/dri.h],
+-                      [have_dri_h="yes"], [have_dri_h="no"])
+-        AC_CHECK_FILE([${sdkdir}/sarea.h],
+-                      [have_sarea_h="yes"], [have_sarea_h="no"])
+-        AC_CHECK_FILE([${sdkdir}/dristruct.h],
+-                      [have_dristruct_h="yes"], [have_dristruct_h="no"])
++  	if test "$cross_compiling" = "no" ; then
++ 		AC_CHECK_FILE([${sdkdir}/dri.h],
++                        [have_dri_h="yes"], [have_dri_h="no"])
++ 		AC_CHECK_FILE([${sdkdir}/sarea.h],
++                        [have_sarea_h="yes"], [have_sarea_h="no"])
++ 		AC_CHECK_FILE([${sdkdir}/dristruct.h],
++                        [have_dristruct_h="yes"], [have_dristruct_h="no"])
++  	else
++  		have_dri_h="yes"
++  		have_sarea_h="yes"
++  		have_dristruct_h="yes"
++  	fi
+ fi
+ 
+ AC_MSG_CHECKING([whether to include DRI support])
+</code></pre></td></tr></table>
+</div> <!-- class=content -->
+<div class='footer'>generated  by cgit v0.9.1 at 2013-03-25 16:38:46 (GMT)</div>
+</div> <!-- id=cgit -->
+</body>
+</html>

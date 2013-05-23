@@ -12,6 +12,10 @@ do_configure_prepend() {
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=ed28020670498bb992812791b7aa3cca"
 
-SRC_URI[md5sum] = "244507baf1900f1e923604c4a0f05925"
-SRC_URI[sha256sum] = "e7558edc144a08371493432014a7b88ee26ec35d00ef96f2ea24bd7872b0ff41"
+SRC_URI = "git://anongit.freedesktop.org/openchrome/xf86-video-openchrome;protocol=git;branch=master \
+          "
+
+S = "${WORKDIR}/git"
+SRCREV = "c27f9fedd1ffb3462154dc309afdf10b5b6ff50d"
+
 

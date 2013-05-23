@@ -1,0 +1,11 @@
+[general]
+grab-keyboard=true
+grab-mouse=true
+auto-clipboard=true
+
+resize-guest=false
+scaling=false
+
+[ui]
+toolbar=false
+statusbar=false

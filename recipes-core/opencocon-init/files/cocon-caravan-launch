@@ -5,7 +5,7 @@
 if [ $DISPLAY ];
 then
   # Just run midori
-  exec midori
+  exec midori -p "http://www.opencocon.org/"
 else
   # Classic : is usualy memory-less, do not running.
   echo "Running classic mode: Abort running browser."

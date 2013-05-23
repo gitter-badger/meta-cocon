@@ -12,4 +12,4 @@ SRC_URI = "git://anongit.freedesktop.org/xorg/driver/xf86-video-trident;protocol
           "
 
 S = "${WORKDIR}/git"
-SRCREV = "f481290e6dbd73b484cad3e8583031c6e2ccb555"
+SRCREV = "48c15909691e28ad2c188a2978b1c8ef3d9d8760"

@@ -1,24 +1,11 @@
-# This image is intended to provide a basic configuration that allows
-# you to access a newly flashed device over the network or via the
-# native console, and use ipkg to install (from feeds accessible via
-# the network) any further features you require into internal flash
-# memory or onto attached storage.
+# opencocon master image
 
-# It should be as small as possible, while still achieving that goal.
-
-# The rationale for naming it 'base-image' is that this image is the
-# base upon which you can install any other functionality you desire.
-
-# See the end of this file for further rationale and policy regarding
-# the contents of this image, and the criteria which are used to make
-# decisions about adding and removing packages from this image.
-
-# Although it is only fully tested with the Angstrom distro, this
-# image is intended to be distro-agnostic.
+IMAGE_PKGTYPE = "ipk"
 
 
 IMAGE_NAME = "opencocon-${DISTRO_VERSION}-${MACHINE}"
 
+# TODO : postprocess?
 #IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
 
 DISTRO_UPDATE_ALTERNATIVES ?= "${PREFERRED_PROVIDER_virtual/update-alternatives}"
@@ -37,7 +24,6 @@ base-files \
 base-passwd \
 keymaps \
 uclibc \
-uclibc-utils \
 busybox \
 opkg \
 libgcc \
@@ -51,29 +37,29 @@ connman \
 connman-plugin-ethernet \
 connman-plugin-wifi \
 polkit \
-util-linux \
-e2fsprogs-fsck \
+util-linux-cfdisk \
+util-linux-fdisk \
 e2fsprogs-badblocks \
 e2fsprogs-mke2fs \
-e2fsprogs-fsck \
 e2fsprogs-e2fsck \
 udev \
 kbd \
 kbd-keymaps \
+dmidecode \
+kernel-modules \
 "
 
 COCON_XBASE_PACKAGES = " \
 xserver-xorg \
 xserver-xorg-xephyr \
 xserver-xorg-extension-dbe \
-xserver-xorg-extension-dri \
-xserver-xorg-extension-dri2 \
 xserver-xorg-extension-extmod \
 xserver-xorg-extension-glx \
 xserver-xorg-module-libint10 \
 xserver-xorg-module-libwfb \
-xserver-xorg-module-xaa \
+xserver-xorg-module-exa \
 xserver-xorg-multimedia-modules \
+xserver-xorg-fbdev \
 xf86-input-synaptics \
 xf86-input-evdev \
 xf86-input-keyboard \
@@ -101,7 +87,6 @@ xf86-video-r128 \
 xf86-video-rendition \
 xf86-video-s3 \
 xf86-video-s3virge \
-xf86-video-savage \
 xf86-video-siliconmotion \
 xf86-video-sis \
 xf86-video-tdfx \
@@ -109,9 +94,8 @@ xf86-video-trident \
 xf86-video-tseng \
 xf86-video-vesa \
 xf86-video-voodoo \
+xf86-video-xgi \
 xf86-video-xgixp \
-xserver-xorg-video-psb \
-libdrm-poulsbo \
 xauth \
 encodings \
 font-util \
@@ -136,35 +120,29 @@ hicolor-icon-theme \
 COCON_XEXT_PACKAGES = " \
 libgl \
 libglu \
-mesa-dri-driver-i810 \
-mesa-dri-driver-i915 \
-mesa-dri-driver-i965 \
-mesa-dri-driver-mach64 \
-mesa-dri-driver-mga \
-mesa-dri-driver-nouveau-vieux \
-mesa-dri-driver-r128 \
-mesa-dri-driver-r200 \
-mesa-dri-driver-r300 \
-mesa-dri-driver-r600 \
-mesa-dri-driver-radeon \
-mesa-dri-driver-savage \
-mesa-dri-driver-sis \
-mesa-dri-driver-swrast \
-mesa-dri-driver-tdfx \
-mesa-dri-driver-unichrome \
+libdricore \
+libegl-mesa \
+libgbm \
+libgl-mesa \
+libglapi \
+libgles1-mesa \
+libgles2-mesa \
 libdrm \
 libdrm-kms \
-libdrm-drivers \
+libdrm-intel \
+libdrm-nouveau \
+libdrm-radeon \
+mesa-driver-i915 \
+mesa-driver-i965 \
+mesa-driver-nouveau-vieux \
+mesa-driver-r200 \
+mesa-driver-radeon \
+mesa-driver-swrast \
 "
+
 
 COCON_APP_PACKAGES = " \
 freerdp \
-libfreerdp-plugin-drdynvc \
-libfreerdp-plugin-rdpsnd-alsa \
-libfreerdp-plugin-rdpsnd \
-libfreerdp-plugin-tsmf-alsa \
-libfreerdp-plugin-tsmf \
-libfreerdp-plugin-tsmf-ffmpeg \
 webkit-gtk \
 libvncserver \
 openssl \
@@ -175,6 +153,7 @@ libgpg-error \
 libjpeg-turbo \ 
 matchbox-wm \
 lxterminal \
+lxrandr \
 alsa-utils-alsamixer \
 alsa-utils-aplay \
 alsa-utils-amixer \
@@ -195,16 +174,18 @@ pulseaudio-server \
 midori \
 cyrus-sasl \
 gtk-vnc \
-pong-clock \
 lxpanel \
 libwnck \
 libnotify \
 connman-gnome \
 viewnior \
+celt \
+spice-gtk \
 "
 
 COCON_HDDIMAGE_PACKAGES = " \
 opencocon-init \
+opencocon-init-doc \
 grub \
 "
 
@@ -241,4 +222,3 @@ IMAGE_BASENAME = "opencocon"
 IMAGE_FSTYPES = " tar.gz squashfs "
 
 inherit image
-

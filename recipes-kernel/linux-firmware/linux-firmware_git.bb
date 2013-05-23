@@ -9,16 +9,19 @@ LICENSE = "Proprietary"
 
 LIC_FILES_CHKSUM = "file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e1951dfbc \
                     file://LICENCE.agere;md5=af0133de6b4a9b2522defd5f188afd31 \
-                    file://LICENCE.iwlwifi_firmware;md5=311cc823df5b1be4f00fbf0f17d96a6b \
+                    file://LICENCE.iwlwifi_firmware;md5=11545778abf78c43d7644d4f171ea1c7 \
 		    file://LICENCE.Marvell;md5=9ddea1734a4baf3c78d845151f42a37a \
                     file://LICENCE.ralink-firmware.txt;md5=ab2c269277c45476fb449673911a2dfd \
                     file://LICENCE.rtlwifi_firmware.txt;md5=00d06cfd3eddd5a2698948ead2ad54a5 \
 		    file://LICENCE.via_vt6656;md5=e4159694cba42d4377a912e78a6e850f \
                    "
+# v5
+# SRCREV = "ac879fea73d2b81442029928693329673a854cba"
+# v6
+SRCREV = "4c79292308ead42fc786c8e189921196ccc298ff"
 
-SRCREV = "ac879fea73d2b81442029928693329673a854cba"
 PV = "0.0+git${SRCPV}"
-PR = "r6"
+PR = "r0"
 
 SRC_URI = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git;protocol=git"
 
@@ -38,16 +41,12 @@ do_install() {
 	ln -sf libertas/sd8686_v9.bin ${D}/lib/firmware/sd8686.bin
 	ln -sf libertas/sd8686_v9_helper.bin ${D}/lib/firmware/sd8686_helper.bin
 
-	# Realtek rtl8192* 
-#	install -m 0644 LICENCE.rtlwifi_firmware.txt ${D}/lib/firmware/rtlwifi/LICENCE.rtlwifi_firmware.txt
 
-	# fixup wl12xx location, after 2.6.37 the kernel searches a different location for it
-#	( cd ${D}/lib/firmware ; ln -sf ti-connectivity/* . )
 }
 
 PACKAGES =+ "${PN}-broadcom ${PN}-agere ${PN}-iwlwifi ${PN}-marvell ${PN}-ralink ${PN}-realtek ${PN}-vt6656"
 
-# Broadcom
+# Broadcom (newer cards)
 LICENSE_${PN}-broadcom = "Firmware:LICENCE.broadcom_bcm43xx"
 FILES_${PN}-broadcom = " \
   /lib/firmware/brcm/* \
@@ -57,7 +56,7 @@ FILES_${PN}-broadcom = " \
 # agere
 LICENSE_${PN}-agere = "Firmware:LICENCE.agere"
 FILES_${PN}-agere = " \
-  /lib/firmware/agere_ap_fw.bin \
+  /lib/firmware/agere_*_fw.bin \
   /lib/firmware/LICENCE.agere \
 "
 
@@ -69,10 +68,11 @@ FILES_${PN}-iwlwifi = " \
 "
 
 # Marvell
+# TODO: more libertas firmware?
 LICENSE_${PN}-marvell = "Firmware:LICENCE.Marvell"
 FILES_${PN}-marvell = " \
   /lib/firmware/mwl8k/*.fw \
-  /lib/firmware/mwl8335_duplex.fw \
+  /lib/firmware/lbtf_usb.bin \
   /lib/firmware/LICENCE.Marvell \
   /lib/firmware/libertas/sd8686_v9* \
   /lib/firmware/sd8686* \

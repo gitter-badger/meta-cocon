@@ -5,7 +5,7 @@ SECTION = "libs"
 PRIORITY = "optional"
 LICENSE = "GPLv2"
 DEPENDS = "zlib libjpeg-turbo libgcrypt libgcrypt-native gnutls gnutls-native"
-PR = "r1"
+PR = "r4"
 
 #DEFAULT_PREFERENCE = "-1"
 
@@ -16,8 +16,11 @@ SRC_URI = "git://libvncserver.git.sourceforge.net/gitroot/libvncserver/libvncser
            file://no_x11vnc_subdir.patch \
 " 
 
-# SRCREV = "af614dea112593f3a01e5c75274cd5912d93bf90"
-SRCREV = "7bac05aeeda213fda66692ae3296371815d4c91c"
+# v6
+SRCREV = "7b9fc019de681125df48eb0650d3235aed87d8a5"
+
+# Post-v5
+## SRCREV = "7bac05aeeda213fda66692ae3296371815d4c91c"
 
 S = "${WORKDIR}/git"
 #S = "${WORKDIR}/LibVNCServer-${PV}"
@@ -26,10 +29,10 @@ S = "${WORKDIR}/git"
 #EXTRA_OEMAKE_append=" SUBDIRS='libvncclient' "
 
 
-EXTRA_OECONF += " --without-x11vnc --disable-libtool-lock --without-websockets "
+EXTRA_OECONF += " --without-x11vnc --disable-libtool-lock --without-websockets --with-gcrypt"
 
-inherit cmake
-
+#inherit cmake
+inherit autotools
 
 do_configure() {
         # I need only some built-in m4, except libtool and gcrypt...

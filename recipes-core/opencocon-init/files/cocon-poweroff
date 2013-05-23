@@ -8,6 +8,9 @@ then
   modprobe apm power_off=1
   /sbin/poweroff
 else
+  # Stop udev
+  /etc/init.d/udev stop
+  pkill udevd
   # have union-boot flag
   cd /media/cf
   exec ./clean <dev/console >dev/console 2>&1

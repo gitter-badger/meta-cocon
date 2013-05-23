@@ -12,4 +12,4 @@ SRC_URI = "git://anongit.freedesktop.org/xorg/driver/xf86-video-voodoo;protocol=
           "
 
 S = "${WORKDIR}/git"
-SRCREV = "8c1121725c4dc1a81dd1af74b83405a1cb69562e"
+SRCREV = "e505d6b24873046285b18446df43ef505b650663"

@@ -17,7 +17,7 @@ OLDLOC="/media/cf"
 
 
 # And, do udev
-/initrd.d/udev-cocon
+/etc/init.d/udev start
 
 
 get_partition_type()
@@ -65,9 +65,10 @@ boot_iso9660()
 #    mount -t aufs -o br:/stage2/tmp/lib-rw:/stage2/lib none /stage2/lib
 
     echo "--- switch root ---"
-#    pkill udevd
-#    umount /proc
+    /etc/init.d/udev stop
+    umount -l /proc
     umount /sys
+    umount -l /dev
 
 #    cd /stage2
 #    exec switch_root -c /dev/console . /sbin/init

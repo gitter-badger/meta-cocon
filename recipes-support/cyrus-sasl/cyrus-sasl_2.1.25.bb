@@ -46,11 +46,11 @@ do_compile_prepend () {
 #	install -m 0644 ${S}/include/prop.h ${STAGING_INCDIR}/sasl/
 #}
 
-pkg_postinst () {
-        grep cyrus /etc/passwd || adduser -D -h /var/spool/mail -G mail -g "Cyrus sasl" cyrus
-	echo "cyrus" | saslpasswd2 -p -c cyrus
-	chgrp mail /etc/sasldb2
-}
+#pkg_postinst_${PN} () {
+#        grep cyrus /etc/passwd || adduser -D -h /var/spool/mail -G mail -g "Cyrus sasl" cyrus
+#	echo "cyrus" | saslpasswd2 -p -c cyrus
+#	chgrp mail /etc/sasldb2
+#}
 
 SRC_URI[md5sum] = "341cffe829a4d71f2a6503d669d5a946"
 SRC_URI[sha256sum] = "418c16e6240a4f9b637cbe3d62937b9675627bad27c622191d47de8686fe24fe"

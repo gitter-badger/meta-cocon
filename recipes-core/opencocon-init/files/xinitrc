@@ -10,16 +10,6 @@ then
   rm $PWROFF
 fi
 
-
-
-#ccl=$COCON_CLOCK
-#if [ $ccl ];
-#then
-#  exec pong-clock
-#  exit 0
-#fi
-
-
 # Default running on matchbox window manager
 matchbox-window-manager &
 lxpanel &
@@ -54,6 +44,13 @@ then
 fi
 
 # New mode menu
-lxterminal -e /usr/bin/cocon-menu-launch
+while :
+do
+  if [ -e $PWROFF ];
+  then
+    break
+  fi
+  lxterminal -e /usr/bin/cocon-menu-launch
+done
 
 # Power off runs on .profile!

@@ -47,6 +47,8 @@ sync
     # Eject CD drive
     if [ $BOOT_FS = "iso9660" ];
     then 
+      mount -t devtmpfs devtmpfs /dev 
+
       echo "--- eject CD device. ($ROOT_DEVICE) ---"
       echo "Press [Enter] key (or wait 2min) to turn off computer."
       echo "Thank you for using opencocon, kon-kon!"

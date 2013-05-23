@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
-# Version: 0.9.33.2-git
-# Sun Jun 10 23:12:09 2012
+# Version: 0.9.33.3-git
+# Fri Feb 15 13:58:15 2013
 #
 # TARGET_alpha is not set
 # TARGET_arm is not set
@@ -220,7 +220,7 @@ UCLIBC_HAS_SIGNUM_MESSAGES=y
 UCLIBC_HAS_GNU_GETOPT=y
 UCLIBC_HAS_STDIO_FUTEXES=y
 UCLIBC_HAS_GNU_GETSUBOPT=y
-# UCLIBC_HAS_ARGP is not set
+UCLIBC_HAS_ARGP=y
 
 #
 # Big and Tall

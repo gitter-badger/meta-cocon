@@ -10,25 +10,25 @@ then
     # Login name
     if [ $2 ];
     then
-      OPTION="$OPTION -u $2 "
+      OPTION="$OPTION /u:$2 "
     fi
 
     # Domain Name
     if [ $3 ];
     then
-      OPTION="$OPTION -d $3 "
+      OPTION="$OPTION /d:$3 "
     fi
 
     # Running on xterm
-    if [ $COCON_RDP_CLASSIC ];
-    then
-      # Classic mode : run on lxterminal
-      lxterminal -e xfreerdp $OPTION -f -x modem -k 0x00000411 --plugin drdynvc --data tsmf:audio:alsa -- --plugin rdpsnd $1
+#    if [ $COCON_RDP_CLASSIC ];
+#    then
+#      # Classic mode : run on lxterminal
+#      lxterminal -e xfreerdp $OPTION /f -x modem /kbd:jp  --plugin drdynvc --data tsmf:audio:alsa -- --plugin rdpsnd $1
+#      retr=$?
+#    else
+      xfreerdp $OPTION /f -wallpaper -themes +fonts /rfx /kbd:jp /sound:sys:alsa /microphone:sys:alsa /multimedia:sys:alsa /v:$1
       retr=$?
-    else
-      xfreerdp $OPTION -f -x modem -k 0x00000411 --plugin drdynvc --data tsmf:audio:alsa -- --plugin rdpsnd $1
-      retr=$?
-    fi
+#    fi
       
     echo "Current return : $retr"
     

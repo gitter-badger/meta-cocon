@@ -10,4 +10,4 @@ SRC_URI = "git://anongit.freedesktop.org/xorg/driver/xf86-video-tseng;protocol=g
           "
 
 S = "${WORKDIR}/git"
-SRCREV = "8f41e5d8bb40d6bb184b4806b701a3e11caf43c3"
+SRCREV = "d2d5c8437e401181f56804cc68594c4831a0983d"

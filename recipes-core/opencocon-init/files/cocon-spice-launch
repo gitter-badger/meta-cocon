@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# opencocon SPICE launcher
+
+
+if [ $1 ];
+then
+  spiceop=" -h $1 "
+
+  if [ `echo $SPICE_PORT` ];
+  then
+    spiceop=" $spiceop -p `echo $SPICE_PORT` "
+  fi
+
+  if [ `echo $SPICE_TLSPORT` ];
+  then
+    spiceop=" $spiceop -s `echo $SPICE_TLSPORT` "
+  fi
+
+  spicy $spiceop
+
+else
+  echo "usage: cocon-spice-launch [hostname]"
+fi
+
+

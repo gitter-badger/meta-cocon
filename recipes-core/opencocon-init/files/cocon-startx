@@ -1,7 +1,25 @@
 #!/bin/bash
 
+# first, copy settings from skel.
+cp -R /etc/skel/.config/ /home/xuser
+cp /etc/skel/.profile /home/xuser
+cp /etc/skel/.xinitrc /home/xuser 
+
+# Workaround for radeon bugs:
+if [ "` lsmod | grep radeon`" ];
+then
+  X_OPTION="-- -depth 24"
+fi
+
+if [ "` lsmod | grep savage`" ];
+then
+  X_OPTION="-- -depth 24"
+fi
+
+
+
 # opencocon userland startx
-startx
+startx $X_OPTION
 retr=$?
 
 echo "X.org return: $retr"

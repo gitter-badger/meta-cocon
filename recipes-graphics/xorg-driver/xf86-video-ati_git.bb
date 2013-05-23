@@ -18,6 +18,11 @@ FILES_${PN}-dbg += "\
   ${libdir}/xorg/modules/multimedia/.debug/*.so \
 " 
 
+EXTRA_OECONF += " --disable-xaa "
 
 S = "${WORKDIR}/git"
-SRCREV = "93459f842c2d8dc178a1954b8e05150fcb96ac9a"
+# v5
+#SRCREV = "343b01c9bf35b125cd0c3df8db7c01a5fb227bda"
+# v6
+SRCREV = "cf377c991f4c1cd4eee1a8530ba9fdf6f9f63301"
+
