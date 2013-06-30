@@ -14,10 +14,6 @@ PV = "3.0.63"
 PR = "r0"
 
 SRC_URI += "ftp://ftp.riken.jp/pub/Linux/kernel.org/linux/kernel/v3.0/linux-${PV}.tar.bz2;name=kernel \
-        file://aufs3-base.patch;apply=no \
-        file://aufs3-standalone.patch;apply=no \
-        file://aufs3-kbuild.patch;apply=no \
-        file://aufs3-proc_map.patch;apply=no \
         ftp://get.opencocon.org/opencocon/sources-supply/aufs-snapshot_3.0.tar.gz;name=aufs \
 	file://linux-3.0.27-headers_install-fix-__packed-in-exported-kernel-head.patch \
 "

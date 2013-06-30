@@ -2,20 +2,14 @@
 
 # opencocon userland init
 
+# special machines
+rm /etc/X11/xorg.conf.d/*
+/usr/bin/cocon-spmachine
+
+
 # Run Menu
-
-menu_flag=`cat /proc/cmdline | grep noxmenu`
-
-if [ "$menu_flag" ];
-then
-  # noxmenu mode : Classic menu
-  su -c 'cocon-menu-launch' xuser
-  retr=$?
-else
-  # Modern X
-  su -c 'cocon-startx' xuser
-  retr=$?
-fi
+su -c 'cocon-startx' xuser
+retr=$?
 
 # Power off runs on .profile!
 cocon-poweroff

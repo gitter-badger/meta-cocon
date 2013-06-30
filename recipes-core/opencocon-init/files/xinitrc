@@ -1,9 +1,21 @@
 #!/bin/bash
 
-# opencocon-local startup
-
+# .xinitrc : setup routine after initalize X.org
 
 PWROFF="/tmp/.cocon.poweroff"
+
+
+# opencocon-local startup
+if [ -e /tmp/.cocon.cnf ];
+then
+  . /tmp/.cocon.cnf
+fi
+
+if [ -e /tmp/.cocon.cnf.part ];
+then
+  . /tmp/.cocon.cnf.part
+fi
+
 
 if [ -e $PWROFF ];
 then
@@ -16,34 +28,50 @@ lxpanel &
 connman-applet &
 
 
-# Classic mode call function : 
+# Read auto-connection setting and run (TODO)
 
-cvnc=$COCON_VNC_HOST
-cvnc_impl=$COCON_VNC_IMPL
-if [ $cvnc ];
+
+
+# Keymap
+if [ "$COCON_KBD_X_MODEL" ];
 then
-  cocon-vnc-launch $cvnc $cvnc_impl
-  exit 0
+  SETXKB=" -model $COCON_KBD_X_MODEL "
+fi
+
+if [ "$COCON_KBD_X_LAYOUT" ];
+then
+  SETXKB="$SETXKB -layout $COCON_KBD_X_LAYOUT "
+fi
+
+if [ "$COCON_KBD_X_VARIANT" ];
+then
+  SETXKB="$SETXKB -variant $COCON_KBD_X_VARIANT "
+fi
+
+if [ "$SETXKB" ];
+then
+  setxkbmap $SETXKB
 fi
 
 
-crdp=$COCON_RDP_HOST
-crdp_domain=$COCON_RDP_DOMAIN
-crdp_user=$COCON_RDP_USER
-if [ $crdp ];
-then
-  cocon-freerdp-launch $crdp $crdp_user $crdp_domain
-  exit 0
+# Auto connection
+if [ "$COCON_AUTOCONNECT" ];
+then 
+  if [ "$COCON_AUTOCONNECT" = "rdp" ];
+  then
+      lxterminal -e /usr/bin/cocon-freerdp-launch
+  fi
+
+  # Poweroff Flag
+  if [ "$COCON_POWEROFF_AFTER_AUTOCONNECT" = "1" ];
+  then
+    touch $PWROFF
+    exit 0
+  fi 
 fi
 
-cnet=$COCON_NETSET
-if [ $cnet ];
-then
-  cocon-netset-launch
-  exit 0
-fi
 
-# New mode menu
+  # New mode menu
 while :
 do
   if [ -e $PWROFF ];

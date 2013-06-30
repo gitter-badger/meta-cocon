@@ -16,6 +16,6 @@ SRC_URI = "git://anongit.freedesktop.org/openchrome/xf86-video-openchrome;protoc
           "
 
 S = "${WORKDIR}/git"
-SRCREV = "c27f9fedd1ffb3462154dc309afdf10b5b6ff50d"
+SRCREV = "0c17f81ad43d42958ab3871c9b5c5e9cea402256"
 
 

@@ -74,9 +74,7 @@ xf86-video-fbdev \
 xf86-video-geode \
 xf86-video-glint \
 xf86-video-i128 \
-xf86-video-i740 \
 xf86-video-intel \
-xf86-video-mach64 \
 xf86-video-mga \
 xf86-video-modesetting \
 xf86-video-neomagic \
@@ -115,6 +113,8 @@ xmodmap \
 openssh-ssh \
 gnome-icon-theme \
 hicolor-icon-theme \
+xdpyinfo \
+x11perf \
 "
 
 COCON_XEXT_PACKAGES = " \
@@ -198,6 +198,7 @@ linux-firmware-ralink \
 linux-firmware-realtek \
 linux-firmware-vt6656 \
 zd1211-firmware \
+linux-firmware \
 "
 
 RDEPENDS = "${COCON_BASE_PACKAGES} \

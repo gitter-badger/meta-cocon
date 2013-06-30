@@ -2,6 +2,13 @@
 
 # opencocon power-off script
 
+if [ `echo $COCON_DEBUG` ];
+then
+  echo "DEBUG: before shutdown. Maybe X.org failed."
+  /bin/sh
+fi
+
+
 if [ -z "$BOOT_FS" ];
 then
   # Direct-boot

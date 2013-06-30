@@ -1,4 +1,4 @@
-PR = "r45"
+PR = "r53"
 DESCRIPTION = "An initramfs module with UI for selection of boot device."
 #RDEPENDS_${PN} = "initramfs-uniboot"
 

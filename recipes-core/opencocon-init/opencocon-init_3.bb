@@ -3,7 +3,7 @@ SECTION = "base"
 LICENSE = "MIT"
 DEPENDS = "base-files"
 RDEPENDS_${PN} = "busybox"
-PR = "r38"
+PR = "r79"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "file://COPYING.MIT \
@@ -15,7 +15,6 @@ SRC_URI = "file://COPYING.MIT \
            file://rc \
            file://rcS \
            file://setup.sh \
-           file://key.conf \
            file://gplv2.txt \
            file://gplv3.txt \
            file://lgpl-2.1.txt \
@@ -30,6 +29,7 @@ SRC_URI = "file://COPYING.MIT \
 	   file://cocon-menu-launch \
 	   file://cocon-netset-launch \
 	   file://cocon-poweroff \
+           file://cocon-spmachine \
 	   file://cocon-vnc-launch \
 	   file://cocon-xephyr-launch \
 	   file://cocon-spice-launch \
@@ -46,6 +46,10 @@ SRC_URI = "file://COPYING.MIT \
 	   file://card-fbdev.conf \
 	   file://defaultdepth.conf \
 	   file://spicy-settings \
+           file://default.cnf \
+           file://geode-1024x600.conf \
+           file://geode-800x480.conf \
+           file://poulsbo.conf \
 "
 
 
@@ -82,6 +86,7 @@ do_install() {
 	install -m 0755    ${WORKDIR}/cocon-startx     ${D}${bindir}/cocon-startx
 	install -m 0755    ${WORKDIR}/cocon-option-menu     ${D}${bindir}/cocon-option-menu
         install -m 0755    ${WORKDIR}/cocon-spice-launch    ${D}${bindir}/cocon-spice-launch
+        install -m 0755    ${WORKDIR}/cocon-spmachine    ${D}${bindir}/cocon-spmachine
 
 	install -d ${D}${sysconfdir}/gtk-2.0
 	install -m 0644 ${WORKDIR}/gtkrc ${D}${sysconfdir}/gtk-2.0/gtkrc
@@ -108,6 +113,10 @@ do_install() {
 	install -d ${D}${datadir}/cocon/
         install -m 0644 ${WORKDIR}/card-fbdev.conf ${D}${datadir}/cocon/card-fbdev.conf
 	install -m 0644 ${WORKDIR}/defaultdepth.conf ${D}${datadir}/cocon/defaultdepth.conf
+        install -m 0644 ${WORKDIR}/geode-1024x600.conf ${D}${datadir}/cocon/geode-1024x600.conf
+        install -m 0644 ${WORKDIR}/geode-800x480.conf ${D}${datadir}/cocon/geode-800x480.conf
+        install -m 0644 ${WORKDIR}/default.cnf ${D}${datadir}/cocon/default.cnf
+	install -m 0644 ${WORKDIR}/poulsbo.conf ${D}${datadir}/cocon/poulsbo.conf
 
 	install -d ${D}${datadir}/cocon/pic/
         install -m 0644 ${WORKDIR}/COPYING.PICS ${D}${datadir}/cocon/pic/COPYING.PICS

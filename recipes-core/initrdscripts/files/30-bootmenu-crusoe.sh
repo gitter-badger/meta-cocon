@@ -15,10 +15,26 @@ OLDLOC="/media/cf"
 #    exit 1
 #fi
 
+# Alloc /dev
+mount -t devtmpfs devtmpfs /dev
+
+# mount missing volatile
+mount -t tmpfs none /var/volatile
+mkdir /var/volatile/tmp
+mkdir /var/volatile/log
+mkdir /var/volatile/run
+mkdir /var/volatile/run/dbus
+mkdir /var/volatile/lock
 
 # And, do udev
 /etc/init.d/udev start
 
+# Debug
+if [ `echo $COCON_DEBUG` ];
+then
+  echo " DEBUG: after initalize udev."
+  /bin/sh
+fi
 
 get_partition_type()
 {
@@ -45,6 +61,12 @@ boot_iso9660()
       echo "... is not contain $SQSFILE, try next. "
       umount $MOUNTLOC
       return 1
+    fi
+
+    if [ `echo $COCON_DEBUG` ];
+    then
+      echo "DEBUG: After detected boot device."
+      /bin/sh
     fi
 
     echo "mount squashfs"
@@ -83,43 +105,32 @@ boot_iso9660()
 scan_device()
 {
   # Scan all available device/partitions
+  cat /proc/diskstats | sort -r > /var/volatile/tmp/.cocon.diskstats
+
   while read maj min dev ex1 ex2 ex3 ex4 ex5 ex6 ex7 ex8 ex9 ex10 ex11; do
     if [ -z "$maj" -o "$maj" = "major" ]; then
         continue;
     fi
 
     get_partition_type
-    if [ "$fstype" = "iso9660" ]; then
+    if [ "$fstype" = "iso9660" -o "$fstype" = "vfat" -o "$fstype" = "ext3" ]; then
         # Comment following line to show all available block devices regardless of FS (for debug purposes)
         BOOT_FS="$fstype"
         export BOOT_FS
         boot_iso9660 $dev
         true
     fi
-    if [ "$fstype" = "vfat" ]; then
-        BOOT_FS="$fstype"
-        export BOOT_FS
-        boot_iso9660 $dev
-        true
-    fi
-    if [ "$fstype" = "ext3" ]; then
-      # ext3 : need some customize...
-      BOOT_FS="$fstype"
-      export BOOT_FS
-      boot_iso9660 $dev
-      true
-    fi
 
 
-  done < /proc/diskstats
+  done < /var/volatile/tmp/.cocon.diskstats
 }
 
 i=1
 while test $i -le 20 ;
 do
   echo "--- scanning root cd (part $i)---"
-  scan_device 
   sleep 5
+  scan_device 
   i=`expr $i + 1` 
 done
 

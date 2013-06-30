@@ -1,64 +1,62 @@
 #!/bin/bash
 
 # opencocon FreeRDP Launcher
-
-if [ $1 ];
+if [ -e /tmp/.cocon.cnf ];
 then
-
-  if [ $DISPLAY ];  
-  then
-    # Login name
-    if [ $2 ];
-    then
-      OPTION="$OPTION /u:$2 "
-    fi
-
-    # Domain Name
-    if [ $3 ];
-    then
-      OPTION="$OPTION /d:$3 "
-    fi
-
-    # Running on xterm
-#    if [ $COCON_RDP_CLASSIC ];
-#    then
-#      # Classic mode : run on lxterminal
-#      lxterminal -e xfreerdp $OPTION /f -x modem /kbd:jp  --plugin drdynvc --data tsmf:audio:alsa -- --plugin rdpsnd $1
-#      retr=$?
-#    else
-      xfreerdp $OPTION /f -wallpaper -themes +fonts /rfx /kbd:jp /sound:sys:alsa /microphone:sys:alsa /multimedia:sys:alsa /v:$1
-      retr=$?
-#    fi
-      
-    echo "Current return : $retr"
-    
-    sleep 5
-
-  else
- 
-    # Classic mode : running X, and call this script again
-    export COCON_RDP_HOST="$1"
-    if [ $2 ];
-    then
-      export COCON_RDP_USER="$2" 
-    fi
-    if [ $3 ];
-    then
-      export COCON_RDP_DOMAIN="$3"
-    fi
-    
-    export COCON_RDP_CLASSIC=1
-    
-    cd $HOME
-    startx
-    
-    unset COCON_RDP_HOST
-    unset COCON_RDP_USER
-    unset COCON_RDP_DOMAIN
-    unset COCON_RDP_CLASSIC
-    
-  fi
-else
-  echo "usage: cocon-freerdp-launch [hostname] <username> <domain>"
+  . /tmp/.cocon.cnf
 fi
+if [ -e /tmp/.cocon.cnf.part ];
+then
+  . /tmp/.cocon.cnf.part
+fi
+
+if [ -z $COCON_RDP_RDPFILE ];
+then
+  if [ -z $COCON_RDP_HOST ];
+  then
+    echo "Error: please spcify COCON_RDP_HOST."
+    exit 1
+  else
+    OPTION="$OPTION /v:$COCON_RDP_HOST "
+
+    # User name
+    if [ $COCON_RDP_USER ];
+    then
+      OPTION="$OPTION /u:$COCON_RDP_USER "
+    fi
+
+    # Domain name
+    if [ $COCON_RDP_DOMAIN ];
+    then
+      OPTION="$OPTION /d:$COCON_RDP_DOMAIN "
+    fi
+
+  fi
+
+else
+  # .rdp file is present: ignore COCON_RDP_HOST etc.
+  OPTION="$OPTION $COCON_RDP_RDPFILE "
+fi
+
+
+# Remote FX
+if [ "$COCON_RDP_RFX" = "1" ];
+then
+  OPTION="$OPTION /rfx /multimedia:sys:alsa /microphone:sys:alsa "
+fi
+
+while :
+do
+
+  xfreerdp $OPTION /f -wallpaper -themes +fonts /sound:sys:alsa /audio-mode
+  retr=$?
+
+  if [ "$retr" != "131" ];
+  then
+    break
+  fi
+done
+
+echo "Current return : $retr"    
+sleep 5
 

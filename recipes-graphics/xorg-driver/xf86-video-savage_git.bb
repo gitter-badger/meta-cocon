@@ -15,6 +15,6 @@ SRC_URI = "git://anongit.freedesktop.org/xorg/driver/xf86-video-savage;protocol=
 
 
 S = "${WORKDIR}/git"
-SRCREV = "ca9718a887ecbc59b76869af673791ab591b849b"
+SRCREV = "44581aef5f878e7f2b34d5693d50ef75263b195c"
 
 EXTRA_OECONF += " --disable-dri"

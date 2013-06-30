@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Script for special machines (and need root).
+ 
+GEOMETRY="/tmp/.cocon.geometry"
+
+if [ -e /tmp/cocon.cnf ];
+then
+  . /tmp/.cocon.cnf
+fi
+
+# Machine name
+MACHINE_MAKER=`dmidecode -s system-manufacturer`
+MACHINE_NAME=`dmidecode -s system-product-name`
+echo "Manufacturer: $MACHINE_MAKER"
+echo "Product name: $MACHINE_NAME"
+
+# Workaroud for special machines
+if [ "`echo "$MACHINE_MAKER" | grep 'KOHJINSHA'`" ];
+then
+  if [ "`echo "$MACHINE_NAME" | grep 'SA Series'`" ];
+  then
+    # KOHJINSHA SA
+    if [ -z "`echo $COCON_GEOMETRY`" ];
+    then
+      dialog --menu "KOHJINSHA SA : Select Geometry" 20 60 25 \
+        800x480   "800x480 (SA1F, SA5KX, SA5KL)" \
+        1024x600  "1024x600 (SA5SX, SA5ST)" \
+      2>$GEOMETRY
+      COCON_GEOMETRY=`cat $GEOMETRY` 
+    fi
+    
+    case $COCON_GEOMETRY in
+    800x480)
+      ln -sf /usr/share/cocon/geode-800x480.conf /etc/X11/xorg.conf.d/geode-800x480.conf
+      ;;
+    1024x600)
+      ln -sf /usr/share/cocon/geode-1024x600.conf /etc/X11/xorg.conf.d/geode-1024x600.conf
+      ;;
+    esac
+    
+  fi
+fi
+
+# Poulsbo : Software cursor
+if [ "` lsmod | grep -E 'poulsbo'`" ];
+then
+  ln -sf /usr/share/cocon/poulsbo.conf /etc/X11/xorg.conf.d/poulsbo.conf
+fi
+
+exit 0

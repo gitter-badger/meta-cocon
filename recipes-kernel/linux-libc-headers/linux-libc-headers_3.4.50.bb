@@ -14,7 +14,6 @@ PR = "r0"
 #        cp -R ${WORKDIR}/aufs/* ${WORKDIR}/linux-${PV}/
 #}
 
-SRC_URI[md5sum] = "5a715fd17a7d706c1715598e62b9c472"
-SRC_URI[sha256sum] = "80cf21391e13db743498012377dffbe04abb8237fb5fd3a7a16bbe50aef6ba27"
-
+SRC_URI[md5sum] = "213239d08746a22a76a84c5e4f09f4bb"
+SRC_URI[sha256sum] = "7376e87f9a44b3c37d2ee02e5d731e843e12d35a4d00c6d3761bb1a26c9a7167"
 

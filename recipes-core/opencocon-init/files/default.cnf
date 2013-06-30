@@ -1,0 +1,5 @@
+# opencocon distibution-wide config
+COCON_KBD_CONSOLE=jp106
+COCON_KBD_X_MODEL=jp106
+COCON_KBD_X_LAYOUT=jp
+

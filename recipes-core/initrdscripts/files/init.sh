@@ -31,7 +31,10 @@ read_args() {
                 ;;
             rootdelay=*)
                 rootdelay=$optarg ;;
-            debug) set -x ;;
+            debug) set -x
+                COCON_DEBUG=1
+                export COCON_DEBUG
+                ;;
             shell) sh ;;
         esac
     done
