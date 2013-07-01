@@ -10,11 +10,10 @@ RPROVIDES_${PN}-dev = "linux-libc-headers-dev"
 RPROVIDES_${PN}-dbg = "linux-libc-headers-dbg"
 KBRANCH ?= "standard/base"
 KMETA ?= "meta"
-PV = "3.0.63"
+PV = "3.0.84"
 PR = "r0"
 
 SRC_URI += "ftp://ftp.riken.jp/pub/Linux/kernel.org/linux/kernel/v3.0/linux-${PV}.tar.bz2;name=kernel \
-        ftp://get.opencocon.org/opencocon/sources-supply/aufs-snapshot_3.0.tar.gz;name=aufs \
 	file://linux-3.0.27-headers_install-fix-__packed-in-exported-kernel-head.patch \
 "
 
@@ -53,15 +52,15 @@ do_kernel_configme() {
 }
 
 # apply patches without quilt
-do_patch() {
-        cd ${WORKDIR}/linux-${PV}
-        patch -p1 <${WORKDIR}/aufs3-kbuild.patch
-        patch -p1 <${WORKDIR}/aufs3-base.patch
-        patch -p1 <${WORKDIR}/aufs3-proc_map.patch
-        patch -p1 <${WORKDIR}/aufs3-standalone.patch
-
-        cp -R ${WORKDIR}/aufs/* ${WORKDIR}/linux-${PV}/
-}
+#do_patch() {
+#        cd ${WORKDIR}/linux-${PV}
+#        patch -p1 <${WORKDIR}/aufs3-kbuild.patch
+#        patch -p1 <${WORKDIR}/aufs3-base.patch
+#        patch -p1 <${WORKDIR}/aufs3-proc_map.patch
+#        patch -p1 <${WORKDIR}/aufs3-standalone.patch
+#
+#        cp -R ${WORKDIR}/aufs/* ${WORKDIR}/linux-${PV}/
+#}
 
 do_compile () {
 }
@@ -74,8 +73,6 @@ do_kernel_configcheck () {
 
 BBCLASSEXTEND = "nativesdk"
 
-SRC_URI[md5sum] = "abaf65516980c909e507cd614f357654"
-SRC_URI[sha256sum] = "24e3c779a13d0288bc3a368e308b675e14bc3e8ab22cb4bf21c3fb0fbb35b003"
 
-SRC_URI[aufs.md5sum] = "6b3b8d4e2d53dfe52b675996c864db1c"
-SRC_URI[aufs.sha256sum] = "652a8385a487c901896d4fa70deba609dc1b979ea52d67ef68b43316804e1233"
+SRC_URI[md5sum] = "b2a15c803b31cc383e509abc0c1c93bb"
+SRC_URI[sha256sum] = "05a6e5f81dedef0e7f8936c2bb900ec5a598dc70274604f471279338cc28a1da"
