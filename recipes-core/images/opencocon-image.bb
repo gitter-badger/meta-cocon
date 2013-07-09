@@ -75,6 +75,7 @@ xf86-video-geode \
 xf86-video-glint \
 xf86-video-i128 \
 xf86-video-intel \
+xf86-video-mach64 \
 xf86-video-mga \
 xf86-video-modesetting \
 xf86-video-neomagic \
@@ -85,6 +86,7 @@ xf86-video-r128 \
 xf86-video-rendition \
 xf86-video-s3 \
 xf86-video-s3virge \
+xf86-video-savage \
 xf86-video-siliconmotion \
 xf86-video-sis \
 xf86-video-tdfx \
@@ -120,7 +122,6 @@ x11perf \
 COCON_XEXT_PACKAGES = " \
 libgl \
 libglu \
-libdricore \
 libegl-mesa \
 libgbm \
 libgl-mesa \
@@ -187,6 +188,7 @@ COCON_HDDIMAGE_PACKAGES = " \
 opencocon-init \
 opencocon-init-doc \
 grub \
+dropbear \
 "
 
 COCON_NONFREE_FIRMWARE = " \

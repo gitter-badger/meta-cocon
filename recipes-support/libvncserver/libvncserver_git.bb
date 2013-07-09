@@ -5,7 +5,7 @@ SECTION = "libs"
 PRIORITY = "optional"
 LICENSE = "GPLv2"
 DEPENDS = "zlib libjpeg-turbo libgcrypt libgcrypt-native gnutls gnutls-native"
-PR = "r4"
+PR = "r5"
 
 #DEFAULT_PREFERENCE = "-1"
 
@@ -14,6 +14,7 @@ SRC_URI = "git://libvncserver.git.sourceforge.net/gitroot/libvncserver/libvncser
 	   file://acinclude.m4 \
 	   file://ignore_webclients.patch \
            file://no_x11vnc_subdir.patch \
+           file://gtkvncviewer.c \
 " 
 
 # v6
@@ -39,6 +40,9 @@ do_configure() {
 	cp ${WORKDIR}/acinclude.m4 acinclude.m4
 	libtoolize --force
 	${CACHED_CONFIGUREVARS} ./autogen.sh ${CONFIGUREOPTS} ${EXTRA_OECONF}
+
+        # copy opencocon version gtkvncviewer
+        cp ${WORKDIR}/gtkvncviewer.c ${S}/client_examples/gtkvncviewer.c
 }
 
 do_install_append() {

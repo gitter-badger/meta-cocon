@@ -43,7 +43,7 @@ then
 fi
 
 # Poulsbo : Software cursor
-if [ "` lsmod | grep -E 'poulsbo'`" ];
+if [ "` lsmod | grep -E 'psb_gfx'`" ];
 then
   ln -sf /usr/share/cocon/poulsbo.conf /etc/X11/xorg.conf.d/poulsbo.conf
 fi
