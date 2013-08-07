@@ -2,25 +2,36 @@
 
 # opencocon SPICE launcher
 
-
-if [ $1 ];
+if [ -e /tmp/.cocon.cnf ];
 then
-  spiceop=" -h $1 "
+  . /tmp/.cocon.cnf
+fi
+if [ -e /tmp/.cocon.cnf.part ];
+then
+  . /tmp/.cocon.cnf.part
+fi
 
-  if [ `echo $SPICE_PORT` ];
-  then
-    spiceop=" $spiceop -p `echo $SPICE_PORT` "
-  fi
+if [ $COCON_SPICE_HOST ];
+then
+  spiceop=" -h $COCON_SPICE_HOST "
 
-  if [ `echo $SPICE_TLSPORT` ];
+  if [ $COCON_SPICE_PORT ];
   then
-    spiceop=" $spiceop -s `echo $SPICE_TLSPORT` "
+    spiceop=" $spiceop -p $COCON_SPICE_PORT "
+  else
+    if [ $COCON_SPICE_TLSPORT ];
+    then
+      spiceop=" $spiceop -s $COCON_SPICE_TLSPORT "
+    else
+      echo "Please specify PORT or TLSPORT."
+      exit 1
+    fi
   fi
 
   spicy $spiceop
 
 else
-  echo "usage: cocon-spice-launch [hostname]"
+  echo "Please specify HOST."
 fi
 
 

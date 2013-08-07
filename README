@@ -8,7 +8,7 @@ URI: git://git.openembedded.org/meta-openembedded
 branch: master
 revision: HEAD
 
-opencocon v3 tree
+opencocon tree
 http://opencocon.org/
 
 Layer maintainers: SHIMADA Hirofumi

@@ -1,9 +1,6 @@
-PR = "r53"
+PR = "r55"
 DESCRIPTION = "An initramfs module with UI for selection of boot device."
 #RDEPENDS_${PN} = "initramfs-uniboot"
-
-# For VFAT mounting.
-#RRECOMMENDS_${PN} = "kernel-module-nls-cp437 kernel-module-nls-iso8859-1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
@@ -16,5 +13,5 @@ do_install() {
 	#install -m 0755 ${WORKDIR}/udev-cocon ${D}/initrd.d/
 }
 
-#PACKAGE_ARCH = "all"
+PACKAGE_ARCH = "all"
 FILES_${PN} += " /initrd.d/* "

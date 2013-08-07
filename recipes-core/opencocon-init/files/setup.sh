@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 DEFCONF="/usr/share/cocon/default.cnf"
 SECCONF="/media/cf/media/realroot/cocon.cnf"
 SECCONF_EXTREME="/cocon.cnf"
 CNFFILE="/tmp/.cocon.cnf"
-ALLOW_CNF_BOOL="COCON_FORCEFB\|COCON_FORCESVGA\|COCON_WAIT_CONNECTED\|COCON_POWEROFF_AFTER_AUTOCONNECT"
-ALLOW_CNF_STR="COCON_KBD_CONSOLE\|COCON_KBD_X_MODEL\|COCON_KBD_X_LAYOUT\|COCON_KBD_X_VARIANT\|COCON_AUTOCONNECT\|COCON_RDP_HOST\|COCON_RDP_USER\|COCON_RDP_DOMAIN\|COCON_RDP_KBD"
+ALLOW_CNF_BOOL="COCON_FORCEFB\|COCON_FORCESVGA\|COCON_WAIT_CONNECTED\|COCON_POWEROFF_AFTER_AUTOCONNECT\|COCON_VNC_GTK-VNC"
+ALLOW_CNF_STR="COCON_KBD_CONSOLE\|COCON_KBD_X_MODEL\|COCON_KBD_X_LAYOUT\|COCON_KBD_X_VARIANT\|COCON_AUTOCONNECT\|COCON_RDP_HOST\|COCON_RDP_USER\|COCON_RDP_DOMAIN\|COCON_RDP_KBD\|COCON_VNC_HOST\|COCON_VNC_USER\|COCON_SPICE_HOST\|COCON_SPICE_PORT\|COCON_SPICE_TLSPORT\|COCON_WWW_START\|COCON_X_HOST"
 ALLOW_CNF_FILE="COCON_RDP_RDPFILE\|COCON_XCONF_ADD"
 
 read_args() {
@@ -24,7 +24,6 @@ read_args() {
             forcesvga)
                 echo "COCON_FORCESVGA=1" >> $CNFFILE
                 ;;
-            shell) sh ;;
         esac
     done
 }
@@ -67,7 +66,6 @@ read_cocon_cnf() {
       cnf_file=`dirname $1`
       argtmp="$cnf_file/$optarg"
       echo "$argtmp"
-#      /bin/sh 
       if [ ! -r "$line" ];
       then
         echo "Error: $cnf_file/$optarg on $arg is not readable."
@@ -80,7 +78,6 @@ read_cocon_cnf() {
       
         echo "$arg=/tmp/.cocon.cnf.files/`basename $argtmp`" >> $CNFFILE
 
-#        /bin/sh
       fi
     fi
 
@@ -90,34 +87,40 @@ read_cocon_cnf() {
 scan_cocon_setting()
 {
   # Scan all available device/partitions
-  cat /proc/diskstats | sort -r > /var/volatile/tmp/.cocon.diskstats
+  cat /proc/diskstats > /var/volatile/tmp/.cocon.diskstats
 
   if [ "$ROOT_DEVICE" ];
   then
     # Exclude Boot device (because already loaded)
-    sed '/$ROOT_DEVICE/d' /var/volatile/tmp/.cocon.diskstats
+    # TODO: not working?
+    sed "/`basename $ROOT_DEVICE`/d" /var/volatile/tmp/.cocon.diskstats > /tmp/.cocon.scan
+    echo "Exclude: $ROOT_DEVICE"
   fi
 
   while read maj min dev ex1 ex2 ex3 ex4 ex5 ex6 ex7 ex8 ex9 ex10 ex11; do
-    if [ -z "$maj" -o "$maj" = "major" ]; then
-        continue;
-    fi
+
+    echo "Searching: $dev"
+
+#    if [ -z "$maj" -o "$maj" = "major" ]; then
+#        continue;
+#    fi
 
     get_partition_type
+
     if [ "$fstype" = "iso9660" -o "$fstype" = "vfat" -o "$fstype" = "ext3" -o "$fstype" = "ntfs" ];
     then
         echo "Scanning setting from : $dev"
         mkdir /mnt/cfg
-        mount -o ro $dev /mnt/cfg
+        mount -o ro /dev/$dev /mnt/cfg
+
         if [ -r /mnt/cfg/cocon.cnf ];
         then
           echo  " --> cocon.cnf found"
           read_cocon_cnf /mnt/cfg/cocon.cnf
         fi
-        umount $dev
-        true
+        umount /dev/$dev
     fi
-  done < /var/volatile/tmp/.cocon.diskstats
+   done < /tmp/.cocon.scan
 }
 
 
@@ -209,6 +212,12 @@ fi
 
 if [ "$COCON_DEBUG" -eq 1 ];
 then
+  sleep 4
+  echo "Debug : enable dropbear. Please input user password."
+  passwd xuser
+  dropbearkey -t rsa -f /tmp/.cocon.debugrsa
+  dropbear -r /tmp/.cocon.debugrsa -w -K 0
+  
   echo "Debug : after setup.sh"
   /bin/sh
 fi

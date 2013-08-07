@@ -17,7 +17,7 @@ SSH_FWPORT=/tmp/.cocon.fwport
 ABOUT=/usr/share/doc/cocon/about.txt
 PARTCNF=/tmp/.cocon.cnf.part
 
-dialog --menu "opencocon v7a (experimental)" 20 40 25 \
+dialog --menu "opencocon v7b (experimental)" 20 40 25 \
 XEPHYR "Connect XDMCP" \
 RDP "Connect RDP" \
 VNC2 "Connect VNC" \
@@ -35,7 +35,7 @@ select=`cat $SELECT`
 case $select in 
 XEPHYR)
 
-  # XDMCP via XEPHYR (Classic mode is X -query)
+  # XDMCP via XEPHYR
 
   dialog --inputbox "Enter hostname to connect" 8 40 2>$HOSTN
   
@@ -43,29 +43,36 @@ XEPHYR)
   rm $HOSTN
   if [ $hostn ];
   then
-    cocon-xephyr-launch $hostn
+    echo "COCON_X_HOST=$hostn" >> $PARTCNF
+    cocon-xephyr-launch
+    rm $PARTCNF
   fi
   ;;
 
 
 VNC)
 
-  # Connect VNC via gtk-vnc
+  # Connect VNC via gtk-vnc (Alt.)
 
   dialog --inputbox "Enter hostname:display to connect" 8 40 2>$HOSTN
-  hostn=`$HOSTN`
+  hostn=`cat $HOSTN`
+  echo "COCON_VNC_HOST=$hostn" >> $PARTCNF
+  echo "COCON_VNC_GTK-VNC=1" >> $PARTCNF
 
-  cocon-vnc-launch $hostn gtk-vnc 
+  cocon-vnc-launch
+  rm $PARTCNF
   ;;
 
 VNC2)
    
-  # Connect VNC via libvncclient (Alt.)
+  # Connect VNC via libvncclient 
 
   dialog --inputbox "Enter hostname:display to connect" 8 40 2>$HOSTN
   hostn=`cat $HOSTN`
+  echo "COCON_VNC_HOST=$hostn" >> $PARTCNF
 
-  cocon-vnc-launch $hostn libvncserver
+  cocon-vnc-launch
+  rm $PARTCNF
   ;;
 
 
@@ -107,17 +114,17 @@ SPICE)
   
   if [ $hostn ];
   then
+    echo "COCON_SPICE_HOST=$hostn" >> $PARTCNF
   
     dialog --inputbox "Enter port number (non-TLS, default is 5900)" 8 40 2>$PORTN
     dialog --inputbox "Enter port number (TLS, default is 5901)" 8 40 2>$PORTN2
  
-    export SPICE_PORT=`cat $PORTN`
-    export SPICE_TLSPORT=`cat $PORTN2`
+    echo "COCON_SPICE_PORT=`cat $PORTN`" >> $PARTCNF
+    echo "COCON_SPICE_TLSPORT=`cat $PORTN2`" >> $PARTCNF
 
-    cocon-spice-launch $hostn 
+    cocon-spice-launch
 
-    unset SPICE_PORT
-    unset SPICE_TLSPORT
+    rm $PARTCNF
 
     # Workaround: force restart lxterminal.
     pkill lxterminal

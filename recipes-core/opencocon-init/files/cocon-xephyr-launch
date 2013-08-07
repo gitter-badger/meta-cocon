@@ -1,19 +1,20 @@
 #!/bin/bash
 
 # opencocon Xephyr launcher
-
-
-if [ $1 ];
+if [ -e /tmp/.cocon.cnf ];
 then
-  if [ $DISPLAY ];
-  then
-    # XDMCP via Xephyr
-    exec Xephyr -query $1 -fullscreen -once :1
-  else
-    # Classic XDMCP
-    X -query $1 -once
-  fi
+  . /tmp/.cocon.cnf
+fi
+if [ -e /tmp/.cocon.cnf.part ];
+then
+  . /tmp/.cocon.cnf.part
+fi
+
+if [ $COCON_X_HOST ];
+then
+  # XDMCP via Xephyr
+  exec Xephyr -query $COCON_X_HOST -fullscreen -once :1
 else
-  echo "usage: cocon-xephyr-launch [hostname]"
+  echo "Please specify HOST."
 fi
 

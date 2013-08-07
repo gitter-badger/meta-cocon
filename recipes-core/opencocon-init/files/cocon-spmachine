@@ -9,13 +9,30 @@ then
   . /tmp/.cocon.cnf
 fi
 
-# Machine name
-MACHINE_MAKER=`dmidecode -s system-manufacturer`
-MACHINE_NAME=`dmidecode -s system-product-name`
-echo "Manufacturer: $MACHINE_MAKER"
-echo "Product name: $MACHINE_NAME"
+# Force Framebuffer driver if boot option contains "forcefb*"
+if [ "$COCON_FORCEFB" = "1" ];
+then
+  ln -s /usr/share/cocon/card-fbdev.conf /etc/X11/xorg.conf.d/card-fbdev.conf
+fi
 
-# Workaroud for special machines
+# Force 800x600 16bit color if contains "forcesvga"
+if [ "$COCON_FORCESVGA" = "1" ];
+then
+  ln -s /usr/share/cocon/defaultdepth.conf /etc/X11/xorg.conf.d/defaultdepth.conf
+fi
+
+
+# Machine name
+if [ "`which dmidecode`" ];
+then
+  # dmidecode is only for x86
+  MACHINE_MAKER=`dmidecode -s system-manufacturer`
+  MACHINE_NAME=`dmidecode -s system-product-name`
+  echo "Manufacturer: $MACHINE_MAKER"
+  echo "Product name: $MACHINE_NAME"
+fi
+
+# Workaroud for KOHJINSHA SA
 if [ "`echo "$MACHINE_MAKER" | grep 'KOHJINSHA'`" ];
 then
   if [ "`echo "$MACHINE_NAME" | grep 'SA Series'`" ];
@@ -42,8 +59,40 @@ then
   fi
 fi
 
+# Workaroud for SONY PCG-C1 (with neomagic graphics)
+# Select 2nd generation PCG-C1. 1st generation can't detect from dmidecode.
+if [ "`echo "$MACHINE_MAKER" | grep 'Sony Corporation'`" -a "`echo "$MACHINE_NAME" | grep -E 'PCG-C1XG|PCG-C1XE|PCG-C2GPS|PCG-C1XF'`" ];
+then
+  COCON_PCG_C1=1
+  export COCON_PCG_C1
+fi
+
+if [ "`cat /proc/cmdline | grep 'pcg-c1'`" ];
+then
+  COCON_PCG_C1=1
+  export COCON_PCG_C1
+fi
+
+if [ "`echo $COCON_PCG_C1`" = "1" ];
+then
+    ln -sf /usr/share/cocon/sony-pcg-c1.conf /etc/X11/xorg.conf.d/sony-pcg-c1.conf
+fi 
+
+# Workaround for Libretto L1, L2, ...
+if [ "`echo "$MACHINE_MAKER" | grep 'TOSHIBA'`" -a "`echo "$MACHINE_NAME" | grep -E 'Libretto L'`" ];
+then
+  ln -sf /usr/share/cocon/libretto-lx.conf /etc/X11/xorg.conf.d/libretto-lx.conf
+fi
+
+# Siliconmotion : Workaroud for SM712
+if [ "` lspci | grep -E '126f:0712' `" ];
+then
+  ln -sf /usr/share/cocon/smi_712.conf /etc/X11/xorg.conf.d/smi_712.conf 
+fi
+
+
 # Poulsbo : Software cursor
-if [ "` lsmod | grep -E 'psb_gfx'`" ];
+if [ "` lsmod | grep -E 'psb_gfx|gma500_gfx'`" ];
 then
   ln -sf /usr/share/cocon/poulsbo.conf /etc/X11/xorg.conf.d/poulsbo.conf
 fi

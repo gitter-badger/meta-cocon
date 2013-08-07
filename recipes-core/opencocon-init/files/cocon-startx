@@ -15,27 +15,18 @@ cp /etc/skel/.profile /home/xuser
 cp /etc/skel/.xinitrc /home/xuser 
 
 
-# Force Framebuffer driver if boot option contains "forcefb*"
-if [ "$COCON_FORCEFB" = "1" ];
-then
-  ln -s /usr/share/cocon/card-fbdev.conf /etc/X11/xorg.conf.d/card-fbdev.conf
-fi
-
-# Force 800x600 16bit color if contains "forcesvga"
-if [ "$COCON_FORCESVGA" = "1" ];
-then
-  ln -s /usr/share/cocon/defaultdepth.conf /etc/X11/xorg.conf.d/defaultdepth.conf
-fi
 
 # Workaround for graphics chipset bugs
 # ( Userspace: not root )
 
 # Workaround chips for broken X.org driver
-#  (Currently ATI, Savage. Almost these chips can display 24-bit color depth.)
-if [ "` lsmod | grep -E 'radeon|savage|atyfb'`" ];
+#  (Currently ATI, Savage, Siliconmotion, Neomagic.
+#   Almost these chips can display 24-bit color depth.)
+if [ "` lsmod | grep -E 'radeon|savage|atyfb|sm7xx|neofb'`" ];
 then
   X_OPTION="-- -depth 24"
 fi
+
 
 if [ `echo $COCON_DEBUG` ];
 then

@@ -3,7 +3,7 @@ SECTION = "base"
 LICENSE = "MIT"
 DEPENDS = "base-files"
 RDEPENDS_${PN} = "busybox"
-PR = "r80"
+PR = "r100"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "file://COPYING.MIT \
@@ -50,6 +50,9 @@ SRC_URI = "file://COPYING.MIT \
            file://geode-1024x600.conf \
            file://geode-800x480.conf \
            file://poulsbo.conf \
+           file://smi_712.conf \
+           file://libretto-lx.conf \
+           file://sony-pcg-c1.conf \
 "
 
 
@@ -117,6 +120,9 @@ do_install() {
         install -m 0644 ${WORKDIR}/geode-800x480.conf ${D}${datadir}/cocon/geode-800x480.conf
         install -m 0644 ${WORKDIR}/default.cnf ${D}${datadir}/cocon/default.cnf
 	install -m 0644 ${WORKDIR}/poulsbo.conf ${D}${datadir}/cocon/poulsbo.conf
+        install -m 0644 ${WORKDIR}/smi_712.conf ${D}${datadir}/cocon/smi_712.conf
+        install -m 0644 ${WORKDIR}/sony-pcg-c1.conf ${D}${datadir}/cocon/sony-pcg-c1.conf
+        install -m 0644 ${WORKDIR}/libretto-lx.conf ${D}${datadir}/cocon/libretto-lx.conf
 
 	install -d ${D}${datadir}/cocon/pic/
         install -m 0644 ${WORKDIR}/COPYING.PICS ${D}${datadir}/cocon/pic/COPYING.PICS

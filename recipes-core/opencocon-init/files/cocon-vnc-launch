@@ -2,35 +2,28 @@
 
 # opencocon VNC Launcher
 
-if [ $1 ];
+if [ -e /tmp/.cocon.cnf ];
 then
+  . /tmp/.cocon.cnf
+fi
+if [ -e /tmp/.cocon.cnf.part ];
+then
+  . /tmp/.cocon.cnf.part
+fi
 
-  if [ $DISPLAY ];  
+if [ $COCON_VNC_HOST ];
+then
+    
+  if [ "`echo $COCON_VNC_GTK-VNC`" = "1" ];
   then
-    
-    if [ "$2" = "libvncserver" ];
-    then
-      exec gtkvncviewer $1
-    fi
-    
-    if [ "$2" = "gtk-vnc" ];
-    then
-      exec gvncviewer $1
-    fi
-
+    # gtk-vnc
+    exec gvncviewer $COCON_VNC_HOST
   else
- 
-    # Classic mode : running X, and call this script again
-    export COCON_VNC_HOST="$1"
-    export COCON_VNC_IMPL="$2"
- 
-    cd $HOME
-    startx
-    
-    unset COCON_VNC_HOST
-    unset COCON_VNC_IMPL
+    # libvncviewer
+    exec gtkvncviewer $COCON_VNC_HOST
   fi
+ 
 else
-  echo "usage: cocon-freerdp-launch [hostname] [gtk-vnc | libvncserver]"
+  echo "Please specify HOST."
 fi
 

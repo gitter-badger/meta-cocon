@@ -1,0 +1,24 @@
+From: "Anthony G. Basile" <blueness at gentoo.org>
+
+Programs using obstacks, like the suite of utilities provided by
+coreutils, need _obstack_newchunk so we unhide the symbol.
+
+Signed-off-by: Anthony G. Basile <blueness at gentoo.org>
+---
+ include/obstack.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/obstack.h b/include/obstack.h
+index 8ef0b7a..076df7d 100644
+--- a/include/obstack.h
++++ b/include/obstack.h
+@@ -179,7 +179,6 @@ struct obstack		/* control current object in current chunk */
+ /* Declare the external functions we use; they are in obstack.c.  */
+ 
+ extern void _obstack_newchunk (struct obstack *, int);
+-libc_hidden_proto(_obstack_newchunk)
+ extern int _obstack_begin (struct obstack *, int, int,
+ 			    void *(*) (long), void (*) (void *));
+ extern int _obstack_begin_1 (struct obstack *, int, int,
+-- 
+1.8.1.5

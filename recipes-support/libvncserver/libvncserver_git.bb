@@ -5,16 +5,14 @@ SECTION = "libs"
 PRIORITY = "optional"
 LICENSE = "GPLv2"
 DEPENDS = "zlib libjpeg-turbo libgcrypt libgcrypt-native gnutls gnutls-native"
-PR = "r5"
-
-#DEFAULT_PREFERENCE = "-1"
-
+PR = "r7"
 
 SRC_URI = "git://libvncserver.git.sourceforge.net/gitroot/libvncserver/libvncserver;protocol=git;branch=master \
 	   file://acinclude.m4 \
 	   file://ignore_webclients.patch \
            file://no_x11vnc_subdir.patch \
            file://gtkvncviewer.c \
+           file://no_sdl_example.patch \
 " 
 
 # v6
@@ -47,7 +45,7 @@ do_configure() {
 
 do_install_append() {
         install -m 0755 ${WORKDIR}/git/client_examples/.libs/gtkvncviewer ${D}${bindir}/gtkvncviewer
-        install -m 0755 ${WORKDIR}/git/client_examples/.libs/SDLvncviewer ${D}${bindir}/SDLvncviewer
+#        install -m 0755 ${WORKDIR}/git/client_examples/.libs/SDLvncviewer ${D}${bindir}/SDLvncviewer
 }
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=361b6b837cad26c6900a926b62aada5f"

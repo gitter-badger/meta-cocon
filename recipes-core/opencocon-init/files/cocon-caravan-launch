@@ -2,12 +2,21 @@
 
 # Cocon-caravan (midori) launcher
 
-if [ $DISPLAY ];
+if [ -e /tmp/.cocon.cnf ];
 then
-  # Just run midori
-  exec midori -p "http://www.opencocon.org/"
-else
-  # Classic : is usualy memory-less, do not running.
-  echo "Running classic mode: Abort running browser."
+  . /tmp/.cocon.cnf
 fi
+if [ -e /tmp/.cocon.cnf.part ];
+then
+  . /tmp/.cocon.cnf.part
+fi
+
+if [ -z $COCON_WWW_START ];
+then
+  COCON_WWW_START="http://www.opencocon.org/"
+fi
+
+
+# Just run midori
+exec midori -p $COCON_WWW_START
 

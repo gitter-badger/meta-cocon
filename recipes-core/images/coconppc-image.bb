@@ -3,7 +3,7 @@
 IMAGE_PKGTYPE = "ipk"
 
 
-IMAGE_NAME = "opencocon-${DISTRO_VERSION}-${MACHINE}"
+IMAGE_NAME = "coconppc-${DISTRO_VERSION}-${MACHINE}"
 
 # TODO : postprocess?
 #IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
@@ -36,15 +36,12 @@ update-rc.d \
 connman \
 connman-plugin-ethernet \
 connman-plugin-wifi \
-util-linux-cfdisk \
-util-linux-fdisk \
 e2fsprogs-badblocks \
 e2fsprogs-mke2fs \
 e2fsprogs-e2fsck \
 udev \
 kbd \
 kbd-keymaps \
-dmidecode \
 kernel-modules \
 consolekit \
 "
@@ -65,35 +62,15 @@ xf86-input-synaptics \
 xf86-input-evdev \
 xf86-input-keyboard \
 xf86-input-mouse \
-xf86-video-apm \
-xf86-video-ark \
-xf86-video-ast \
-xf86-video-ati \
 xf86-video-chips \
-xf86-video-cirrus \
 xf86-video-fbdev \
-xf86-video-geode \
-xf86-video-glint \
-xf86-video-i128 \
-xf86-video-intel \
 xf86-video-mach64 \
 xf86-video-mga \
 xf86-video-modesetting \
+xf86-video-neomagic \
 xf86-video-nouveau \
 xf86-video-nv \
-xf86-video-openchrome \
 xf86-video-r128 \
-xf86-video-rendition \
-xf86-video-s3 \
-xf86-video-s3virge \
-xf86-video-sis \
-xf86-video-tdfx \
-xf86-video-trident \
-xf86-video-tseng \
-xf86-video-vesa \
-xf86-video-voodoo \
-xf86-video-xgi \
-xf86-video-xgixp \
 xauth \
 encodings \
 font-util \
@@ -115,15 +92,11 @@ gnome-icon-theme \
 hicolor-icon-theme \
 xdpyinfo \
 x11perf \
-xf86-video-savage \
-xf86-video-siliconmotion \
-xf86-video-neomagic \
+xf86-video-ati \
 "
 
-# Currently exclude drivers:
-# xf86-video-savage 
-# xf86-video-siliconmotion 
-# xf86-video-neomagic 
+# Currently exclude driver:
+# xf86-video-ati
 
 COCON_XEXT_PACKAGES = " \
 libgl \
@@ -136,21 +109,14 @@ libgles1-mesa \
 libgles2-mesa \
 libdrm \
 libdrm-kms \
-libdrm-intel \
 libdrm-nouveau \
 libdrm-radeon \
-mesa-driver-i915 \
-mesa-driver-i965 \
-mesa-driver-nouveau-vieux \
-mesa-driver-r200 \
-mesa-driver-radeon \
 mesa-driver-swrast \
 "
 
 
 COCON_APP_PACKAGES = " \
 freerdp \
-libfreerdp \
 webkit-gtk \
 libvncserver \
 openssl \
@@ -189,23 +155,18 @@ connman-gnome \
 viewnior \
 celt \
 spice-gtk \
-dropbear \
 "
 
 COCON_HDDIMAGE_PACKAGES = " \
 opencocon-init \
 opencocon-init-doc \
-grub \
+yaboot \
+parted \
 "
 
 COCON_NONFREE_FIRMWARE = " \
-linux-firmware-broadcom \
-linux-firmware-agere \
-linux-firmware-iwlwifi \
-linux-firmware-marvell \
 linux-firmware-ralink \
 linux-firmware-realtek \
-linux-firmware-vt6656 \
 zd1211-firmware \
 linux-firmware \
 "
@@ -226,9 +187,7 @@ ${COCON_HDDIMAGE_PACKAGES} \
 ${COCON_NONFREE_FIRMWARE} \
 "
 
-
-
-IMAGE_BASENAME = "opencocon"
+IMAGE_BASENAME = "coconppc"
 IMAGE_FSTYPES = " tar.gz squashfs "
 
 inherit image

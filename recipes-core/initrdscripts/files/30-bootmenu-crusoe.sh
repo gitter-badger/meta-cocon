@@ -32,7 +32,7 @@ mkdir /var/volatile/lock
 # Debug
 if [ `echo $COCON_DEBUG` ];
 then
-  echo " DEBUG: after initalize udev."
+  echo " DEBUG: after initalize udev on initramfs."
   /bin/sh
 fi
 
@@ -63,11 +63,11 @@ boot_iso9660()
       return 1
     fi
 
-    if [ `echo $COCON_DEBUG` ];
-    then
-      echo "DEBUG: After detected boot device."
-      /bin/sh
-    fi
+#    if [ `echo $COCON_DEBUG` ];
+#    then
+#      echo "DEBUG: After detected boot device."
+#      /bin/sh
+#    fi
 
     echo "mount squashfs"
 

@@ -7,10 +7,11 @@ include freerdp.inc
 
 PV = "gitr${SRCPV}"
 PKGV = "${GITPKGVTAG}"
-PR = "${INC_PR}.9"
+PR = "${INC_PR}.10"
 
 # Experimental:
-SRCREV = "15a22eb9c9656fab41cefbe9e39e4b70162bece2" 
+# v7
+SRCREV = "15a22eb9c9656fab41cefbe9e39e4b70162bece2"
 # SRCREV = "b4b0fb06429b1ae2bae1429cc1a930509babf57e"  # Tested
 
 # Stable tree:
@@ -18,7 +19,6 @@ SRCREV = "15a22eb9c9656fab41cefbe9e39e4b70162bece2"
 
 SRC_URI = "git://github.com/FreeRDP/FreeRDP.git \
            file://futimens_cocon_v2.patch \
-           file://06d06fdd2d45350f144ff3d79353e817b30811a7.patch \ 
 "
 GITPKGVTAG = "${SRCREV}"
 

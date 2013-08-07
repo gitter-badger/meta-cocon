@@ -27,7 +27,6 @@ FILES_${PN}-vala += "${datadir}/vala/*"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=4fbd65380cdd255951079008b364516c"
 
-SRC_URI[md5sum] = "85c1d975ad3c9df4882b91f34b41920d"
-SRC_URI[sha256sum] = "43588f68c03d271ea139ec7366db04872c780577bf8a08584d5c2bff001981cf"
-
+SRC_URI[md5sum] = "9ef6b7f2f368b7966029b7834b7c2bec"
+SRC_URI[sha256sum] = "b1355823b0ceb2e118c1f9a9a602ccab78e1e2edf2d93f71fa42d3bc85ca75df"
 

@@ -2,10 +2,10 @@ DESCRIPTION = "VNC viewer widget for GTK"
 HOMEPAGE = "VNC viewer widget for GTK"
 AUTHOR = ""
 SECTION = "x11/utils"
-LICENSE = "GPL"
+LICENSE = "LGPLv2"
 DEPENDS = "openssl virtual/libx11 atk gtk+ cyrus-sasl gnutls libgcrypt jpeg zlib"
 
-PR = "r0"
+PR = "r1"
 
 SRC_URI = "http://ftp.acc.umu.se/pub/GNOME/sources/gtk-vnc/0.5/gtk-vnc-${PV}.tar.xz \
 "
@@ -34,7 +34,8 @@ do_configure_prepend() {
 	${S}/acinclude.m4
 }
 
-
-SRC_URI[md5sum] = "f45c9649c915af335cff91268e74ab67"
-SRC_URI[sha256sum] = "1de65d8ffa8c25a61a8e8c4b7e5963d4a826f4fcf7120d66ed027f5f70cc8f81"
+SRC_URI[md5sum] = "591f5c0efff931336cba5b56e0c64e0d"
+SRC_URI[sha256sum] = "b51bda7edebb82ab142c292bd1b1493406bc8225a5c834d854bbafef9e9a471f"
+#SRC_URI[md5sum] = "f45c9649c915af335cff91268e74ab67"
+#SRC_URI[sha256sum] = "1de65d8ffa8c25a61a8e8c4b7e5963d4a826f4fcf7120d66ed027f5f70cc8f81"
 LIC_FILES_CHKSUM = "file://COPYING.LIB;md5=4339efb5fd592e45b9e2641de9fe734f"
