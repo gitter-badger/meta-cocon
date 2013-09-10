@@ -10,7 +10,7 @@ RPROVIDES_${PN}-dev = "linux-libc-headers-dev"
 RPROVIDES_${PN}-dbg = "linux-libc-headers-dbg"
 KBRANCH ?= "standard/base"
 KMETA ?= "meta"
-PV = "3.0.84"
+PV = "3.0.94"
 PR = "r0"
 
 SRC_URI += "ftp://ftp.riken.jp/pub/Linux/kernel.org/linux/kernel/v3.0/linux-${PV}.tar.bz2;name=kernel \
@@ -74,5 +74,3 @@ do_kernel_configcheck () {
 BBCLASSEXTEND = "nativesdk"
 
 
-SRC_URI[md5sum] = "b2a15c803b31cc383e509abc0c1c93bb"
-SRC_URI[sha256sum] = "05a6e5f81dedef0e7f8936c2bb900ec5a598dc70274604f471279338cc28a1da"

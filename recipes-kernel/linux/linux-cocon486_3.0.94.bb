@@ -1,8 +1,8 @@
 inherit kernel
 require recipes-kernel/linux/linux.inc
 
-PR = "r5"
-LINUX_VERSION ?= "3.0.84"
+PR = "r0"
+LINUX_VERSION ?= "3.0.94"
 
 S = "${WORKDIR}/linux-${PV}"
 

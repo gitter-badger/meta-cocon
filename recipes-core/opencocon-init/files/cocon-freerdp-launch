@@ -24,12 +24,15 @@ then
     then
       OPTION="$OPTION /u:$COCON_RDP_USER "
     fi
+    # TODO : if empty, Prompt user name! 
 
     # Domain name
     if [ $COCON_RDP_DOMAIN ];
     then
       OPTION="$OPTION /d:$COCON_RDP_DOMAIN "
     fi
+
+   # TODO : password
 
   fi
 
@@ -47,6 +50,8 @@ fi
 
 while :
 do
+
+  # TODO : Show message : Password prompt is shown neither string or *!
 
   xfreerdp $OPTION /f -wallpaper -themes +fonts /sound:sys:alsa /audio-mode
   retr=$?

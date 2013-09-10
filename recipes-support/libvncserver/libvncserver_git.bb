@@ -7,7 +7,7 @@ LICENSE = "GPLv2"
 DEPENDS = "zlib libjpeg-turbo libgcrypt libgcrypt-native gnutls gnutls-native"
 PR = "r7"
 
-SRC_URI = "git://libvncserver.git.sourceforge.net/gitroot/libvncserver/libvncserver;protocol=git;branch=master \
+SRC_URI = "git://git.code.sf.net/p/libvncserver/code;protocol=git;branch=master \
 	   file://acinclude.m4 \
 	   file://ignore_webclients.patch \
            file://no_x11vnc_subdir.patch \
