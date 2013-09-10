@@ -195,7 +195,7 @@ dropbear \
 COCON_HDDIMAGE_PACKAGES = " \
 opencocon-init \
 opencocon-init-doc \
-grub \
+grub-legacy \
 "
 
 COCON_NONFREE_FIRMWARE = " \

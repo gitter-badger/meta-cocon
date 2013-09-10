@@ -73,4 +73,5 @@ do_kernel_configcheck () {
 
 BBCLASSEXTEND = "nativesdk"
 
-
+SRC_URI[md5sum] = "157b4ca9066a4b7bbdbb9da9b79fc65c"
+SRC_URI[sha256sum] = "62f6836bc45389abc92d175049b1ba2785a73748a45cc3f54a0b1f01a6ea5cd8"
