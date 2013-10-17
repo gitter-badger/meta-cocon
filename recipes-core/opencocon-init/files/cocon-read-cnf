@@ -1,0 +1,59 @@
+#!/bin/sh
+
+CNFFILE="/tmp/.cocon.cnf"
+CNF_FILE_MOVETO="/tmp/.cocon.cnf.files/"
+ALLOW_CNF_BOOL="COCON_FORCEFB\|COCON_FORCESVGA\|COCON_WAIT_CONNECTED\|COCON_POWEROFF_AFTER_AUTOCONNECT\|COCON_VNC_GTK-VNC"
+ALLOW_CNF_STR="COCON_KBD_CONSOLE\|COCON_KBD_X_MODEL\|COCON_KBD_X_LAYOUT\|COCON_KBD_X_VARIANT\|COCON_AUTOCONNECT\|COCON_RDP_HOST\|COCON_RDP_USER\|COCON_RDP_DOMAIN\|COCON_RDP_KBD\|COCON_VNC_HOST\|COCON_VNC_USER\|COCON_SPICE_HOST\|COCON_SPICE_PORT\|COCON_SPICE_TLSPORT\|COCON_WWW_START\|COCON_X_HOST"
+ALLOW_CNF_FILE="COCON_RDP_RDPFILE\|COCON_XCONF_ADD"
+
+
+# Read cocon.cnf
+read_cocon_cnf() {
+  while read line
+  do
+    line=`echo $line | dos2unix`
+    line=`echo $line | sed -e '/^#/d'`
+    optarg=`echo $line | cut -d "=" -f 2`
+    arg=`echo "$line" | cut -d "=" -f 1`
+
+    if [ "$arg" ];
+    then
+      echo "$arg=$optarg"
+    fi
+
+    if expr "$arg" : $ALLOW_CNF_BOOL > /dev/null ;
+    then
+      # Data is boolean
+      echo "$arg=$((optarg > 0 ? 1: 0))" >> $CNFFILE
+    fi
+
+    if expr "$arg" : $ALLOW_CNF_STR > /dev/null ;
+    then
+      # Data is string (TODO: Sanitry Check)
+      echo "$arg=$optarg" >> $CNFFILE
+    fi
+
+    if expr "$arg" : $ALLOW_CNF_FILE > /dev/null ;
+    then
+      # One filename : convert to fullpath on opencocon
+      cnf_file=`dirname $1`
+      argtmp="$cnf_file/$optarg"
+      echo "$argtmp"
+      if [ ! -r "$line" ];
+      then
+        echo "Error: $cnf_file/$optarg on $arg is not readable."
+        #unset $arg
+      else 
+      
+        # Copy to /tmp
+        mkdir -p $CNF_FILE_MOVETO
+        cp $argtmp $CNF_FILE_MOVETO
+      
+        echo "$arg=$CNF_FILE_MOVETO`basename $argtmp`" >> $CNFFILE
+
+      fi
+    fi
+
+  done < $1
+}
+

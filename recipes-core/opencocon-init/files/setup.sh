@@ -1,12 +1,13 @@
 #!/bin/sh
 
 DEFCONF="/usr/share/cocon/default.cnf"
-SECCONF="/media/cf/media/realroot/cocon.cnf"
+SECCONF="/mnt/union/mnt/realroot/cocon.cnf"
 SECCONF_EXTREME="/cocon.cnf"
+CONF_MOUNT="/mnt/cfg"
 CNFFILE="/tmp/.cocon.cnf"
-ALLOW_CNF_BOOL="COCON_FORCEFB\|COCON_FORCESVGA\|COCON_WAIT_CONNECTED\|COCON_POWEROFF_AFTER_AUTOCONNECT\|COCON_VNC_GTK-VNC"
-ALLOW_CNF_STR="COCON_KBD_CONSOLE\|COCON_KBD_X_MODEL\|COCON_KBD_X_LAYOUT\|COCON_KBD_X_VARIANT\|COCON_AUTOCONNECT\|COCON_RDP_HOST\|COCON_RDP_USER\|COCON_RDP_DOMAIN\|COCON_RDP_KBD\|COCON_VNC_HOST\|COCON_VNC_USER\|COCON_SPICE_HOST\|COCON_SPICE_PORT\|COCON_SPICE_TLSPORT\|COCON_WWW_START\|COCON_X_HOST"
-ALLOW_CNF_FILE="COCON_RDP_RDPFILE\|COCON_XCONF_ADD"
+DISKSTATS_TMP="/var/volatile/tmp/.cocon.diskstats"
+
+. /usr/bin/cocon-read-cnf
 
 read_args() {
     [ -z "$CMDLINE" ] && CMDLINE=`cat /proc/cmdline`
@@ -34,103 +35,81 @@ get_partition_type()
     fstype=`expr "$fstype" : '.*TYPE="\([A-Za-z0-9]*\)".*'`
 }
 
-# Read cocon.cnf
-read_cocon_cnf() {
-  while read line
-  do
-    line=`echo $line | dos2unix`
-    line=`echo $line | sed -e '/^#/d'`
-    optarg=`echo $line | cut -d "=" -f 2`
-    arg=`echo "$line" | cut -d "=" -f 1`
-
-    if [ "$arg" ];
-    then
-      echo "$arg=$optarg"
-    fi
-
-    if expr "$arg" : $ALLOW_CNF_BOOL > /dev/null ;
-    then
-      # Data is boolean
-      echo "$arg=$((optarg > 0 ? 1: 0))" >> $CNFFILE
-    fi
-
-    if expr "$arg" : $ALLOW_CNF_STR > /dev/null ;
-    then
-      # Data is string (TODO: Sanitry Check)
-      echo "$arg=$optarg" >> $CNFFILE
-    fi
-
-    if expr "$arg" : $ALLOW_CNF_FILE > /dev/null ;
-    then
-      # One filename : convert to fullpath on opencocon
-      cnf_file=`dirname $1`
-      argtmp="$cnf_file/$optarg"
-      echo "$argtmp"
-      if [ ! -r "$line" ];
-      then
-        echo "Error: $cnf_file/$optarg on $arg is not readable."
-        #unset $arg
-      else 
-      
-        # Copy to /tmp
-        mkdir -p /tmp/.cocon.cnf.files/
-        cp $argtmp /tmp/.cocon.cnf.files/
-      
-        echo "$arg=/tmp/.cocon.cnf.files/`basename $argtmp`" >> $CNFFILE
-
-      fi
-    fi
-
-  done < $1
-}
 
 scan_cocon_setting()
 {
+  ALLOW_LOAD_FIRMWARE_B43="wl_apsta-3.130.20.0.o\|wl_apsta.o"
+  ALLOW_LOAD_FIRMWARE_IPW2X00="ipw2100-1.3-i.fw\|ipw2100-1.3-p.fw\|ipw2100-1.3.fw\|ipw2200-bss.fw\|ipw2200-ibss.fw\|ipw2200-sniffer.fw"
+  ALLOW_LOAD_FIRMWARE_P54="isl3886pci\|isl3886usb\|isl3887usb"
+
   # Scan all available device/partitions
-  cat /proc/diskstats > /var/volatile/tmp/.cocon.diskstats
+  cat /proc/diskstats > $DISKSTATS_TMP
 
   if [ "$ROOT_DEVICE" ];
   then
     # Exclude Boot device (because already loaded)
     # TODO: not working?
-    sed "/`basename $ROOT_DEVICE`/d" /var/volatile/tmp/.cocon.diskstats > /tmp/.cocon.scan
-    echo "Exclude: $ROOT_DEVICE"
+    # sed "/`basename $ROOT_DEVICE`/d" $DISKSTATS_TMP > /tmp/.cocon.scan
+    # echo "Exclude: $ROOT_DEVICE"
+    rootdv=`basename $ROOT_DEVICE`
   fi
 
   while read maj min dev ex1 ex2 ex3 ex4 ex5 ex6 ex7 ex8 ex9 ex10 ex11; do
 
-    echo "Searching: $dev"
+    # echo "Searching: $dev"
 
-#    if [ -z "$maj" -o "$maj" = "major" ]; then
-#        continue;
-#    fi
+    # Exclude ram and loop device
+    if [ "`echo $arg | grep 'loop\|ram'`" ];
+    then
+      continue;
+    fi
 
     get_partition_type
 
     if [ "$fstype" = "iso9660" -o "$fstype" = "vfat" -o "$fstype" = "ext3" -o "$fstype" = "ntfs" ];
     then
         echo "Scanning setting from : $dev"
-        mkdir /mnt/cfg
-        mount -o ro /dev/$dev /mnt/cfg
-
-        if [ -r /mnt/cfg/cocon.cnf ];
+        mount -o ro /dev/$dev $CONF_MOUNT
+        
+        # cocon.cnf and related files
+        if [ -r $CONF_MOUNT/cocon.cnf -a "$dev" != "$rootdv" ];
         then
           echo  " --> cocon.cnf found"
-          read_cocon_cnf /mnt/cfg/cocon.cnf
+          read_cocon_cnf $CONF_MOUNT/cocon.cnf
         fi
-        umount /dev/$dev
-    fi
-   done < /tmp/.cocon.scan
-}
 
+        # Non-redistributable Firmwares
+        if [ -d $CONF_MOUNT/coconfrm ];
+        then
+          echo "--> firmware directory found"
+          for frm in `ls -1 $CONF_MOUNT/coconfrm`; do
+            if expr "$frm" : "$ALLOW_LOAD_FIRMWARE_B43" > /dev/null ;
+            then
+              # Broadcom is big firmware file, so cut now.
+              b43-fwcutter -w /lib/firmware $CONF_MOUNT/coconfrm/$frm
+              continue;
+            fi
+
+            if expr "$frm" : "$ALLOW_LOAD_FIRMWARE_IPW2X00\|$ALLOW_LOAD_FIRMWARE_P54" > /dev/null ;
+            then
+              # Just copy
+              cp $CONF_MOUNT/coconfrm/$frm /lib/firmware
+              continue;
+            fi
+
+          done
+          
+        fi
+
+
+        umount /dev/$dev
+
+    fi
+   done < $DISKSTATS_TMP
+}
 
 read_args
 
-/sbin/modprobe zram
-
-
-# Alloc /dev
-mount -t devtmpfs devtmpfs /dev
 
 # mount missing /dev/pts
 if [ ! -d /dev/pts ];
@@ -139,18 +118,37 @@ then
 fi
 mount -t devpts -o mode=0620,gid=5 none /dev/pts
 
-# mdev before udev
-#mdev -s
-
 # mount missing volatile
-mount -t tmpfs none /var/volatile
-mkdir /var/volatile/tmp
-mkdir /var/volatile/log
+#mount -t tmpfs none /var/volatile
+#mkdir /var/volatile/tmp
+if [ ! -d /var/volatile/log ];
+then
+  mkdir -p /var/volatile/log
+fi
+
+# TODO : create on base-files.
 mkdir /var/volatile/run
 mkdir /var/volatile/lock
 
-# Run udev daemon
-/etc/init.d/udev restart
+if [ -z "$BOOT_FS" ];
+then
+  # If extreme mode, start udev.
+  mount -t devtmpfs devtmpfs /dev
+
+  # Run udev daemon
+  /etc/init.d/udev restart
+else
+  # Scan again
+  udevadm trigger --action=add
+  udevadm settle
+fi
+
+
+if [ "$COCON_DEBUG" = "1" ];
+then
+  echo "DEBUG: after udev."
+  /bin/sh
+fi
 
 # zram
 COCON_MEM_MB=`free -m | grep "Mem:" | sed -r "s/Mem://" | sed -r "s/^[[:space:]]*([0-9]+).*/\\1/"`
@@ -163,6 +161,13 @@ then
   mkswap /dev/zram0
   swapon /dev/zram0
 fi
+
+if [ "$COCON_DEBUG" = "1" ];
+then
+  echo "DEBUG: after zram."
+  /bin/sh
+fi
+
 
 # Read setting file.
 # First : /usr/share/cocon/default.cnf
@@ -184,6 +189,13 @@ fi
 
 scan_cocon_setting
 
+if [ "$COCON_DEBUG" = "1" ];
+then
+  echo "DEBUG: after parse config."
+  /bin/sh
+fi
+
+
 # After parsing setting file, read .cocon.cnf
 if [ -e $CNFFILE ];
 then
@@ -199,7 +211,15 @@ fi
 # Daemon
 mkdir -p /var/run/dbus/
 /etc/init.d/dbus-1 start
-/etc/init.d/connman start
+/etc/init.d/NetworkManager start
+
+# Touchpad driver
+#if [ -e "/dev/input/touchpad0" ];
+#then
+#  
+#
+#fi
+
 
 # Keymap (TODO)
 if [ -z $COCON_KBD_CONSOLE ];
@@ -209,8 +229,17 @@ fi
 
 /usr/bin/loadkeys $COCON_KBD_CONSOLE
 
+# If /var/log is not folder, recreate it.
+# (only for coconrpi?)
+if [ ! -d "/var/log/" ];
+then
+  rm -rf /var/log/
+  mkdir -p /var/log/
+fi
 
-if [ "$COCON_DEBUG" -eq 1 ];
+
+
+if [ "$COCON_DEBUG" = "1" ];
 then
   sleep 4
   echo "Debug : enable dropbear. Please input user password."

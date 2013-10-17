@@ -33,9 +33,7 @@ usbutils \
 wireless-tools \
 wpa-supplicant \
 update-rc.d \
-connman \
-connman-plugin-ethernet \
-connman-plugin-wifi \
+networkmanager \
 util-linux-cfdisk \
 util-linux-fdisk \
 e2fsprogs-badblocks \
@@ -47,6 +45,7 @@ kbd-keymaps \
 dmidecode \
 kernel-modules \
 consolekit \
+xuser-account \
 "
 
 COCON_XBASE_PACKAGES = " \
@@ -118,22 +117,21 @@ x11perf \
 xf86-video-savage \
 xf86-video-siliconmotion \
 xf86-video-neomagic \
+gnome-keyring \
+network-manager-applet \
+polkit-gnome \
+opengalax \
+xinput-calibrator \
+networkmanager-openvpn \
+openvpn \
+networkmanager-pptp \
+pptp-linux \
+openswan \
+networkmanager-openswan \
 "
 
-# Currently exclude drivers:
-# xf86-video-savage 
-# xf86-video-siliconmotion 
-# xf86-video-neomagic 
 
 COCON_XEXT_PACKAGES = " \
-libgl \
-libglu \
-libegl-mesa \
-libgbm \
-libgl-mesa \
-libglapi \
-libgles1-mesa \
-libgles2-mesa \
 libdrm \
 libdrm-kms \
 libdrm-intel \
@@ -145,12 +143,29 @@ mesa-driver-nouveau-vieux \
 mesa-driver-r200 \
 mesa-driver-radeon \
 mesa-driver-swrast \
+libdricore \
+libegl-mesa \
+libgbm \
+libgl-mesa \
+libglapi \
+libgles1-mesa \
+libgles2-mesa \
 "
 
 
 COCON_APP_PACKAGES = " \
 freerdp \
 libfreerdp \
+libfreerdp-plugin-tsmf \
+libfreerdp-plugin-tsmf-pulse \
+libfreerdp-plugin-tsmf-alsa \
+libfreerdp-plugin-rdpsnd \
+libfreerdp-plugin-rdpsnd-pulse \
+libfreerdp-plugin-rdpsnd-alsa \
+libfreerdp-plugin-audin \
+libfreerdp-plugin-audin-pulse \
+libfreerdp-plugin-audin-alsa \
+libfreerdp-plugin-drdynvc \
 webkit-gtk \
 libvncserver \
 openssl \
@@ -158,7 +173,7 @@ gnutls \
 gnutls-openssl \
 libgcrypt \
 libgpg-error \
-libjpeg-turbo \ 
+libjpeg-turbo \
 matchbox-wm \
 lxterminal \
 lxrandr \
@@ -185,11 +200,11 @@ gtk-vnc \
 lxpanel \
 libwnck \
 libnotify \
-connman-gnome \
 viewnior \
 celt \
 spice-gtk \
 dropbear \
+python-pygtk \
 "
 
 COCON_HDDIMAGE_PACKAGES = " \
@@ -207,7 +222,66 @@ linux-firmware-ralink \
 linux-firmware-realtek \
 linux-firmware-vt6656 \
 zd1211-firmware \
-linux-firmware \
+kernel-firmware-3ccfem556 \
+kernel-firmware-3cxem556 \
+kernel-firmware-d101m-ucode \
+kernel-firmware-d101s-ucode \
+kernel-firmware-d102e-ucode \
+kernel-firmware-dp83903 \
+kernel-firmware-ds1-ctrl \
+kernel-firmware-ds1-dsp \
+kernel-firmware-ds1e-ctrl \
+kernel-firmware-g200-warp \
+kernel-firmware-g400-warp \
+kernel-firmware-la-pcm \
+kernel-firmware-maestro3-assp-kernel \
+kernel-firmware-maestro3-assp-minisrc \
+kernel-firmware-ne2k \
+kernel-firmware-new-code-fix \
+kernel-firmware-new-code \
+kernel-firmware-pcmlm28 \
+kernel-firmware-pe-200 \
+kernel-firmware-pe520 \
+kernel-firmware-r100-cp \
+kernel-firmware-r128-cce \
+kernel-firmware-r200-cp \
+kernel-firmware-r300-cp \
+kernel-firmware-r420-cp \
+kernel-firmware-r520-cp \
+kernel-firmware-r600-me \
+kernel-firmware-r600-pfp \
+kernel-firmware-rs600-cp \
+kernel-firmware-rs690-cp \
+kernel-firmware-rs780-me \
+kernel-firmware-rs780-pfp \
+kernel-firmware-rv610-me \
+kernel-firmware-rv610-pfp \
+kernel-firmware-rv620-me \
+kernel-firmware-rv620-pfp \
+kernel-firmware-rv630-me \
+kernel-firmware-rv630-pfp \
+kernel-firmware-rv635-me \
+kernel-firmware-rv635-pfp \
+kernel-firmware-rv670-me \
+kernel-firmware-rv670-pfp \
+kernel-firmware-rv710-me \
+kernel-firmware-rv710-pfp \
+kernel-firmware-rv730-me \
+kernel-firmware-rv730-pfp \
+kernel-firmware-rv770-me \
+kernel-firmware-rv770-pfp \
+kernel-firmware-tamarack \
+kernel-firmware-tg1 \
+kernel-firmware-tg2 \
+kernel-firmware-tg3-tso5 \
+kernel-firmware-tg3-tso \
+kernel-firmware-tg3 \
+kernel-firmware-trigger-code-fix \
+kernel-firmware-trigger-code \
+kernel-firmware-typhoon \
+kernel-firmware-xilinx7od \
+kernel-firmware-yss225-registers \
+b43-fwcutter \
 "
 
 RDEPENDS = "${COCON_BASE_PACKAGES} \

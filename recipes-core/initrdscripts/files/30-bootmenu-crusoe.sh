@@ -5,15 +5,12 @@
 # Cocon-crusoe for opencocon
 
 E="\033["
-MOUNTLOC="/media/realroot"
-UNIONLOC="/media/union"
-RAMLOC="/media/ram"
-OLDLOC="/media/cf"
-
-#if ! (echo " " | read -n1 foo) >/dev/null 2>&1; then
-#    echo "'read' command lacks -n switch support, aborting" 
-#    exit 1
-#fi
+MOUNTLOC="/mnt/realroot"
+UNIONLOC="/mnt/union"
+RAMLOC="/mnt/ram"
+OLDLOC="/mnt/oldroot"
+NEWLOC="/mnt/newroot"
+DISKSTATS_TMP="/var/volatile/tmp/.cocon.diskstats"
 
 # Alloc /dev
 mount -t devtmpfs devtmpfs /dev
@@ -63,41 +60,27 @@ boot_iso9660()
       return 1
     fi
 
-#    if [ `echo $COCON_DEBUG` ];
-#    then
-#      echo "DEBUG: After detected boot device."
-#      /bin/sh
-#    fi
-
     echo "mount squashfs"
 
     # TODO : optional root sqs file
-    losetup /dev/loop0 $MOUNTLOC/$SQSFILE
-    mount -t squashfs /dev/loop0 $UNIONLOC
+    mount -o loop -t squashfs $MOUNTLOC/$SQSFILE $UNIONLOC
 
     echo "union with aufs"
     mount -t tmpfs none $RAMLOC
-#    mkdir -p /stage2/tmp/root-rw
     
-    mount -t aufs -o br:$RAMLOC:$UNIONLOC none $UNIONLOC
-#    mount -t aufs -o br:/stage2/tmp/etc-rw:/stage2/etc none /stage2/etc
-#    mount -t aufs -o br:/stage2/tmp/var-rw:/stage2/var none /stage2/var
-#    mount -t aufs -o br:/stage2/tmp/home-rw:/stage2/home none /stage2/home
-#    mount -t aufs -o br:/stage2/tmp/usr-rw:/stage2/usr none /stage2/usr
-#    mount -t aufs -o br:/stage2/tmp/lib-rw:/stage2/lib none /stage2/lib
+    mount -t aufs -o br:$RAMLOC:$UNIONLOC none $NEWLOC
 
     echo "--- switch root ---"
-    /etc/init.d/udev stop
+    # on Linux 3.10, it seems do not stop udev.
+#    /etc/init.d/udev stop
     umount -l /proc
     umount /sys
-    umount -l /dev
-
-#    cd /stage2
-#    exec switch_root -c /dev/console . /sbin/init
+#    umount -l /dev
+    mount -o bind /dev $NEWLOC/dev
 
     # Pivot to real opencocon
     # cd $UNIONLOC
-    pivot_root $UNIONLOC $UNIONLOC/$OLDLOC
+    pivot_root $NEWLOC $NEWLOC/$OLDLOC
     exec chroot . /sbin/init <dev/console >dev/console 2>&1
 
 }
@@ -105,7 +88,7 @@ boot_iso9660()
 scan_device()
 {
   # Scan all available device/partitions
-  cat /proc/diskstats | sort -r > /var/volatile/tmp/.cocon.diskstats
+  cat /proc/diskstats | sort -r > $DISKSTATS_TMP
 
   while read maj min dev ex1 ex2 ex3 ex4 ex5 ex6 ex7 ex8 ex9 ex10 ex11; do
     if [ -z "$maj" -o "$maj" = "major" ]; then
@@ -122,14 +105,14 @@ scan_device()
     fi
 
 
-  done < /var/volatile/tmp/.cocon.diskstats
+  done < $DISKSTATS_TMP
 }
 
+sleep 1
 i=1
 while test $i -le 20 ;
 do
   echo "--- scanning root cd (part $i)---"
-  sleep 5
   scan_device 
   i=`expr $i + 1` 
 done

@@ -40,12 +40,6 @@ read_args() {
     done
 }
 
-#do_depmod() {
-  # maybe depmod not need in thisplace
-#  mount -t tmpfs none /media/card
-#  mount -t aufs -o br:/media/card:/lib/modules none /lib/modules
-#	[ -e "/lib/modules/$(uname -r)/modules.dep" ] || depmod -a
-#}
 
 load_module() {
     # Cannot redir to $CONSOLE here easily - may not be set yet
@@ -59,11 +53,6 @@ load_modules() {
     done
 }
 
-#boot_root() {
-#    cd $BOOT_ROOT
-#    exec switch_root -c /dev/console $BOOT_ROOT /sbin/init
-#}
-
 fatal() {
     echo $1 >$CONSOLE
     echo >$CONSOLE
@@ -74,7 +63,6 @@ fatal() {
 echo "Starting opencocon initrd boot..."
 early_setup
 load_modules '0*'
-# do_depmod
 
 [ -z "$CONSOLE" ] && CONSOLE="/dev/console"
 

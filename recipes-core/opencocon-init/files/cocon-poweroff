@@ -12,15 +12,22 @@ fi
 if [ -z "$BOOT_FS" ];
 then
   # Direct-boot
-  modprobe apm power_off=1
+
+  # only for x86
+  modprobe apm power_off=1  >/dev/null 2>&1
+
   /sbin/poweroff
+
 else
+
   # Stop udev
   /etc/init.d/udev stop
   pkill udevd
+
   # have union-boot flag
-  cd /media/cf
+  cd /mnt/oldroot
   exec ./sbin/clean <dev/console >dev/console 2>&1
+
 fi
 
 

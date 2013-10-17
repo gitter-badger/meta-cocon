@@ -1,5 +1,8 @@
 #!/bin/bash
 
+USERN=/tmp/.cocon.menu.usern
+
+
 # opencocon FreeRDP Launcher
 if [ -e /tmp/.cocon.cnf ];
 then
@@ -17,19 +20,20 @@ then
     echo "Error: please spcify COCON_RDP_HOST."
     exit 1
   else
-    OPTION="$OPTION /v:$COCON_RDP_HOST "
 
     # User name
-    if [ $COCON_RDP_USER ];
+    if [ -z $COCON_RDP_USER ];
     then
-      OPTION="$OPTION /u:$COCON_RDP_USER "
+      dialog --inputbox "Enter login username (require for login)" 8 40 2>$USERN
+      COCON_RDP_USER="`cat $USERN`"
     fi
-    # TODO : if empty, Prompt user name! 
+
+    OPTION="$OPTION -u $COCON_RDP_USER "
 
     # Domain name
     if [ $COCON_RDP_DOMAIN ];
     then
-      OPTION="$OPTION /d:$COCON_RDP_DOMAIN "
+      OPTION="$OPTION -d $COCON_RDP_DOMAIN "
     fi
 
    # TODO : password
@@ -38,22 +42,34 @@ then
 
 else
   # .rdp file is present: ignore COCON_RDP_HOST etc.
-  OPTION="$OPTION $COCON_RDP_RDPFILE "
+#  OPTION="$OPTION $COCON_RDP_RDPFILE "
+  echo "WARNING: RDPFILE is disabled."
 fi
 
 
 # Remote FX
 if [ "$COCON_RDP_RFX" = "1" ];
 then
-  OPTION="$OPTION /rfx /multimedia:sys:alsa /microphone:sys:alsa "
+  OPTION="$OPTION --rfx --plugin drdynvc --data tsmf -- --plugin --data audin -- "
 fi
+
+
+#if [ "$COCON_RDP_MODEM" = "1" ];
+#then
+#  OPTION="$OPTION -x modem "
+#fi
+
+# finally, add HOSTNAME
+OPTION="$OPTION $COCON_RDP_HOST "
 
 while :
 do
 
-  # TODO : Show message : Password prompt is shown neither string or *!
+  echo "=========================================="
+  echo "    PASSWORD is not shown in console."
+  echo "=========================================="
 
-  xfreerdp $OPTION /f -wallpaper -themes +fonts /sound:sys:alsa /audio-mode
+  xfreerdp -f -x 81 --plugin rdpsnd --data alsa -- $OPTION
   retr=$?
 
   if [ "$retr" != "131" ];
@@ -62,6 +78,6 @@ do
   fi
 done
 
-echo "Current return : $retr"    
-sleep 5
+# echo "Current return : $retr" > /var/volatile/log/cocon-freerdp.log
+# sleep 5
 

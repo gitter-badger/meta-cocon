@@ -7,7 +7,8 @@ SECTION = "kernel"
 
 LICENSE = "Proprietary"
 
-LIC_FILES_CHKSUM = "file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e1951dfbc \
+LIC_FILES_CHKSUM = "file://LICENCE.atheros_firmware;md5=30a14c7823beedac9fa39c64fdd01a13 \
+                    file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e1951dfbc \
                     file://LICENCE.agere;md5=af0133de6b4a9b2522defd5f188afd31 \
                     file://LICENCE.iwlwifi_firmware;md5=11545778abf78c43d7644d4f171ea1c7 \
 		    file://LICENCE.Marvell;md5=9ddea1734a4baf3c78d845151f42a37a \
@@ -17,11 +18,13 @@ LIC_FILES_CHKSUM = "file://LICENCE.broadcom_bcm43xx;md5=3160c14df7228891b868060e
                    "
 # v5
 # SRCREV = "ac879fea73d2b81442029928693329673a854cba"
-# v6
-SRCREV = "4c79292308ead42fc786c8e189921196ccc298ff"
+# v6-7
+# SRCREV = "4c79292308ead42fc786c8e189921196ccc298ff"
+# v8
+SRCREV = "2892af06dc38a764938f0583a2eac30595108799"
 
 PV = "0.0+git${SRCPV}"
-PR = "r0"
+PR = "r1"
 
 SRC_URI = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git;protocol=git"
 
@@ -44,9 +47,19 @@ do_install() {
 
 }
 
-PACKAGES =+ "${PN}-broadcom ${PN}-agere ${PN}-iwlwifi ${PN}-marvell ${PN}-ralink ${PN}-realtek ${PN}-vt6656"
+PACKAGES =+ "${PN}-atheros ${PN}-broadcom ${PN}-agere ${PN}-iwlwifi ${PN}-marvell ${PN}-ralink ${PN}-realtek ${PN}-vt6656"
 
-# Broadcom (newer cards)
+# Atheros
+LICENSE_${PN}-atheros = "Firmware:LICENCE.atheros_firmware"
+FILES_${PN}-atheros = " \
+  /lib/firmware/ath6k/* \
+  /lib/firmware/ar9170-*.fw \
+  /lib/firmware/ar5523.bin \
+  /lib/firmware/carl9170-1.fw \
+  /lib/firmware/LICENCE.atheros_firmware \
+"
+
+# Broadcom (some cards)
 LICENSE_${PN}-broadcom = "Firmware:LICENCE.broadcom_bcm43xx"
 FILES_${PN}-broadcom = " \
   /lib/firmware/brcm/* \
@@ -56,7 +69,7 @@ FILES_${PN}-broadcom = " \
 # agere
 LICENSE_${PN}-agere = "Firmware:LICENCE.agere"
 FILES_${PN}-agere = " \
-  /lib/firmware/agere_*_fw.bin \
+  /lib/firmware/agere_ap_fw.bin \
   /lib/firmware/LICENCE.agere \
 "
 
@@ -68,15 +81,16 @@ FILES_${PN}-iwlwifi = " \
 "
 
 # Marvell
-# TODO: more libertas firmware?
 LICENSE_${PN}-marvell = "Firmware:LICENCE.Marvell"
 FILES_${PN}-marvell = " \
   /lib/firmware/mwl8k/*.fw \
   /lib/firmware/lbtf_usb.bin \
   /lib/firmware/LICENCE.Marvell \
-  /lib/firmware/libertas/sd8686_v9* \
-  /lib/firmware/sd8686* \
+  /lib/firmware/sd8686_v9* \
+  /lib/firmware/libertas/* \
+  /lib/firmware/mrvl/* \
   /lib/firmware/LICENCE.libertas \
+  /lib/firmware/LICENCE.OLPC \
 "
 
 # Ralink
@@ -91,6 +105,7 @@ LICENSE_${PN}-realtek = "Firmware:LICENCE.rtlwifi_firmware"
 FILES_${PN}-realtek = " \
   /lib/firmware/rtlwifi/* \
   /lib/firmware/RTL8192E/* \
+  /lib/firmware/rtl_nic/* \
   /lib/firmware/LICENCE.rtlwifi_firmware.txt \
 "
 
@@ -100,6 +115,7 @@ FILES_${PN}-vt6656 = " \
   /lib/firmware/vntwusb.fw \
   /lib/firmware/LICENCE.via_vt6656 \  
 "
+
 
 FILES_${PN} += "/lib/firmware/*"
 

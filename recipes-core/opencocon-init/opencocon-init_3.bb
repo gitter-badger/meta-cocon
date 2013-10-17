@@ -3,7 +3,7 @@ SECTION = "base"
 LICENSE = "MIT"
 DEPENDS = "base-files"
 RDEPENDS_${PN} = "busybox"
-PR = "r100"
+PR = "r129"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "file://COPYING.MIT \
@@ -53,6 +53,11 @@ SRC_URI = "file://COPYING.MIT \
            file://smi_712.conf \
            file://libretto-lx.conf \
            file://sony-pcg-c1.conf \
+           file://kohjinsha-pm.conf \
+           file://cocon-version \
+           file://cocon-x-session \
+           file://50-org.freedesktop.NetworkManager.rules \
+           file://cocon-read-cnf \
 "
 
 
@@ -65,6 +70,7 @@ do_install() {
         install -d ${D}${sysconfdir}/default
         install -d ${D}${sysconfdir}/init.d
         install -d ${D}${sysconfdir}/rcS.d
+        install -m 0644 ${WORKDIR}/cocon-version ${D}${sysconfdir}/cocon-version
         install -m 0644 ${WORKDIR}/inittab ${D}${sysconfdir}/inittab
         install -m 0644    ${WORKDIR}/rcS-default       ${D}${sysconfdir}/default/rcS  
         install -m 0755    ${WORKDIR}/rc                ${D}${sysconfdir}/init.d
@@ -90,6 +96,8 @@ do_install() {
 	install -m 0755    ${WORKDIR}/cocon-option-menu     ${D}${bindir}/cocon-option-menu
         install -m 0755    ${WORKDIR}/cocon-spice-launch    ${D}${bindir}/cocon-spice-launch
         install -m 0755    ${WORKDIR}/cocon-spmachine    ${D}${bindir}/cocon-spmachine
+        install -m 0755    ${WORKDIR}/cocon-x-session    ${D}${bindir}/cocon-x-session
+        install -m 0755    ${WORKDIR}/cocon-read-cnf    ${D}${bindir}/cocon-read-cnf
 
 	install -d ${D}${sysconfdir}/gtk-2.0
 	install -m 0644 ${WORKDIR}/gtkrc ${D}${sysconfdir}/gtk-2.0/gtkrc
@@ -100,11 +108,14 @@ do_install() {
 	install -d ${D}${sysconfdir}/skel/.config/lxterminal
 	install -d ${D}${sysconfdir}/skel/.config/midori
 	install -d ${D}${sysconfdir}/skel/.config/spicy
+        install -d ${D}${sysconfdir}/polkit-1/
+        install -d ${D}${sysconfdir}/polkit-1/rules.d/
 	install -m 0755 ${WORKDIR}/xinitrc ${D}${sysconfdir}/skel/.xinitrc
 	install -m 0644 ${WORKDIR}/panel ${D}${sysconfdir}/skel/.config/lxpanel/default/panels/panel
 	install -m 0644 ${WORKDIR}/lxterminal.conf ${D}${sysconfdir}/skel/.config/lxterminal/lxterminal.conf
 	install -m 0644 ${WORKDIR}/midori-config ${D}${sysconfdir}/skel/.config/midori/config
 	install -m 0644 ${WORKDIR}/spicy-settings ${D}${sysconfdir}/skel/.config/spicy/settings
+        install -m 0644 ${WORKDIR}/50-org.freedesktop.NetworkManager.rules ${D}${sysconfdir}/polkit-1/rules.d/50-org.freedesktop.NetworkManager.rules
  
         install -d ${D}${datadir}/doc/cocon/
         install -m 0644 ${WORKDIR}/about.txt ${D}${datadir}/doc/cocon/about.txt
@@ -123,6 +134,7 @@ do_install() {
         install -m 0644 ${WORKDIR}/smi_712.conf ${D}${datadir}/cocon/smi_712.conf
         install -m 0644 ${WORKDIR}/sony-pcg-c1.conf ${D}${datadir}/cocon/sony-pcg-c1.conf
         install -m 0644 ${WORKDIR}/libretto-lx.conf ${D}${datadir}/cocon/libretto-lx.conf
+        install -m 0644 ${WORKDIR}/kohjinsha-pm.conf ${D}${datadir}/cocon/kohjinsha-pm.conf
 
 	install -d ${D}${datadir}/cocon/pic/
         install -m 0644 ${WORKDIR}/COPYING.PICS ${D}${datadir}/cocon/pic/COPYING.PICS

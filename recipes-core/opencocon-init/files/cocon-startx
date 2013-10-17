@@ -22,7 +22,7 @@ cp /etc/skel/.xinitrc /home/xuser
 # Workaround chips for broken X.org driver
 #  (Currently ATI, Savage, Siliconmotion, Neomagic.
 #   Almost these chips can display 24-bit color depth.)
-if [ "` lsmod | grep -E 'radeon|savage|atyfb|sm7xx|neofb'`" ];
+if [ "` lsmod | grep -E 'radeon|savage|atyfb|sm7xx|neofb|i915'`" ];
 then
   X_OPTION="-- -depth 24"
 fi

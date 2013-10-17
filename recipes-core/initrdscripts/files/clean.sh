@@ -1,19 +1,16 @@
 #!/bin/bash
 
-MOUNTLOC="/media/realroot"
-UNIONLOC="/media/union"
-RAMLOC="/media/ram"
-OLDLOC="/media/cf"
+MOUNTLOC="/mnt/realroot"
+UNIONLOC="/mnt/union"
+RAMLOC="/mnt/ram"
+OLDLOC="/mnt/oldroot"
+NEWLOC="/mnt/newroot"
 
-#if [ ! "$COCON_CDSHUTDOWN" ];
-#then
     echo "--- reverse pivot"
     COCON_CDSHUTDOWN=1
+    
     # reverse pivot (to unmount)
-    #/bin/sh
-    pivot_root $OLDLOC $OLDLOC/$UNIONLOC
-#    exec chroot . /clean "$@" <dev/console >dev/console 2>&1 
-#fi
+    pivot_root $OLDLOC $OLDLOC/$NEWLOC
 
     # kill processs
     PID="pidof clean"
@@ -27,22 +24,22 @@ do
     fi
   fi
 done
-    # Kill processes
+
 kill -s TERM $LIST >/dev/null 2>&1
 #sleep 2
 kill -s KILL $LIST >/dev/null 2>&1
 sync
 
     # unmount file system
-    umount -lf $UNIONLOC/proc
-    umount -lf $UNIONLOC/sys
-    umount -lf $UNIONLOC/tmp
-    umount -lf $UNIONLOC/dev/pts
-    umount -lf $UNIONLOC/dev
-    umount -lf $UNIONLOC
-    umount -lf $RAMLOC
-    umount -lf $UNIONLOC
-    umount -lf $MOUNTLOC
+    umount -lf $NEWLOC/proc >/dev/null 2>&1
+    umount -lf $NEWLOC/sys >/dev/null 2>&1
+    umount -lf $NEWLOC/tmp >/dev/null 2>&1
+    umount -lf $NEWLOC/dev/pts >/dev/null 2>&1
+    umount -lf $NEWLOC/dev >/dev/null 2>&1
+    umount -lf $NEWLOC >/dev/null 2>&1
+    umount -lf $RAMLOC >/dev/null 2>&1
+    umount -lf $UNIONLOC >/dev/null 2>&1
+    umount -lf $MOUNTLOC >/dev/null 2>&1
 
     # Eject CD drive
     if [ $BOOT_FS = "iso9660" ];
@@ -58,6 +55,7 @@ sync
     fi
 
     # and Power off
+    umount -lf /dev >/dev/null 2>&1
     /sbin/poweroff
 
 

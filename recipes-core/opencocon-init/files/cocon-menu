@@ -15,9 +15,10 @@ SSH_USERN=/tmp/.cocon.sshuser
 SSH_FWHOSTN=/tmp/.cocon.fwhost
 SSH_FWPORT=/tmp/.cocon.fwport
 ABOUT=/usr/share/doc/cocon/about.txt
+VERSION=/etc/cocon-version
 PARTCNF=/tmp/.cocon.cnf.part
 
-dialog --menu "opencocon v7b (experimental)" 20 40 25 \
+dialog --menu "`cat $VERSION` (experimental)" 20 40 25 \
 XEPHYR "Connect XDMCP" \
 RDP "Connect RDP" \
 VNC2 "Connect VNC" \
@@ -95,8 +96,16 @@ RDP)
   if [ $hostn ];
   then
     echo "COCON_RDP_HOST=$hostn" >> $PARTCNF
-    echo "COCON_RDP_USER=$usern" >> $PARTCNF
-    echo "COCON_RDP_DOMAIN=$rdpdomain" >> $PARTCNF
+
+    if [ $usern ];
+    then
+      echo "COCON_RDP_USER=$usern" >> $PARTCNF
+    fi
+
+    if [ $rdpdomain ];
+    then
+      echo "COCON_RDP_DOMAIN=$rdpdomain" >> $PARTCNF
+    fi
 
     cocon-freerdp-launch
     
