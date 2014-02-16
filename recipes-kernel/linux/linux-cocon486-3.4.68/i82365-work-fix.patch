@@ -1,8 +1,8 @@
 diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 90b06d4..e2649ae 100644
+index 532d2e0..9b22f2c 100644
 --- a/arch/x86/kernel/Makefile
 +++ b/arch/x86/kernel/Makefile
-@@ -49,7 +49,7 @@ obj-y			+= pci-dma.o quirks.o topology.o kdebugfs.o
+@@ -33,7 +33,7 @@ obj-y			+= pci-dma.o quirks.o topology.o kdebugfs.o
  obj-y			+= alternative.o i8253.o pci-nommu.o hw_breakpoint.o
  obj-y			+= tsc.o io_delay.o rtc.o
  obj-y			+= pci-iommu_table.o
@@ -12,7 +12,7 @@ index 90b06d4..e2649ae 100644
  obj-y				+= trampoline.o trampoline_$(BITS).o
  obj-y				+= process.o
 diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
-index 2a26819..0a46450 100644
+index 2a26819..ddc0d00a 100644
 --- a/arch/x86/kernel/resource.c
 +++ b/arch/x86/kernel/resource.c
 @@ -4,6 +4,7 @@
@@ -36,7 +36,7 @@ index 2a26819..0a46450 100644
  	int i;
  	struct e820entry *entry;
  
-@@ -33,10 +36,12 @@ static void remove_e820_regions(struct resource *avail)
+@@ -33,11 +36,13 @@ static void remove_e820_regions(struct resource *avail)
  		resource_clip(avail, entry->addr,
  			      entry->addr + entry->size - 1);
  	}
@@ -45,10 +45,11 @@ index 2a26819..0a46450 100644
  
  void arch_remove_reservations(struct resource *avail)
  {
-+/*
  	/* Trim out BIOS areas (low 1MB and high 2MB) and E820 regions */
++/*
  	if (avail->flags & IORESOURCE_MEM) {
  		if (avail->start < BIOS_END)
+ 			avail->start = BIOS_END;
 @@ -45,4 +50,5 @@ void arch_remove_reservations(struct resource *avail)
  
  		remove_e820_regions(avail);
@@ -56,10 +57,10 @@ index 2a26819..0a46450 100644
 +*/
  }
 diff --git a/arch/x86/pci/i386.c b/arch/x86/pci/i386.c
-index 494f2e7..5609d3e 100644
+index 831971e..adfeb80 100644
 --- a/arch/x86/pci/i386.c
 +++ b/arch/x86/pci/i386.c
-@@ -72,6 +72,9 @@ pcibios_align_resource(void *data, const struct resource *res,
+@@ -154,6 +154,9 @@ pcibios_align_resource(void *data, const struct resource *res,
  			return start;
  		if (start & 0x300)
  			start = (start + 0x3ff) & ~0x3ff;

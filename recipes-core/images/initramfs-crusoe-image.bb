@@ -29,6 +29,7 @@ kernel-module-c67x00 \
 kernel-module-firewire-core \
 kernel-module-firewire-ohci \
 kernel-module-firewire-sbp2 \
+eject \
 "
 
 CRUSOE_486ONLY_PACKAGE = " \

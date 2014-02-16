@@ -63,15 +63,28 @@ then
   if [ "`echo "$MACHINE_NAME" | grep 'PM Series'`" ];
   then
     ln -sf /usr/share/cocon/kohjinsha-pm.conf /etc/X11/xorg.conf.d/kohjinsha-pm.conf
-
+    export COCON_GALAX="1"
   fi
 
   # TODO : Touchpanel driver
 
 fi
 
+
+# Workaround for SHARP
+if [ "`echo "$MACHINE_MAKER" | grep 'SHARP Corporation'`" ];
+then
+
+  # WILLCOM D4
+  if [ "`echo "$MACHINE_NAME" | grep 'PC-UM1 Series'`" ];
+  then
+    ln -sf /usr/share/cocon/kohjinsha-pm.conf /etc/X11/xorg.conf.d/kohjinsha-pm.conf
+  fi
+fi
+
+
 # Workaroud for SONY PCG-C1 (with neomagic graphics)
-# Select 2nd generation PCG-C1. 1st generation can't detect from dmidecode.
+# Select 2nd generation PCG-C1. 1st generation can't detect from dmidecode, detect from /proc/cmdline.
 if [ "`echo "$MACHINE_MAKER" | grep 'Sony Corporation'`" -a "`echo "$MACHINE_NAME" | grep -E 'PCG-C1XG|PCG-C1XE|PCG-C2GPS|PCG-C1XF'`" ];
 then
   COCON_PCG_C1=1
@@ -151,6 +164,20 @@ then
 
   # TODO : p54 is need ifup function, but adhoc...
   /sbin/ifconfig wlan0 up
+fi
+
+# opengalax Touchscreen flag
+if [ "`cat /proc/cmdline | grep 'galax'`" -o "`echo $COCON_GALAX`" = "1" ];
+then
+  mouse_sysfs="/sys` dmesg | grep "input: PS/2 Generic Mouse as" | sed -e "s|input: PS/2 Generic Mouse as ||g" `/device/drvctl"
+  echo -n "serio_raw" > $mouse_sysfs
+
+  modprobe uinput
+  sleep 2
+  
+  opengalax &
+  ln -sf /usr/share/cocon/opengalax.conf /etc/X11/xorg.conf.d/opengalax.conf
+
 fi
 
 

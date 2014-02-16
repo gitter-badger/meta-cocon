@@ -1,4 +1,4 @@
-PR = "r52"
+PR = "r61"
 DESCRIPTION = "A modular initramfs init script system."
 # RRECOMMENDS_${PN} = "kernel-module-mtdblock"
 

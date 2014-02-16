@@ -2,21 +2,18 @@ inherit kernel
 require recipes-kernel/linux/linux.inc
 
 PR = "r0"
-LINUX_VERSION ?= "3.0.94"
+LINUX_VERSION = "${PV}"
 
 S = "${WORKDIR}/linux-${PV}"
 
-# Mark archs/machines that this kernel supports
-#DEFAULT_PREFERENCE = "-1"
-#DEFAULT_PREFERENCE_cocon486 = "1"
-
 SRC_URI = "ftp://ftp.riken.jp/pub/Linux/kernel.org/linux/kernel/v3.0/linux-${PV}.tar.bz2;name=kernel \
            git://aufs.git.sourceforge.net/gitroot/aufs/aufs3-standalone.git;name=aufs \
+         file://i82365-work-fix.patch;apply=no \
            file://defconfig \
-           file://i82365-work-fix.patch \
 "
 
-SRCREV_aufs = "aa3d7447003abd5e3c437de52d8da2e6203390ac"
+
+SRCREV_aufs = "070c75b8e088086687688ce8306cc33bea5c8934"
 
 COMPATIBLE_MACHINE = "cocon486"
 
@@ -29,6 +26,8 @@ do_configure_prepend() {
 
 # apply patches without quilt
 do_patch() {
+        # Extract aufs tree to Linux tree
+
         cd ${WORKDIR}/linux-${PV}
         patch -p1 <${WORKDIR}/git/aufs3-kbuild.patch
         patch -p1 <${WORKDIR}/git/aufs3-base.patch
@@ -38,7 +37,5 @@ do_patch() {
         cp -R ${WORKDIR}/git/fs/* ./fs/
         cp -R ${WORKDIR}/git/include/linux/aufs_type.h ./include/linux/
 
-#        patch -p1 <${WORKDIR}/i82365-work-fix.patch
+        patch -p1 <${WORKDIR}/i82365-work-fix.patch
 }
-
-

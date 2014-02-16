@@ -5,8 +5,9 @@ UNIONLOC="/mnt/union"
 RAMLOC="/mnt/ram"
 OLDLOC="/mnt/oldroot"
 NEWLOC="/mnt/newroot"
+COPYTORAMLOC="/mnt/copytoram"
 
-    echo "--- reverse pivot"
+    echo "--- reverse pivot ---"
     COCON_CDSHUTDOWN=1
     
     # reverse pivot (to unmount)
@@ -39,24 +40,28 @@ sync
     umount -lf $NEWLOC >/dev/null 2>&1
     umount -lf $RAMLOC >/dev/null 2>&1
     umount -lf $UNIONLOC >/dev/null 2>&1
+    umount -lf $COPYTORAMLOC >/dev/null 2>&1
     umount -lf $MOUNTLOC >/dev/null 2>&1
 
     # Eject CD drive
-    if [ $BOOT_FS = "iso9660" ];
+    if [ $BOOT_FS = "iso9660" -a -z "$COCON_NOEJECT" -a -z "$COCON_COPYTORAM" ];
     then 
       mount -t devtmpfs devtmpfs /dev 
+      mount -t proc none /proc
 
-      echo "--- eject CD device. ($ROOT_DEVICE) ---"
+      echo "--- Eject CD device. ($ROOT_DEVICE) ---"
       echo "Press [Enter] key (or wait 2min) to turn off computer."
       echo "Thank you for using opencocon, kon-kon!"
-      eject -sT $ROOT_DEVICE
-      # eject -m?
+      fuser -k $ROOT_DEVICE
+      sync
+      eject.eject -s $ROOT_DEVICE
+      eject.eject $ROOT_DEVICE
       read -t 120
     fi
 
     # and Power off
     umount -lf /dev >/dev/null 2>&1
-    /sbin/poweroff
+    /sbin/poweroff >/dev/null 2>&1
 
 
 /bin/sh

@@ -3,7 +3,7 @@
 IMAGE_PKGTYPE = "ipk"
 
 
-IMAGE_NAME = "opencocon-${DISTRO_VERSION}-${MACHINE}"
+IMAGE_NAME = "opencocon-compact-${DISTRO_VERSION}-${MACHINE}"
 
 # TODO : postprocess?
 #IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
@@ -46,7 +46,6 @@ dmidecode \
 kernel-modules \
 consolekit \
 xuser-account \
-eject \
 "
 
 COCON_XBASE_PACKAGES = " \
@@ -68,7 +67,6 @@ xf86-input-mouse \
 xf86-video-apm \
 xf86-video-ark \
 xf86-video-ast \
-xf86-video-ati \
 xf86-video-chips \
 xf86-video-cirrus \
 xf86-video-fbdev \
@@ -141,8 +139,6 @@ libdrm-radeon \
 mesa-driver-i915 \
 mesa-driver-i965 \
 mesa-driver-nouveau-vieux \
-mesa-driver-r200 \
-mesa-driver-radeon \
 mesa-driver-swrast \
 libdricore \
 libegl-mesa \
@@ -167,7 +163,6 @@ libfreerdp-plugin-audin \
 libfreerdp-plugin-audin-pulse \
 libfreerdp-plugin-audin-alsa \
 libfreerdp-plugin-drdynvc \
-webkit-gtk \
 libvncserver \
 openssl \
 gnutls \
@@ -195,7 +190,6 @@ pulseaudio-module-mmkbd-evdev \
 pulseaudio-module-udev-detect \
 pulseaudio-module-x11-publish \
 pulseaudio-server \
-midori \
 cyrus-sasl \
 gtk-vnc \
 lxpanel \

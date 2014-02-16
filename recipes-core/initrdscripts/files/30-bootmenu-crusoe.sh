@@ -10,6 +10,7 @@ UNIONLOC="/mnt/union"
 RAMLOC="/mnt/ram"
 OLDLOC="/mnt/oldroot"
 NEWLOC="/mnt/newroot"
+COPYTORAMLOC="/mnt/copytoram"
 DISKSTATS_TMP="/var/volatile/tmp/.cocon.diskstats"
 
 # Alloc /dev
@@ -50,7 +51,7 @@ boot_iso9660()
     fi
 
     echo "--- coconcrusoe boot seq. ---"
-    echo "Boot from: $ROOT_DEVICE, $SQSFILE"
+    echo "Boot from: $ROOT_DEVICE ($BOOT_FS), $SQSFILE"
    
     mount -o ro $ROOT_DEVICE $MOUNTLOC 
 
@@ -60,12 +61,59 @@ boot_iso9660()
       return 1
     fi
 
-    echo "mount squashfs"
+    if [ `echo $COCON_COPYTORAM` ];
+    then
+      # Copy-to-RAM
+      # TODO: disable for low memory
+      echo "--- copy squashfs image to ram ---"
+      mount -t tmpfs none $COPYTORAMLOC
+      # cp $MOUNTLOC/$SQSFILE.md5sum $COPYTORAMLOC/$SQSFILE.md5sum
+      cp $MOUNTLOC/$SQSFILE $COPYTORAMLOC/$SQSFILE
 
-    # TODO : optional root sqs file
-    mount -o loop -t squashfs $MOUNTLOC/$SQSFILE $UNIONLOC
+      # TODO : md5sum ha shibaraku oaduke
+      # cd $COPYTORAMLOC && md5sum -cs $COPYTORAMLOC/$SQSFILE.md5sum -eq 0
+      if [ $? -eq 0 ];
+      then
 
-    echo "union with aufs"
+        # copy ok. release the MOUNTLOC.
+        umount -lf $MOUNTLOC >/dev/null 2>&1
+        echo "NOTE: Copy-to-RAM mode. It is safe to Eject or Unplug boot media."
+        echo " (If you want to read cocon.cnf or firmware, please stay when by showing menu.)"
+        SQS_DEVICE="$COPYTORAMLOC"
+
+        # Eject CD drive
+        if [ $BOOT_FS = "iso9660" -a -z "$COCON_NOEJECT" ];
+        then
+          echo "--- Eject CD device. ($ROOT_DEVICE) ---"
+          fuser -k $ROOT_DEVICE
+          sync
+          eject.eject -s $ROOT_DEVICE
+        fi
+
+        mount -o remount,ro $COPYTORAMLOC
+
+      else
+        # failed. fallback to normal boot.
+        echo "==============================================================="
+        echo "WARNING: Trying Copy-to-RAM was failed. fallback to normal boot."
+        echo "         Do not Eject or Unplug boot media."
+        echo "==============================================================="
+        sleep 5
+        umount -lf $COPYTORAMLOC >/dev/null 2>&1
+        unset COCON_COPYTORAM
+        # TODO : is working?
+        SQS_DEVICE="$MOUNTLOC"
+     fi
+    else
+      echo "WARNING: Do not Eject or Unplug boot media."
+      SQS_DEVICE="$MOUNTLOC"
+    fi 
+
+    echo "--- mount squashfs ---"
+
+    mount -o loop -t squashfs $SQS_DEVICE/$SQSFILE $UNIONLOC
+
+    echo "--- union with aufs ---"
     mount -t tmpfs none $RAMLOC
     
     mount -t aufs -o br:$RAMLOC:$UNIONLOC none $NEWLOC
@@ -112,9 +160,10 @@ sleep 1
 i=1
 while test $i -le 20 ;
 do
-  echo "--- scanning root cd (part $i)---"
+  echo "--- scanning root media (part $i)---"
   scan_device 
   i=`expr $i + 1` 
+  sleep 3
 done
 
 

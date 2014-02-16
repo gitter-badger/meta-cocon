@@ -35,6 +35,14 @@ read_args() {
                 COCON_DEBUG=1
                 export COCON_DEBUG
                 ;;
+            copytoram)
+                COCON_COPYTORAM=1
+                export COCON_COPYTORAM
+                ;;
+            noeject)
+                COCON_NOEJECT=1
+                export COCON_NOEJECT
+                ;;
             shell) sh ;;
         esac
     done
