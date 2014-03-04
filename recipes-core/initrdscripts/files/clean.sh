@@ -6,6 +6,7 @@ RAMLOC="/mnt/ram"
 OLDLOC="/mnt/oldroot"
 NEWLOC="/mnt/newroot"
 COPYTORAMLOC="/mnt/copytoram"
+ISOLOC="/mnt/iso"
 
     echo "--- reverse pivot ---"
     COCON_CDSHUTDOWN=1
@@ -41,6 +42,7 @@ sync
     umount -lf $RAMLOC >/dev/null 2>&1
     umount -lf $UNIONLOC >/dev/null 2>&1
     umount -lf $COPYTORAMLOC >/dev/null 2>&1
+    umount -lf $ISOLOC >/dev/null 2>&1
     umount -lf $MOUNTLOC >/dev/null 2>&1
 
     # Eject CD drive

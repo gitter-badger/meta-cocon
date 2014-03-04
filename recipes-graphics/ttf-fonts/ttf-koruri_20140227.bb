@@ -7,7 +7,7 @@ PR = "r0"
 
 inherit allarch fontcache
 
-SRC_URI = "http://osdn.dl.sourceforge.jp/koruri/60169/Koruri-${PV}.tar.xz"
+SRC_URI = "http://osdn.dl.sourceforge.jp/koruri/60670/Koruri-${PV}.tar.xz"
 S = "${WORKDIR}/Koruri-${PV}"
 
 
@@ -33,7 +33,7 @@ fc-cache
 PACKAGES = "${PN}"
 FILES_${PN} += "${sysconfdir} ${datadir}"
 
-SRC_URI[md5sum] = "85f5c31ee6279037408451bcd3be31a9"
-SRC_URI[sha256sum] = "815c4f53ee63fda58c03b73fe6ed7101fe563477a8ff2e8a48ff8c11a20c8ecb"
+SRC_URI[md5sum] = "b34069e6118a19e0360c9462ca8d6843"
+SRC_URI[sha256sum] = "167cc90fdfb93a0b74e6e814c85f9ccdabfaf982b7cebf051e39760eb5f9079d"
 
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=b3c555e6db1b49c42179e4717f69b607"

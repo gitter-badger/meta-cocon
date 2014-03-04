@@ -4,15 +4,27 @@
 
 SELECT=/tmp/.cocon.menu.select
 
+# If copy-to-ram mode, show eject menu.
+if [ "$COCON_COPYTORAM" = "1" ];
+then
+  menu_eject="EJECT"
+  menu_eject_desc="Eject unused boot device"
+else
+  menu_eject="----"
+fi
+
+
 while :
 do
 
-  dialog --menu "Option, Ambient tools" 20 60 25 \
+  dialog --no-cancel --menu "Option, Ambient tools" 20 60 25 \
   MIX   "Sound mixer" \
   SNDT  "Sound test (Caution: play noise sound!)" \
   TPAD  "Touchpad calibration" \
   IMAGE "Image viewer (Incomplete)" \
   RANDR "Change resolution, output of screen" \
+  KBD   "Change keyboard layout" \
+  "$menu_eject" "$menu_eject_desc" \
   RET   "Return to main menu" 2>$SELECT
 
   select=`cat $SELECT`
@@ -47,9 +59,19 @@ do
     lxrandr
     ;;
 
+  KBD)
+    cocon-select-kbd
+    ;;
+
+  EJECT)
+    # TODO: use sudo
+    su -c "eject.eject $ROOT_DEVICE"
+    ;;
+
   RET)
     exit 1
     ;;
+
 
   esac
 

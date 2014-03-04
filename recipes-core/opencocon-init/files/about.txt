@@ -1,10 +1,11 @@
 opencocon : Old computer, New generation.
-distributed by SHIMADA Hirofumi, 2013
+distributed by SHIMADA Hirofumi, 2014
 
 For disk-space saving, This image not contains source
 code of each components.
 If you want source code and patches, please access to
-ftp://get.opencocon.org/ and get all source, buildtree.
+http://cgit.openembedded.org/ (OpenEmbedded)
+https://github.com/dejiko/ (opencocon local)
 
 Some License information document is located in
 /usr/doc/cocon of your opencocon tree.

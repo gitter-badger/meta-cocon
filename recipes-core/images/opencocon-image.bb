@@ -104,7 +104,7 @@ xinit \
 dbus-x11 \
 liberation-fonts \
 ttf-bitstream-vera \
-ttf-vlgothic \
+ttf-koruri \
 xrandr \
 xkeyboard-config \
 freetype \

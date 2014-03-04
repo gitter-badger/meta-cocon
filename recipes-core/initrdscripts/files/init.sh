@@ -4,6 +4,7 @@ MODULE_DIR=/initrd.d
 BOOT_ROOT=
 ROOT_DEVICE=
 SQSFILE=
+FROMISO=
 
 early_setup() {
     mount -t proc proc /proc
@@ -28,6 +29,10 @@ read_args() {
             sqsfile=*)
 		SQSFILE=$optarg
 		export SQSFILE
+                ;;
+            fromiso=*)
+                FROMISO=$optarg
+                export FROMISO
                 ;;
             rootdelay=*)
                 rootdelay=$optarg ;;

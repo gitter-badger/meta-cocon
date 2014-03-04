@@ -64,6 +64,14 @@ scan_cocon_setting()
       continue;
     fi
 
+    if [ "$BOOT_FS" = "iso9660" -a "$ROOT_DEVICE" = "/dev/$dev" ];
+    then
+      # This is booted CD drive.
+      # after Copy-to-RAM, mount this drive then close CD tray.
+      # then ignore this drive.
+      continue;
+    fi
+
     get_partition_type
 
     if [ "$fstype" = "iso9660" -o "$fstype" = "vfat" -o "$fstype" = "ext3" -o "$fstype" = "ntfs" ];

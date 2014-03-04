@@ -3,7 +3,7 @@ SECTION = "base"
 LICENSE = "MIT"
 DEPENDS = "base-files"
 RDEPENDS_${PN} = "busybox"
-PR = "r133"
+PR = "r137"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "file://COPYING.MIT \
@@ -58,6 +58,7 @@ SRC_URI = "file://COPYING.MIT \
            file://cocon-x-session \
            file://50-org.freedesktop.NetworkManager.rules \
            file://cocon-read-cnf \
+           file://cocon-select-kbd \
 "
 
 
@@ -97,7 +98,8 @@ do_install() {
         install -m 0755    ${WORKDIR}/cocon-spice-launch    ${D}${bindir}/cocon-spice-launch
         install -m 0755    ${WORKDIR}/cocon-spmachine    ${D}${bindir}/cocon-spmachine
         install -m 0755    ${WORKDIR}/cocon-x-session    ${D}${bindir}/cocon-x-session
-        install -m 0755    ${WORKDIR}/cocon-read-cnf    ${D}${bindir}/cocon-read-cnf
+        install -m 0755    ${WORKDIR}/cocon-read-cnf     ${D}${bindir}/cocon-read-cnf
+        install -m 0755    ${WORKDIR}/cocon-select-kbd   ${D}${bindir}/cocon-select-kbd
 
 	install -d ${D}${sysconfdir}/gtk-2.0
 	install -m 0644 ${WORKDIR}/gtkrc ${D}${sysconfdir}/gtk-2.0/gtkrc

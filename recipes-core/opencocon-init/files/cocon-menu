@@ -18,7 +18,7 @@ ABOUT=/usr/share/doc/cocon/about.txt
 VERSION=/etc/cocon-version
 PARTCNF=/tmp/.cocon.cnf.part
 
-dialog --menu "`cat $VERSION` (experimental)" 20 40 25 \
+dialog --no-cancel --menu "`cat $VERSION` (experimental)" 20 40 25 \
 XEPHYR "Connect XDMCP" \
 RDP "Connect RDP" \
 VNC2 "Connect VNC" \

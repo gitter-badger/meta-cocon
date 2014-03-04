@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# opencocon keyboard selector
+
+SELECT=/tmp/.cocon.kbd.select
+MODEL=/tmp/.cocon.kbd.model
+LAYOUT=/tmp/.cocon.kbd.layout
+
+
+set_kbd() {
+  setxkbmap -model `cat $MODEL` -layout `cat $LAYOUT`
+}
+
+
+dialog --menu "Select keyboard layout" 20 60 25 \
+US   "US Keyboard" \
+JP106  "Japanese Keyboard" \
+CUSTOM  "Other" 2>$SELECT
+
+select=`cat $SELECT`
+
+case $select in
+US)
+  echo "us" > $MODEL
+  echo "us" > $LAYOUT
+  set_kbd
+  ;;
+
+JP106)
+  echo "jp106" > $MODEL
+  echo "jp" > $LAYOUT
+  set_kbd
+  ;;
+
+CUSTOM)
+  # TODO : more error check
+  dialog --inputbox "Enter Keyboard model" 8 40 2>$MODEL
+  dialog --inputbox "Enter Keyboard layout" 8 40 2>$LAYOUT
+  set_kbd
+  ;;
+
+esac
+
+
