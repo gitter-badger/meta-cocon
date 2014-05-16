@@ -1,7 +1,7 @@
 inherit kernel
 require recipes-kernel/linux/linux.inc
 
-PR = "r1"
+PR = "r2"
 
 LINUX_VERSION = "${PV}"
 
