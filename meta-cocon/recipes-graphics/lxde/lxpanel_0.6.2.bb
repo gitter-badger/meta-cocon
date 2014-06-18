@@ -1,12 +1,9 @@
 DESCRIPTION = "LXDE Panel"
 SECTION = "x11"
-DEPENDS = "libwnck menu-cache gettext"
+DEPENDS = "libwnck menu-cache glib-2.0 gtk+ gdk-pixbuf"
 LICENSE = "GPLv2"
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/lxde/${PN}-${PV}.tar.gz"
-
-SRC_URI[md5sum] = "30def9a0aa3c517e102295e8a7bc17fd"
-SRC_URI[sha256sum] = "11cfe76f6241bbac556e57a6efc079b6e10dceea76a8bdaf4c749afdb81d15ab"
 
 
 inherit autotools gettext
@@ -19,4 +16,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=9d19a9495cc76dc96b703fb4aa157183"
 EXTRA_OECONF += "--with-plugins='volumealsa,batt,xkb,monitors'"
 
 # --enable-indicator-support
+
+SRC_URI[md5sum] = "b074182b6effe46ccac97bf178de4e32"
+SRC_URI[sha256sum] = "f9ba6d0b825f7b99de045c3371738792bf9f3604af66bef4d98d783461c60a48"
 

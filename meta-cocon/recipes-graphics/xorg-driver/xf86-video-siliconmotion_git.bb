@@ -15,6 +15,9 @@ do_compile_prepend() {
                 ${S}/src/Makefile
 }
 
-SRC_URI[md5sum] = "b5acd392d799e2bb67ea702a83feb4a0"
-SRC_URI[sha256sum] = "a59f1bd21499351b3703c4b77ec007d1299ccb888434d19fabbbeee0a7a14d07"
+SRC_URI = "git://anongit.freedesktop.org/xorg/driver/xf86-video-siliconmotion;protocol=git;branch=master \
+          "
+
+S = "${WORKDIR}/git"
+SRCREV = "f19d7e463c30f1364e82e8c9f87b8a8407d53680"
 

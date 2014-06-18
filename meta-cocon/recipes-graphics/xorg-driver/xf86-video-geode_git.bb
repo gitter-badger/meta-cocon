@@ -8,6 +8,6 @@ SRC_URI = "git://anongit.freedesktop.org/xorg/driver/xf86-video-geode;protocol=g
 "
 
 S = "${WORKDIR}/git"
-SRCREV = "ed0b153f320a95a11bd561726d2405823573500e"
+SRCREV = "70b131d09b7d21df1d1ffcf6a4e50d3086924228"
 
 COMPATIBLE_HOST = "i.86.*-linux"

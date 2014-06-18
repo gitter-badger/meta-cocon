@@ -58,7 +58,6 @@ xserver-xorg-extension-glx \
 xserver-xorg-module-libint10 \
 xserver-xorg-module-libwfb \
 xserver-xorg-module-exa \
-xserver-xorg-module-xaa \
 xserver-xorg-multimedia-modules \
 xserver-xorg-fbdev \
 xf86-input-synaptics \
@@ -94,6 +93,10 @@ xf86-video-vesa \
 xf86-video-voodoo \
 xf86-video-xgi \
 xf86-video-xgixp \
+xcb-util-image \
+xcb-util-keysyms \
+xcb-util-renderutil \
+xcb-util-wm \
 xauth \
 encodings \
 font-util \
@@ -216,74 +219,32 @@ grub-legacy \
 "
 
 COCON_NONFREE_FIRMWARE = " \
-linux-firmware-broadcom \
-linux-firmware-agere \
-linux-firmware-iwlwifi \
-linux-firmware-marvell \
+linux-firmware-ar9170 \
+linux-firmware-ath6k \
+linux-firmware-ath9k \
+linux-firmware-bcm4329 \
+linux-firmware-bcm4330 \
+linux-firmware-bcm4334 \
+linux-firmware-iwlwifi-6000g2a-5 \
+linux-firmware-iwlwifi-6000g2b-6 \
+linux-firmware-iwlwifi-7260-7 \
+linux-firmware-iwlwifi-6000g2a-6 \
+linux-firmware-iwlwifi-135-6 \
+linux-firmware-marvell-license \
+linux-firmware-sd8686 \
+linux-firmware-sd8787 \
+linux-firmware-sd8797 \
 linux-firmware-ralink \
-linux-firmware-realtek \
+linux-firmware-rtl8192cu \
+linux-firmware-rtl8192ce \
 linux-firmware-vt6656 \
+linux-firmware-radeon \
+linux-firmware-rtl8192su \
 zd1211-firmware \
-kernel-firmware-3ccfem556 \
-kernel-firmware-3cxem556 \
-kernel-firmware-d101m-ucode \
-kernel-firmware-d101s-ucode \
-kernel-firmware-d102e-ucode \
-kernel-firmware-dp83903 \
-kernel-firmware-ds1-ctrl \
-kernel-firmware-ds1-dsp \
-kernel-firmware-ds1e-ctrl \
-kernel-firmware-g200-warp \
-kernel-firmware-g400-warp \
-kernel-firmware-la-pcm \
-kernel-firmware-maestro3-assp-kernel \
-kernel-firmware-maestro3-assp-minisrc \
-kernel-firmware-ne2k \
-kernel-firmware-new-code-fix \
-kernel-firmware-new-code \
-kernel-firmware-pcmlm28 \
-kernel-firmware-pe-200 \
-kernel-firmware-pe520 \
-kernel-firmware-r100-cp \
-kernel-firmware-r128-cce \
-kernel-firmware-r200-cp \
-kernel-firmware-r300-cp \
-kernel-firmware-r420-cp \
-kernel-firmware-r520-cp \
-kernel-firmware-r600-me \
-kernel-firmware-r600-pfp \
-kernel-firmware-rs600-cp \
-kernel-firmware-rs690-cp \
-kernel-firmware-rs780-me \
-kernel-firmware-rs780-pfp \
-kernel-firmware-rv610-me \
-kernel-firmware-rv610-pfp \
-kernel-firmware-rv620-me \
-kernel-firmware-rv620-pfp \
-kernel-firmware-rv630-me \
-kernel-firmware-rv630-pfp \
-kernel-firmware-rv635-me \
-kernel-firmware-rv635-pfp \
-kernel-firmware-rv670-me \
-kernel-firmware-rv670-pfp \
-kernel-firmware-rv710-me \
-kernel-firmware-rv710-pfp \
-kernel-firmware-rv730-me \
-kernel-firmware-rv730-pfp \
-kernel-firmware-rv770-me \
-kernel-firmware-rv770-pfp \
-kernel-firmware-tamarack \
-kernel-firmware-tg1 \
-kernel-firmware-tg2 \
-kernel-firmware-tg3-tso5 \
-kernel-firmware-tg3-tso \
-kernel-firmware-tg3 \
-kernel-firmware-trigger-code-fix \
-kernel-firmware-trigger-code \
-kernel-firmware-typhoon \
-kernel-firmware-xilinx7od \
-kernel-firmware-yss225-registers \
 b43-fwcutter \
+"
+
+COCON_BSP_PACKAGES = "v86d \
 "
 
 RDEPENDS = "${COCON_BASE_PACKAGES} \
@@ -292,6 +253,7 @@ ${COCON_XEXT_PACKAGES} \
 ${COCON_APP_PACKAGES} \
 ${COCON_HDDIMAGE_PACKAGES} \
 ${COCON_NONFREE_FIRMWARE} \
+${COCON_BSP_PACKAGES} \
 "
 
 IMAGE_INSTALL = "${COCON_BASE_PACKAGES} \

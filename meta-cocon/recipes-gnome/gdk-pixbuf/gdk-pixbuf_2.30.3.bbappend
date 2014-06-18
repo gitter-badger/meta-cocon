@@ -1,8 +1,6 @@
-PRINC := "${@int(PRINC) + 1}"
+PRINC := "${@int(PRINC) + 2}"
 
 # look for files in the layer first
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-X11DEPENDS = "--with-x11"
-X11DEPENDS_cocon486 = "--with-x11"
-
+GDK_PIXBUF_LOADERS = "png jpeg x11"
