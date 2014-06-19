@@ -1,8 +1,6 @@
 require recipes-graphics/xorg-driver/xorg-driver-video.inc
 
 DESCRIPTION = "X.Org X server -- i740 display driver"
-PE = "1"
-PR = "${INC_PR}.0"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=c85da4d100605ac6d8d47d47eb2bf191"
 
@@ -10,5 +8,5 @@ SRC_URI = "git://anongit.freedesktop.org/xorg/driver/xf86-video-i740;protocol=gi
 "
 
 S = "${WORKDIR}/git"
-SRCREV = "084aa23643bf4245c917e3d672576bc9e5717017"
+SRCREV = "b4a3e260f5123d6fbd4670776232af5405a7c5a2"
 

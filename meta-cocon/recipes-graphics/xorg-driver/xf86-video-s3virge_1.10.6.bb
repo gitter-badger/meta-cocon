@@ -1,8 +1,6 @@
 require recipes-graphics/xorg-driver/xorg-driver-video.inc
 
 DESCRIPTION = "X.Org X server -- S3 ViRGE display driver"
-PE = "1"
-PR = "${INC_PR}.0"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=09743e0f5c076a765cd16697b5b1effb"
 

@@ -1,8 +1,6 @@
 require recipes-graphics/xorg-driver/xorg-driver-video.inc
 
 DESCRIPTION = "X.Org X server -- Chips display driver"
-PE = "2"
-PR = "${INC_PR}.0"
 
 SRC_URI = "git://anongit.freedesktop.org/xorg/driver/xf86-video-chips;protocol=git;branch=master \
            file://01_default_to_noaccel_on_69k.diff \

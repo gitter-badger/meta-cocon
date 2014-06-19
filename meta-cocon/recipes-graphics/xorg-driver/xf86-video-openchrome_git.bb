@@ -2,8 +2,6 @@ require recipes-graphics/xorg-driver/xorg-driver-video.inc
 
 DESCRIPTION = "X.Org X server -- openchrome display driver"
 DEPENDS += "libxvmc"
-PE = "1"
-PR = "${INC_PR}.1"
 
 
 do_configure_prepend() {

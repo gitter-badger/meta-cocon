@@ -1,8 +1,5 @@
 require recipes-graphics/xorg-driver/xorg-driver-video.inc
 
-PE = "1"
-PR = "${INC_PR}.0"
-
 LIC_FILES_CHKSUM = "file://COPYING;md5=0a077234e3915957b0b4a1f0ff3f10b7"
 
 
