@@ -3,22 +3,26 @@
 # Script for special machines (and need root).
  
 GEOMETRY="/tmp/.cocon.geometry"
+SPMACHINE486_CONF="/usr/share/spmachine-486"
+XORG_CONF_D="/etc/X11/xorg.conf.d"
 
+
+# only read cocon.cnf
 if [ -e /tmp/cocon.cnf ];
 then
   . /tmp/.cocon.cnf
 fi
 
 # Force Framebuffer driver if boot option contains "forcefb*"
-if [ "$COCON_FORCEFB" = "1" ];
+if [ `cat /proc/cmdline | grep 'forcefb'` ];
 then
-  ln -s /usr/share/cocon/card-fbdev.conf /etc/X11/xorg.conf.d/card-fbdev.conf
+  ln -s $SPMACHINE486_CONF/card-fbdev.conf $XORG_CONF_D/card-fbdev.conf
 fi
 
 # Force 800x600 16bit color if contains "forcesvga"
-if [ "$COCON_FORCESVGA" = "1" ];
+if [ `cat /proc/cmdline | grep 'forcesvga'` ];
 then
-  ln -s /usr/share/cocon/defaultdepth.conf /etc/X11/xorg.conf.d/defaultdepth.conf
+  ln -s $SPMACHINE486_CONF/defaultdepth.conf $XORG_CONF_D/defaultdepth.conf
 fi
 
 
@@ -50,10 +54,10 @@ then
     
     case $COCON_GEOMETRY in
     800x480)
-      ln -sf /usr/share/cocon/geode-800x480.conf /etc/X11/xorg.conf.d/geode-800x480.conf
+      ln -sf $SPMACHINE486_CONF/geode-800x480.conf $XORG_CONF_D/geode-800x480.conf
       ;;
     1024x600)
-      ln -sf /usr/share/cocon/geode-1024x600.conf /etc/X11/xorg.conf.d/geode-1024x600.conf
+      ln -sf $SPMACHINE486_CONF/geode-1024x600.conf $XORG_CONF_D/geode-1024x600.conf
       ;;
     esac
     
@@ -62,12 +66,9 @@ then
   # KOHJINSHA PM
   if [ "`echo "$MACHINE_NAME" | grep 'PM Series'`" ];
   then
-    ln -sf /usr/share/cocon/kohjinsha-pm.conf /etc/X11/xorg.conf.d/kohjinsha-pm.conf
+    ln -sf $SPMACHINE486_CONF/kohjinsha-pm.conf $XORG_CONF_D/kohjinsha-pm.conf
     export COCON_GALAX="1"
   fi
-
-  # TODO : Touchpanel driver
-
 fi
 
 
@@ -78,13 +79,13 @@ then
   # WILLCOM D4
   if [ "`echo "$MACHINE_NAME" | grep 'PC-UM1 Series'`" ];
   then
-    ln -sf /usr/share/cocon/kohjinsha-pm.conf /etc/X11/xorg.conf.d/kohjinsha-pm.conf
+    ln -sf $SPMACHINE486_CONF/kohjinsha-pm.conf $XORG_CONF_D/kohjinsha-pm.conf
   fi
 fi
 
 
 # Workaroud for SONY PCG-C1 (with neomagic graphics)
-# Select 2nd generation PCG-C1. 1st generation can't detect from dmidecode, detect from /proc/cmdline.
+# Select 2nd generation PCG-C1. 1st generation can't detect from dmidecode, then detect from /proc/cmdline.
 if [ "`echo "$MACHINE_MAKER" | grep 'Sony Corporation'`" -a "`echo "$MACHINE_NAME" | grep -E 'PCG-C1XG|PCG-C1XE|PCG-C2GPS|PCG-C1XF'`" ];
 then
   COCON_PCG_C1=1
@@ -99,27 +100,33 @@ fi
 
 if [ "`echo $COCON_PCG_C1`" = "1" ];
 then
-    ln -sf /usr/share/cocon/sony-pcg-c1.conf /etc/X11/xorg.conf.d/sony-pcg-c1.conf
+    ln -sf $SPMACHINE486_CONF/sony-pcg-c1.conf $XORG_CONF_D/sony-pcg-c1.conf
 fi 
 
 # Workaround for Libretto L1, L2, ...
 if [ "`echo "$MACHINE_MAKER" | grep 'TOSHIBA'`" -a "`echo "$MACHINE_NAME" | grep -E 'Libretto L'`" ];
 then
-  ln -sf /usr/share/cocon/libretto-lx.conf /etc/X11/xorg.conf.d/libretto-lx.conf
+  ln -sf $SPMACHINE486_CONF/libretto-lx.conf $XORG_CONF_D/libretto-lx.conf
 fi
 
 # Siliconmotion : Workaroud for SM712
 if [ "` lspci | grep -E '126f:0712' `" ];
 then
-  ln -sf /usr/share/cocon/smi_712.conf /etc/X11/xorg.conf.d/smi_712.conf 
+#  ln -sf $SPMACHINE486_CONF/smi_712.conf $XORG_CONF_D/smi_712.conf
+  echo "SM712."
+
+
 fi
 
 
 # Poulsbo : Software cursor
 if [ "` lsmod | grep -E 'psb_gfx|gma500_gfx'`" ];
 then
-  ln -sf /usr/share/cocon/poulsbo.conf /etc/X11/xorg.conf.d/poulsbo.conf
+  ln -sf $SPMACHINE486_CONF/poulsbo.conf $XORG_CONF_D/poulsbo.conf
 fi
+
+
+
 
 # Re-startup b43 device and load firmware
 if [ "` lsmod | grep -E 'b43legacy'`" -a -d /lib/firmware/b43legacy ];
@@ -174,9 +181,10 @@ then
 
   modprobe uinput
   sleep 2
-  
+ 
+  # $SPMACHINE486_CONF/opengalax.conf propides from opengalax package 
   opengalax &
-  ln -sf /usr/share/cocon/opengalax.conf /etc/X11/xorg.conf.d/opengalax.conf
+  ln -sf $SPMACHINE486_CONF/opengalax.conf $XORG_CONF_D/opengalax.conf
 
 fi
 

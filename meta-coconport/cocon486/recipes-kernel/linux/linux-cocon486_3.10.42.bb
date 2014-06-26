@@ -42,3 +42,6 @@ do_patch() {
 	patch -p1 <${WORKDIR}/platform_driver_probe.patch
 }
 
+SRC_URI[kernel.md5sum] = "ef927e91cf8b8c4ddf98847341ccf2c8"
+SRC_URI[kernel.sha256sum] = "95f9be5a26f6c15d21528ecdb2cd3307fc99c715cfb3bce13843de8393f67028"
+

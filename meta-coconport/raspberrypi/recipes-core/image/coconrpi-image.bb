@@ -72,7 +72,7 @@ xinit \
 dbus-x11 \
 liberation-fonts \
 ttf-bitstream-vera \
-ttf-vlgothic \
+ttf-koruri \
 xrandr \
 xkeyboard-config \
 freetype \
@@ -168,7 +168,6 @@ opencocon-init-doc \
 COCON_NONFREE_FIRMWARE = " \
 userland \
 linux-firmware-ralink \
-linux-firmware-realtek \
 "
 
 RDEPENDS = "${COCON_BASE_PACKAGES} \

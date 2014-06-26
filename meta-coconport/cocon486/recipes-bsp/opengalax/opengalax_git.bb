@@ -2,7 +2,6 @@ DESCRIPTION = "Opengalax Touchpad daemon"
 HOMEPAGE = "https://github.com/poliva/opengalax"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=cbbd794e2a0a289b9dfcc9f513d1996e"
-PR = "r3"
 
 SRC_URI = "git://github.com/poliva/opengalax.git \
 "
@@ -32,9 +31,9 @@ do_install() {
 
         ${MAKE} install
 
-	install -d ${D}${datadir}/cocon/
-        install -m 0644 ${S}/10-opengalax.conf ${D}${datadir}/cocon/opengalax.conf
+	install -d ${D}${datadir}/spmachine-486/
+        install -m 0644 ${S}/10-opengalax.conf ${D}${datadir}/spmachine-486/opengalax.conf
 
 }
 
-FILES_${PN} += "/usr/share/cocon/"
+FILES_${PN} += "/usr/share/spmachine-486/"
