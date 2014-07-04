@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# opencocon network-setting launcher
+
+if [ -z "`pidof NetworkManager`" ];
+then
+  # TODO : use sudo
+  # TODO : add some setting interface. static etc.
+  echo "Fallback dhcp client."
+  su -c "udhcpc"
+else
+
+  exec nm-connection-editor
+fi
+

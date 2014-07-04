@@ -12,6 +12,7 @@ OLDLOC="/mnt/oldroot"
 NEWLOC="/mnt/newroot"
 COPYTORAMLOC="/mnt/copytoram"
 ISOLOC="/mnt/iso"
+MODLOC="/mnt/mod"
 DISKSTATS_TMP="/var/volatile/tmp/.cocon.diskstats"
 
 # Alloc /dev
@@ -24,6 +25,10 @@ mkdir /var/volatile/log
 mkdir /var/volatile/run
 mkdir /var/volatile/run/dbus
 mkdir /var/volatile/lock
+
+# It is need to writable on udev : /run
+mount -t tmpfs none $MODLOC
+mount -t aufs -o br:$MODLOC:/run none /run
 
 # And, do udev
 /etc/init.d/udev start

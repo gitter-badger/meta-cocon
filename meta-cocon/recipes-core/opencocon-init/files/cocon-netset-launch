@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# opencocon network-setting launcher
-
-exec nm-connection-editor
-
-

@@ -7,6 +7,8 @@ OLDLOC="/mnt/oldroot"
 NEWLOC="/mnt/newroot"
 COPYTORAMLOC="/mnt/copytoram"
 ISOLOC="/mnt/iso"
+MODLOC="/mnt/mod"
+
 
     echo "--- reverse pivot ---"
     COCON_CDSHUTDOWN=1
@@ -44,6 +46,8 @@ sync
     umount -lf $COPYTORAMLOC >/dev/null 2>&1
     umount -lf $ISOLOC >/dev/null 2>&1
     umount -lf $MOUNTLOC >/dev/null 2>&1
+    umount -lf /run >/dev/null 2>&1
+    umount -lf $MODLOC >/dev/null 2>&1
 
     # Eject CD drive
     if [ $BOOT_FS = "iso9660" -a -z "$COCON_NOEJECT" -a -z "$COCON_COPYTORAM" ];
@@ -63,7 +67,7 @@ sync
 
     # and Power off
     umount -lf /dev >/dev/null 2>&1
-    /sbin/poweroff >/dev/null 2>&1
+    /sbin/poweroff
 
 
 /bin/sh

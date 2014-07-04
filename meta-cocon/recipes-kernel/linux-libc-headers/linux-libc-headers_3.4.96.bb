@@ -2,7 +2,7 @@ require recipes-kernel/linux-libc-headers/linux-libc-headers.inc
 
 #SRC_URI += "file://scripts-Makefile.headersinst-install-headers-from-sc.patch"
 
-PR = "r0"
+KORG_ARCHIVE_COMPRESSION = "xz"
 
 #do_patch() {
 #        cd ${WORKDIR}/linux-${PV}
@@ -14,6 +14,6 @@ PR = "r0"
 #        cp -R ${WORKDIR}/aufs/* ${WORKDIR}/linux-${PV}/
 #}
 
-SRC_URI[md5sum] = "75ce4d56658db99b5ec2ec20b349dbdb"
-SRC_URI[sha256sum] = "d8aac289e728ef1020ebbdf0c2b68da3821a65903283ae2c4546f3290fbd7482"
+SRC_URI[md5sum] = "5e133d894ddd6716f1d538945cbdf296"
+SRC_URI[sha256sum] = "cb698a13b8f3b9727852dc839e64a9ea8d9b82615e0b66e3bae303b2b13c6a76"
 

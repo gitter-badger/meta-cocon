@@ -1,19 +1,18 @@
 inherit kernel
 require recipes-kernel/linux/linux.inc
 
-PR = "r0"
 LINUX_VERSION = "${PV}"
 
 S = "${WORKDIR}/linux-${PV}"
 
-SRC_URI = "ftp://ftp.riken.jp/pub/Linux/kernel.org/linux/kernel/v3.0/linux-${PV}.tar.bz2;name=kernel \
-           git://aufs.git.sourceforge.net/gitroot/aufs/aufs3-standalone.git;name=aufs \
-         file://i82365-work-fix.patch;apply=no \
+SRC_URI = "${KERNELORG_MIRROR}/linux/kernel/v3.0/linux-${PV}.tar.xz;name=kernel \
+           git://git.code.sf.net/p/aufs/aufs3-standalone;protocol=http;branch=aufs3.4;name=aufs \
+           file://i82365-work-fix.patch;apply=no \
            file://defconfig \
 "
 
 
-SRCREV_aufs = "070c75b8e088086687688ce8306cc33bea5c8934"
+SRCREV_aufs = "bfbe10165cbfc0cd7b1d7e9c878f1a3f2b6872f1"
 
 COMPATIBLE_MACHINE = "cocon486"
 
@@ -31,7 +30,7 @@ do_patch() {
         cd ${WORKDIR}/linux-${PV}
         patch -p1 <${WORKDIR}/git/aufs3-kbuild.patch
         patch -p1 <${WORKDIR}/git/aufs3-base.patch
-        patch -p1 <${WORKDIR}/git/aufs3-proc_map.patch
+        patch -p1 <${WORKDIR}/git/aufs3-mmap.patch
         patch -p1 <${WORKDIR}/git/aufs3-standalone.patch
 
         cp -R ${WORKDIR}/git/fs/* ./fs/

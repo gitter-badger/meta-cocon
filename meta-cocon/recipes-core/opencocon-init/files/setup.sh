@@ -138,18 +138,25 @@ fi
 mkdir /var/volatile/run
 mkdir /var/volatile/lock
 
+
+# workaround : force depmod
+#depmod -a
+
+
 if [ -z "$BOOT_FS" ];
 then
   # If extreme mode, start udev.
   mount -t devtmpfs devtmpfs /dev
-
-  # Run udev daemon
-  /etc/init.d/udev restart
-else
-  # Scan again
-  udevadm trigger --action=add
-  udevadm settle
 fi
+
+  # Run udev daemon (TODO : is this safe?)
+/etc/init.d/udev restart
+
+#else
+  # Scan again
+#  udevadm trigger --action=add
+#  udevadm settle
+#fi
 
 
 if [ "$COCON_DEBUG" = "1" ];
