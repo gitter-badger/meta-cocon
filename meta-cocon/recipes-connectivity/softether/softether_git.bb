@@ -2,6 +2,8 @@ require softether.inc
 
 DEPENDS = "zlib ncurses openssl softether-hamcorebuilder-native"
 
+SRC_URI += "file://internat-uclibc.patch"
+
 EXTRA_OEMAKE += "'PREFIX=${D}${prefix} CC=${CC} -fomit-frame-pointer \
                  ${CFLAGS}'"
 
@@ -10,6 +12,11 @@ do_configure_append() {
     sed -i \
         -e "s:tmp/hamcorebuilder src/bin/hamcore/ src/bin/BuiltHamcoreFiles/unix/hamcore.se2:hamcorebuilder src/bin/hamcore/ src/bin/BuiltHamcoreFiles/unix/hamcore.se2:g" \
         ${S}/Makefile
+
+    sed -i \
+        -e "s:OPTIONS_LINK_RELEASE=:OPTIONS_LINK_RELEASE=-liconv :g" \
+        ${S}/Makefile
+
 
     sed -i \
         -e "s:INSTALL_BINDIR=:INSTALL_BINDIR=${D}:g" \
@@ -62,12 +69,13 @@ do_install() {
 
 }
 
-PACKAGES += " \
+PACKAGES = " \
   ${PN}-vpnbridge \
   ${PN}-vpnclient \
   ${PN}-vpncmd \
   ${PN}-vpnserver \
   ${PN}-hamcore \
+  ${PN}-dbg \
 "
 
 FILES_${PN}-vpnbridge = "\

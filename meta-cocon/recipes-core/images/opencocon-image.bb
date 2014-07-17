@@ -209,6 +209,10 @@ spice-gtk \
 dropbear \
 python-pygtk \
 ntpdate \
+softether-vpnbridge \
+softether-vpnclient \
+softether-vpncmd \
+softether-hamcore \
 "
 
 COCON_HDDIMAGE_PACKAGES = " \

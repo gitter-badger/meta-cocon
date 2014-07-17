@@ -1,0 +1,20 @@
+diff --git a/src/Mayaqua/Internat.c b/src/Mayaqua/Internat.c
+index f2f7572..8a97e4d 100644
+--- a/src/Mayaqua/Internat.c
++++ b/src/Mayaqua/Internat.c
+@@ -935,11 +935,11 @@ void InitInternational()
+ 	d = IconvWideToStrInternal();
+ 	if (d == (void *)-1)
+ 	{
+-#ifdef	UNIX_MACOS
++// #ifdef	UNIX_MACOS
+ 		StrCpy(charset, sizeof(charset), "utf-8");
+-#else	// UNIX_MACOS
+-		StrCpy(charset, sizeof(charset), "EUCJP");
+-#endif	// UNIX_MACOS
++//#else	// UNIX_MACOS
++//		StrCpy(charset, sizeof(charset), "EUCJP");
++//#endif	// UNIX_MACOS
+ 		d = IconvWideToStrInternal();
+ 		if (d == (void *)-1)
+ 		{
