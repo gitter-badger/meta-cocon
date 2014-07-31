@@ -6,6 +6,7 @@ SECCONF_EXTREME="/cocon.cnf"
 CONF_MOUNT="/mnt/cfg"
 CNFFILE="/tmp/.cocon.cnf"
 DISKSTATS_TMP="/var/volatile/tmp/.cocon.diskstats"
+CNF_NM_FILE_MOVETO="/tmp/.cocon.cnf.files/nm/"
 
 . /usr/bin/cocon-read-cnf
 
@@ -74,7 +75,7 @@ scan_cocon_setting()
 
     get_partition_type
 
-    if [ "$fstype" = "iso9660" -o "$fstype" = "vfat" -o "$fstype" = "ext3" -o "$fstype" = "ntfs" ];
+    if [ "$fstype" = "iso9660" -o "$fstype" = "vfat" -o "$fstype" = "ext3" -o "$fstype" = "ntfs" -o  "$fstype" = "ext4" ];
     then
         echo "Scanning setting from : $dev"
         mount -o ro /dev/$dev $CONF_MOUNT
@@ -109,6 +110,24 @@ scan_cocon_setting()
           
         fi
 
+        # NetworkManager Settings
+        if [ -d $CONF_MOUNT/coconnm ];
+        then
+          mkdir -p $CNF_NM_FILE_MOVETO
+          echo "--> NetworkManager setting directory found"
+          for nm in `ls -1 $CONF_MOUNT/coconnm`; do
+          
+            if [ -z ` cat $nm | grep '\#\!\/' ` ];
+            then
+
+              # TODO : more more inf file check
+              cp $CONF_MOUNT/coconnm/$nm $CNF_NM_FILE_MOVETO
+              chmod 600 $CNF_NM_FILE_MOVETO/$nm
+            fi
+
+          done
+
+        fi
 
         umount /dev/$dev
 
@@ -226,6 +245,10 @@ fi
 # Daemon
 mkdir -p /var/run/dbus/
 /etc/init.d/dbus-1 start
+
+# NetworkManager IPv6 fix
+ln -sf /var/lib/dbus/machine-id /etc/machine-id
+
 /etc/init.d/NetworkManager start
 
 # Touchpad driver
@@ -252,7 +275,8 @@ then
   mkdir -p /var/log/
 fi
 
-
+# Hostname
+hostname tiny$RANDOM
 
 if [ "$COCON_DEBUG" = "1" ];
 then

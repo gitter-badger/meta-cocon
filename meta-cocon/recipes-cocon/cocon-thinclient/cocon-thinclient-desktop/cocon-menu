@@ -9,11 +9,6 @@ DOMAIN=/tmp/.cocon.menu.domain
 PWROFF=/tmp/.cocon.poweroff
 PORTN=/tmp/.cocon.port
 PORTN2=/tmp/.cocon.port2
-SSH_HOSTN=/tmp/.cocon.sshhost
-SSH_PORT=/tmp/.cocon.sshport
-SSH_USERN=/tmp/.cocon.sshuser
-SSH_FWHOSTN=/tmp/.cocon.fwhost
-SSH_FWPORT=/tmp/.cocon.fwport
 ABOUT=/usr/share/doc/cocon/about.txt
 VERSION=/etc/cocon-version
 PARTCNF=/tmp/.cocon.cnf.part
@@ -42,7 +37,7 @@ VNC "Connect VNC (Alt.)" \
 SPICE "Connect SPICE" \
 WWW "Web Browser" \
 NET "Network Setting" \
-SSHPF "Setup SSH port forwarding" \
+VPN "Connect VPN" \
 ETC "Option, Ambient tools" \
 ABOUT "About opencocon" \
 OFF "Power Off" 2>$SELECT
@@ -252,37 +247,6 @@ SPICE)
 
   ;;
 
-SSHPF)
-  dialog --inputbox "Enter SSH hostname to connect" 8 40 2>$SSH_HOSTN
-  dialog --inputbox "Enter SSH port to connect (if default port(22), just enter)" 8 40 2>$SSH_PORT
-  dialog --inputbox "Enter SSH username" 8 40 2>$SSH_USERN
-  dialog --inputbox "Enter forward hostname" 8 40 2>$SSH_FWHOSTN
-  dialog --inputbox "Enter forward port (RDP:3389, VNC:5900+Display number)" 8 40 2>$SSH_FWPORT
-  
-  ssh_hostn=`cat $SSH_HOSTN`
-  ssh_port=`cat $SSH_PORT`
-  ssh_user=`cat $SSH_USERN`
-  ssh_fwhostn=`cat $SSH_FWHOSTN`
-  ssh_fwport=`cat $SSH_FWPORT`
-  
-  if [ -n "$ssh_hostn" -a -n "$ssh_user" -a -n "$ssh_fwhostn" -a -n "$ssh_fwport" ];
-  then
-    if [ -z "$ssh_port" ];
-    then
-      ssh_port=22 
-    fi
-
-    # TODO : move to sepalated script
-    /usr/bin/ssh -N -f -L $ssh_fwport:$ssh_fwhostn:$ssh_fwport -p $ssh_port -l $ssh_user $ssh_hostn
-  
-    if [ -z "`pidof ssh`" ];
-    then
-      dialog --msgbox "Failed to connect." 15 60
-    else
-      dialog --msgbox "Okey, SSH port-forwarding is connected. please input hostname to 'localhost'." 15 60
-    fi
-  fi
-  ;;
 
 WWW)
   # Web Browser
@@ -291,6 +255,10 @@ WWW)
 
 NET)
   cocon-netset-launch
+  ;;
+
+VPN)
+  cocon-vpn-menu
   ;;
 
 ETC)

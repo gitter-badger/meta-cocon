@@ -1,0 +1,221 @@
+#!/bin/bash
+
+# opencocon VPN menu
+
+SELECT=/tmp/.cocon.vpnmenu.select
+SSH_HOSTN=/tmp/.cocon.sshhost
+SSH_PORT=/tmp/.cocon.sshport
+SSH_USERN=/tmp/.cocon.sshuser
+SSH_FWHOSTN=/tmp/.cocon.fwhost
+SSH_FWPORT=/tmp/.cocon.fwport
+SE_HOSTN=/tmp/.cocon.sehost
+SE_USERN=/tmp/.cocon.seuser
+SE_HUBN=/tmp/.cocon.sehub
+SE_METHOD=/tmp/.cocon.semethod
+SE_GATEWAY=/tmp/.cocon.segw
+SE_FLAG=/tmp/.cocon.softether
+SE_DISCONN=/tmp/.cocon.sedisconn
+SE_GATEWAY_SELECT=/tmp/.cocon.segw.select
+SE_RESOLV_BACKUP=/tmp/.cocon.seresolv
+
+while :
+do
+
+
+
+  # If connected SoftEther, show SEDHCP
+  if [ -e $SE_FLAG ];
+  then
+    menu_sedhcp="SEDHCP"
+    menu_sedhcp_desc="Enable DHCP for SoftEther VPN Port"
+  else
+    menu_sedhcp="----"
+  fi
+
+
+  dialog --no-cancel --menu "VPN connect menu" 20 60 25 \
+    SSHPF "Setup SSH port forwarding" \
+    SE    "Connect (or disconnect) SoftEther VPN Server" \
+    "$menu_sedhcp" "$menu_sedhcp_desc" \
+    SEST  "SoftEther connection status" \
+    RET   "Return to main menu" 2>$SELECT
+
+  select=`cat $SELECT`
+
+  case $select in
+
+  SSHPF)
+    dialog --inputbox "Enter SSH hostname to connect" 8 40 2>$SSH_HOSTN
+    dialog --inputbox "Enter SSH port to connect (if default port(22), just enter)" 8 40 2>$SSH_PORT
+    dialog --inputbox "Enter SSH username" 8 40 2>$SSH_USERN
+    dialog --inputbox "Enter forward hostname" 8 40 2>$SSH_FWHOSTN
+    dialog --inputbox "Enter forward port (RDP:3389, VNC:5900+Display number)" 8 40 2>$SSH_FWPORT
+
+    ssh_hostn=`cat $SSH_HOSTN`
+    ssh_port=`cat $SSH_PORT`
+    ssh_user=`cat $SSH_USERN`
+    ssh_fwhostn=`cat $SSH_FWHOSTN`
+    ssh_fwport=`cat $SSH_FWPORT`
+
+    if [ -n "$ssh_hostn" -a -n "$ssh_user" -a -n "$ssh_fwhostn" -a -n "$ssh_fwport" ];
+    then
+      if [ -z "$ssh_port" ];
+      then
+        ssh_port=22
+      fi
+
+      # TODO : move to sepalated script
+      /usr/bin/ssh -N -f -L $ssh_fwport:$ssh_fwhostn:$ssh_fwport -p $ssh_port -l $ssh_user $ssh_hostn
+
+      if [ -z "`pidof ssh`" ];
+      then
+        dialog --msgbox "Failed to connect." 15 60
+      else
+        dialog --msgbox "Okey, SSH port-forwarding is connected. please input hostname to 'localhost'." 15 60
+      fi
+    fi
+    ;;
+
+
+  SE)
+
+    if [ -e $SE_FLAG ];
+    then
+      # Disconnect?
+      dialog --yesno "Disconnect current SoftEther connection?" 8 40 2>$SE_DISCONN
+      se_disconn_ret="$?"
+      if [ "$se_disconn_ret" = "0" ];
+      then
+
+        # Stop udhcpc process
+        su -c "/usr/vpnclient/vpnclient stop"
+        se_dhcp_process=` ps ax | grep vpn_tun0 | sed /grep/d | awk '{print $1}' `
+        su -c "kill $se_dhcp_process"
+
+        # Restore gateway if changed
+        if [ "`cat $SE_GATEWAY_SELECT`" = "VPN" ];
+        then
+          su -c "cp $SE_RESOLV_BACKUP /etc/resolv.conf"
+          su -c "/sbin/ip route del default"
+          su -c "/sbin/ip route add default via ` cat $SE_GATEWAY `"
+        fi
+
+        # Disconnect
+        vpncmd /CLIENT localhost /CMD AccountDisconnect gate
+        vpncmd /CLIENT localhost /CMD NicDisable tun0
+        vpncmd /CLIENT localhost /CMD NicDelete tun0
+
+        rm $SE_FLAG
+      fi
+    else
+
+      dialog --inputbox "Enter SoftEther VPN hostname:port to connect" 8 40 2>$SE_HOSTN
+      dialog --inputbox "Enter SoftEther username" 8 40 2>$SE_USERN
+      dialog --inputbox "Enter Hub name to connect" 8 40 2>$SE_HUBN
+
+      dialog --no-cancel --menu "Select auth method" 20 60 25 \
+        PASS "Password Auth (standard)" \
+        ANON "Anonymous Login"  2>$SE_METHOD
+  
+      se_host=`cat $SE_HOSTN`
+      se_user=`cat $SE_USERN`
+      se_hub=`cat $SE_HUBN`
+      se_method=`cat $SE_METHOD`
+
+      if [ -n $se_host -a -n $se_user -a -n $se_hub ];
+      then
+        # Backup gateway ( address  )
+        /sbin/ip route | awk '/default/ { print $3 }' > $SE_GATEWAY
+
+        # Connect
+        su -c "/usr/vpnclient/vpnclient start"
+        vpncmd /CLIENT localhost /CMD NicCreate tun0
+        vpncmd /CLIENT localhost /CMD NicEnable tun0
+        vpncmd /CLIENT localhost /CMD AccountCreate gate "/SERVER:$se_host" "/HUB:$se_hub" "/USERNAME:$se_user" /NICNAME:tun0
+
+        if [ "$se_method" = "PASS" ];
+        then
+          vpncmd /CLIENT localhost /CMD AccountPasswordSet gate /TYPE:standard
+        fi
+
+        if [ "$se_method" = "ANON" ];
+        then
+          vpncmd /CLIENT localhost /CMD AccountAnonymousSet gate
+        fi
+
+        vpncmd /CLIENT localhost /CMD AccountConnect gate
+        if [ $? -eq 0 ];
+        then
+          dialog --msgbox "Okey, connected. Please select SEDHCP to get IP address, or specify manually." 15 60
+          touch $SE_FLAG
+        else
+          # Cleanup
+          vpncmd /CLIENT localhost /CMD AccountDisconnect gate
+          vpncmd /CLIENT localhost /CMD NicDisable tun0
+          vpncmd /CLIENT localhost /CMD NicDelete tun0
+
+          su -c "/usr/vpnclient/vpnclient stop"
+
+          dialog --msgbox "Failed to connect." 15 60
+        fi
+
+      fi
+
+    fi
+    ;;
+
+
+  SEDHCP)
+
+    # TODO : After set DHCP to vpn_tun0, two default gateway makes. (phsical, on VPN)
+    # It is good that choice before run DHCP client...
+
+    # Do DHCP, and change default gateway to VPN here.
+    # TODO : 2nd time udhcpd won7t work.
+    su -c "cp /etc/resolv.conf $SE_RESOLV_BACKUP"
+    su -c "udhcpc -i vpn_tun0"
+
+
+    # And get default gateway and exclude Physical
+    gateway_org=` cat $SE_GATEWAY `
+
+    gateway_vpn=` /sbin/ip route | awk '/default/ { print $3 }' `
+
+    if [ -n $gateway_vpn ];
+    then
+      dialog --no-cancel --menu "Select default gateway to use" 20 60 25 \
+        VPN "VPN gateway ($gateway_vpn)" \
+        PHY "Physical gateway ($gateway_org)" 2>$SE_GATEWAY_SELECT
+
+      if [ `cat $SE_GATEWAY_SELECT` = "PHY" ];
+      then
+        su -c "/sbin/ip route del default"
+        su -c "/sbin/ip route add default via $gateway_org"
+        su -c "cp $SE_RESOLV_BACKUP /etc/resolv.conf"
+      fi
+
+## Do nothing while selected VPN.
+#      if [ `cat $SE_GATEWAY_SELECT` = "VPN" ];
+#      then
+#        su -c "/sbin/ip route del default"
+#        su -c "/sbin/ip route add default via $gateway_vpn"
+#      fi
+
+    fi
+    
+    ;;
+
+  SEST)
+    about=`vpncmd /CLIENT localhost /CMD AccountStatusGet gate`
+    dialog --msgbox "$about" 40 80
+    ;;
+
+  RET)
+    exit 1
+    ;;
+
+
+  esac
+
+done
+

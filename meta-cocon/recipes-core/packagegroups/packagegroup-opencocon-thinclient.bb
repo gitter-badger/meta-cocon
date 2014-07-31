@@ -20,6 +20,7 @@ gnome-icon-theme \
 gnome-keyring \
 gtk-vnc \
 hicolor-icon-theme \
+iproute2 \
 libfreerdp \
 libfreerdp-plugin-audin \
 libfreerdp-plugin-audin-alsa \

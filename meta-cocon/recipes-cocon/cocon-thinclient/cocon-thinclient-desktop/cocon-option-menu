@@ -2,7 +2,7 @@
 
 # opencocon option menu
 
-SELECT=/tmp/.cocon.menu.select
+SELECT=/tmp/.cocon.optmenu.select
 
 # If copy-to-ram mode, show eject menu.
 if [ "$COCON_COPYTORAM" = "1" ];

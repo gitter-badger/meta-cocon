@@ -17,7 +17,6 @@ SRC_URI = "file://COPYING.MIT \
            file://kohjinsha-pm.conf \
 "
 
-
 S="${WORKDIR}"
 
 do_install() {

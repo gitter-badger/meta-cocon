@@ -1,7 +1,7 @@
 DESCRIPTION = "opencocon thin-client focused desktop environment"
 SECTION = "base"
 LICENSE = "MIT"
-DEPENDS = "cocon-data spmachine-486 dialog lxterminal"
+DEPENDS = "cocon-data dialog lxterminal"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "file://COPYING.MIT \
@@ -26,6 +26,7 @@ SRC_URI = "file://COPYING.MIT \
            file://50-org.freedesktop.NetworkManager.rules \
            file://cocon-select-kbd \
            file://dialogrc \
+           file://cocon-vpn-menu \
 "
 
 
@@ -50,6 +51,7 @@ do_install() {
         install -m 0755    ${WORKDIR}/cocon-spice-launch    ${D}${bindir}/cocon-spice-launch
         install -m 0755    ${WORKDIR}/cocon-x-session    ${D}${bindir}/cocon-x-session
         install -m 0755    ${WORKDIR}/cocon-select-kbd   ${D}${bindir}/cocon-select-kbd
+        install -m 0755    ${WORKDIR}/cocon-vpn-menu   ${D}${bindir}/cocon-vpn-menu
 
         install -d ${D}${sysconfdir}/
         install -m 0644 ${WORKDIR}/dialogrc ${D}${sysconfdir}/dialogrc
