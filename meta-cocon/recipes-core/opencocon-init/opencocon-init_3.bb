@@ -15,6 +15,7 @@ SRC_URI = "file://COPYING.MIT \
            file://default.cnf \
            file://cocon-version \
            file://cocon-read-cnf \
+           file://services \
 "
 
 
@@ -29,6 +30,7 @@ do_install() {
         install -d ${D}${sysconfdir}/rcS.d
         install -m 0644 ${WORKDIR}/cocon-version ${D}${sysconfdir}/cocon-version
         install -m 0644 ${WORKDIR}/inittab ${D}${sysconfdir}/inittab
+        install -m 0644 ${WORKDIR}/services ${D}${sysconfdir}/services
         install -m 0644    ${WORKDIR}/rcS-default       ${D}${sysconfdir}/default/rcS  
         install -m 0755    ${WORKDIR}/rc                ${D}${sysconfdir}/init.d
         install -m 0755    ${WORKDIR}/rcS               ${D}${sysconfdir}/init.d

@@ -45,6 +45,7 @@ ntpdate \
 opencocon-init \
 polkit-gnome \
 spice-gtk \
+tzdata \
 viewnior \
 xserver-xorg-xephyr \
 xuser-account \

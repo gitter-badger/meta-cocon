@@ -267,6 +267,9 @@ fi
 
 /usr/bin/loadkeys $COCON_KBD_CONSOLE
 
+# Timezone (TODO)
+ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+
 # If /var/log is not folder, recreate it.
 # (only for coconrpi?)
 if [ ! -d "/var/log/" ];

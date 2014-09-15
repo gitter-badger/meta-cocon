@@ -166,41 +166,46 @@ do
 
 
   SEDHCP)
-
-    # TODO : After set DHCP to vpn_tun0, two default gateway makes. (phsical, on VPN)
-    # It is good that choice before run DHCP client...
-
-    # Do DHCP, and change default gateway to VPN here.
-    # TODO : 2nd time udhcpd won7t work.
-    su -c "cp /etc/resolv.conf $SE_RESOLV_BACKUP"
-    su -c "udhcpc -i vpn_tun0"
-
-
-    # And get default gateway and exclude Physical
-    gateway_org=` cat $SE_GATEWAY `
-
-    gateway_vpn=` /sbin/ip route | awk '/default/ { print $3 }' `
-
-    if [ -n $gateway_vpn ];
+    # If really connected?
+    if [ -z "` vpncmd /CLIENT localhost /CMD AccountStatusGet gate | grep "Connection Completed" `" ];
     then
-      dialog --no-cancel --menu "Select default gateway to use" 20 60 25 \
-        VPN "VPN gateway ($gateway_vpn)" \
-        PHY "Physical gateway ($gateway_org)" 2>$SE_GATEWAY_SELECT
 
-      if [ `cat $SE_GATEWAY_SELECT` = "PHY" ];
+      dialog --msgbox "It seems not connected for SoftEther VPN server completely. Please check network connection, and clock is correct(run NTP on Option menu)." 15 60
+
+    else
+
+      # After set DHCP to vpn_tun0, two default gateway makes. (phsical, on VPN)
+      # It is good that choice before run DHCP client...
+
+      # Do DHCP, and change default gateway to VPN here.
+      su -c "cp /etc/resolv.conf $SE_RESOLV_BACKUP"
+      su -c "udhcpc -i vpn_tun0"
+
+      # And get default gateway and exclude Physical
+      gateway_org=` cat $SE_GATEWAY `
+      gateway_vpn=` /sbin/ip route | awk '/default/ { print $3 }' `
+
+      if [ -n $gateway_vpn ];
       then
-        su -c "/sbin/ip route del default"
-        su -c "/sbin/ip route add default via $gateway_org"
-        su -c "cp $SE_RESOLV_BACKUP /etc/resolv.conf"
-      fi
+        dialog --no-cancel --menu "Select default gateway to use" 20 60 25 \
+          VPN "VPN gateway ($gateway_vpn)" \
+          PHY "Physical gateway ($gateway_org)" 2>$SE_GATEWAY_SELECT
+
+        if [ `cat $SE_GATEWAY_SELECT` = "PHY" ];
+        then
+          su -c "/sbin/ip route del default"
+          su -c "/sbin/ip route add default via $gateway_org"
+          su -c "cp $SE_RESOLV_BACKUP /etc/resolv.conf"
+        fi
 
 ## Do nothing while selected VPN.
-#      if [ `cat $SE_GATEWAY_SELECT` = "VPN" ];
-#      then
-#        su -c "/sbin/ip route del default"
-#        su -c "/sbin/ip route add default via $gateway_vpn"
-#      fi
+#        if [ `cat $SE_GATEWAY_SELECT` = "VPN" ];
+#        then
+#          su -c "/sbin/ip route del default"
+#          su -c "/sbin/ip route add default via $gateway_vpn"
+#        fi
 
+      fi
     fi
     
     ;;
